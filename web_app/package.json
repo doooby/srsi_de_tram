@@ -1,0 +1,15 @@
+{
+  "name": "srsi_de_tram",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "d3oby <zelazk.o@email.cz>",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve"
+  },
+  "devDdependencies": {
+    "@vue/cli": "^3.11.0",
+    "@vue/cli-service": "^3.11.0"
+  }
+}
