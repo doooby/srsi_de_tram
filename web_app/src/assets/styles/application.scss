@@ -1,30 +1,87 @@
 .srsi {
   background-color: #2a753a;
 
-  .cards-hand-list {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .board {
+    width: 100%;
     height: 100%;
+    display: grid;
 
-    > div {
-      position: relative;
+    grid-template-columns: 10% 20% auto 30%;
+    grid-template-rows: 50% 40% 10%;
+
+    > .-deck {
+      grid-column: 1 / span 2;
+      grid-row: 1;
     }
 
-    .card {
-      position: absolute;
-      top: 0;
-      transition: top 0.2s, transform 0.2s;
-      border: 1px solid gray;
+    > .-pile {
+      grid-column: 3;
+      grid-row: 1;
+    }
 
-      width: #{constant-responsive('cards.hand.width')}px;
-      height: #{constant-responsive('cards.hand.height')}px;
+    > .-remotes {
+      grid-column: 4;
+      grid-row: 1;
+      background-color: rgba(147, 198, 106, 0.56);
+    }
 
-      &:hover {
-        box-shadow: 0 0 5px 5px gray;
-        top: -#{floor(constant-responsive('cards.hand.height') * 0.2)}px;
-      }
+    > .-ui {
+      grid-column: 1;
+      grid-row: 2 / span 2;
+      background-color: rgba(255, 126, 0, 0.56);
+    }
+
+    > .-local-cards {
+      grid-column: 2 / span 3;
+      grid-row: 2;
+    }
+
+    > .-printout {
+      grid-column: 2 / span 3;
+      grid-row: 3;
     }
   }
 
+  .cards-deck {
+    .srsi-card {
+      background-color: $gray-800;
+    }
+  }
+
+  .cards-pile {
+    position: relative;
+    .srsi-card {
+      position: absolute;
+    }
+  }
+
+  .cards-hand-local {
+    position: relative;
+    .srsi-card {
+      position: absolute;
+      top: 0;
+      transition: top 0.2s, transform 0.2s;
+    }
+  }
+
+}
+
+.center-child {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.srsi-card {
+  width: #{constant-responsive('card.regular.width')}px;
+  height: #{constant-responsive('card.regular.height')}px;
+  border: 2px solid $gray-500;
+
+  &.-selectable {
+    &:hover {
+      box-shadow: 0 0 5px 5px $gray-500;
+      top: -#{ceil(constant-responsive('card.regular.height') * 0.2)}px;
+    }
+  }
 }

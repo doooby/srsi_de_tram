@@ -1,48 +1,28 @@
 <template>
     <div
-     :style="{width: '1200px', height: '450px', border: '2px solid gray'}">
+     class="cards-hand-local">
         <div
-         class="cards-hand-list">
-            <div>
-                <div
-                 v-for="(data, index) in cardsModelView"
-                 :key="index"
-                 class="card"
-                 :style="data.css_styles">
-                    fdsf
-                </div>
-            </div>
-        </div>
+         v-for="(data, index) in cardsModelView"
+         :key="index"
+         class="srsi-card -selectable"
+         :style="data.css_styles"/>
     </div>
 </template>
 
 <script>
-
     import randString from 'crypto-random-string';
     import colorspace from 'colorspace';
     import times from 'lodash/times';
-    import { getResponsiveConst } from '../constants';
+    import { getResponsiveConst, cardCssTransformation } from '../utils';
 
-    const CARD_WIDTH = getResponsiveConst('cards.hand.width');
-    const CARD_HEIGHT = getResponsiveConst('cards.hand.height');
-    const CARD_X_PROP_SHIFT = (len) => {
-        const mod = 11.0 / (13.0 + len);
-        return mod* 0.6 * CARD_WIDTH;
-    };
-    const CARD_X_SHIFT = (rel_shift, stance) => {
-        const shift = rel_shift * stance;
-        return shift - (0.5 * CARD_WIDTH);
-    };
-    const CARD_Y_SHIFT = (rel_stance, base) => {
-        const shift = Math.abs(rel_stance) - base;
-        return shift * CARD_HEIGHT * 0.3 - (0.5 * CARD_HEIGHT);
-    };
+    const CARD_WIDTH = getResponsiveConst('card.regular.width');
+    const CARD_HEIGHT = getResponsiveConst('card.regular.height');
 
     export default {
 
         data () {
             return {
-                cards: times(6, () => this.createCard()),
+                cards: times(12, () => this.createCard()),
             };
         },
 
@@ -54,7 +34,7 @@
                 const middle = (len-1) / 2;
                 const rel_stance_base = middle / len;
 
-                const proportional_x_shift = CARD_X_PROP_SHIFT(len);
+                const proportional_x_shift = 11.0 / (13.0 + len) * 0.6 * CARD_WIDTH;
 
                 for (let i=0; i<len; i+=1) {
                     const rel_stance = (i - middle) / len;
@@ -64,12 +44,12 @@
                         card: cards_data[i],
                     };
 
-                    const tx = CARD_X_SHIFT(proportional_x_shift, stance);
-                    const ty = CARD_Y_SHIFT(rel_stance, rel_stance_base);
-                    const rot = 0.6 * rel_stance;
+                    const x = proportional_x_shift * stance;
+                    const y = 0.4 * CARD_HEIGHT * (Math.abs(rel_stance) - rel_stance_base) + 0.1 * CARD_HEIGHT;
+                    const rot = 0.2 * rel_stance;
                     data['css_styles'] = {
                         backgroundColor: data.card.color,
-                        transform: `translateX(${tx}px) translateY(${ty}px) rotate(${rot}rad)`
+                        transform: cardCssTransformation(x, y, rot, CARD_WIDTH, CARD_HEIGHT)
                     };
 
                     cards[i] = data;
@@ -92,7 +72,6 @@
         }
 
     }
-
 
     class Card {
 

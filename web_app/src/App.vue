@@ -1,17 +1,58 @@
 <template>
-  <div
-   class="srsi">
-      <cards-hand-local/>
-  </div>
+    <div
+     class="srsi">
+        <div
+
+         class="board">
+
+            <div
+             class="-deck center-child">
+                <cards-deck/>
+            </div>
+
+            <div
+             class="-pile center-child">
+                <cards-pile/>
+            </div>
+
+            <div
+             class="-remotes">
+                <div class="cards-remote-list"></div>
+                <div class="cards-remote-list"></div>
+            </div>
+
+            <div
+             class="-ui">
+                UIUIUIUI
+            </div>
+
+            <div
+             class="-local-cards center-child">
+                <cards-hand-local/>
+            </div>
+
+            <div
+             class="-printout center-child">
+                tohle je printout
+            </div>
+
+        </div>
+
+
+    </div>
 </template>
 
 <script>
-import CardsHandLocal from './components/CardsHandLocal.vue';
+    import CardsDeck from './components/CardsDeck.vue';
+    import CardsPile from './components/CardsPile.vue';
+    import CardsHandLocal from './components/CardsHandLocal.vue';
 
-export default {
-  name: 'app',
-  components: {
-      CardsHandLocal
-  }
-}
+    export default {
+        name: 'app',
+        components: {
+            CardsDeck,
+            CardsPile,
+            CardsHandLocal,
+        }
+    }
 </script>

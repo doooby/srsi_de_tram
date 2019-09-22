@@ -1,10 +1,10 @@
 {
   "media_sizes": ["sm"],
 
-  "cards": {
-    "hand": {
-      "width": {"sm": 180},
-      "height": {"sm": 260}
+  "card": {
+    "regular": {
+      "width": {"sm": 140},
+      "height": {"sm": 200}
     }
   }
 }
