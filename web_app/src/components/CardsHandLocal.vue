@@ -2,18 +2,19 @@
     <div
      class="cards-hand-local">
         <div
-         v-for="(data, index) in cardsModelView"
-         :key="index"
+         v-for="record in cardsModelView"
+         :key="record.card.id"
          class="srsi-card -selectable"
-         :style="data.css_styles"/>
+         :style="record.css_styles">
+            <img
+             :src="record.img_data"/>
+        </div>
     </div>
 </template>
 
 <script>
-    import randString from 'crypto-random-string';
-    import colorspace from 'colorspace';
-    import times from 'lodash/times';
     import { getResponsiveConst, cardCssTransformation } from '../utils';
+    import * as srsi from '../game';
 
     const CARD_WIDTH = getResponsiveConst('card.regular.width');
     const CARD_HEIGHT = getResponsiveConst('card.regular.height');
@@ -21,15 +22,16 @@
     export default {
 
         data () {
+            const deck = srsi.cards.createNewShuffledDeck();
             return {
-                cards: times(12, () => this.createCard()),
+                cards: deck
             };
         },
 
         computed: {
 
             cardsModelView () {
-                const cards = [], cards_data = this.cards;
+                const model_view = [], cards_data = this.cards;
                 const len = cards_data.length;
                 const middle = (len-1) / 2;
                 const rel_stance_base = middle / len;
@@ -40,48 +42,26 @@
                     const rel_stance = (i - middle) / len;
                     const stance = i - middle;
 
-                    const data = {
-                        card: cards_data[i],
-                    };
-
                     const x = proportional_x_shift * stance;
                     const y = 0.4 * CARD_HEIGHT * (Math.abs(rel_stance) - rel_stance_base) + 0.1 * CARD_HEIGHT;
                     const rot = 0.2 * rel_stance;
-                    data['css_styles'] = {
-                        backgroundColor: data.card.color,
-                        transform: cardCssTransformation(x, y, rot, CARD_WIDTH, CARD_HEIGHT)
-                    };
 
-                    cards[i] = data;
+                    const card = cards_data[i];
+                    model_view[i] = {
+                        card,
+                        img_data: srsi.images[card.id],
+                        css_styles: {
+                            transform: cardCssTransformation(
+                                x, y, rot, CARD_WIDTH, CARD_HEIGHT
+                            )
+                        }
+                    };
                 }
 
-                return cards;
+                return model_view;
             }
 
         },
-
-        methods: {
-
-            createCard () {
-                const color = colorspace(randString({length: 10, type: 'base64'}));
-                const card = new Card(color);
-                Object.freeze(card);
-                return card;
-            }
-
-        }
-
-    }
-
-    class Card {
-
-        constructor (color) {
-            this.color = color;
-        }
-
-        transformProperty () {
-
-        }
 
     }
 

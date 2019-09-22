@@ -3,17 +3,15 @@
      class="cards-deck">
         <div
          class="srsi-card -selectable center-child">
-            <span
-             style="color: white;">
-                Balík
-            </span>
+            <img
+             :src="card_bg"/>
         </div>
     </div>
 </template>
 
 <script>
-    import times from 'lodash/times';
     import { getResponsiveConst, cardCssTransformation } from '../utils';
+    import * as srsi from '../game';
 
     const CARD_WIDTH = getResponsiveConst('card.regular.width');
     const CARD_HEIGHT = getResponsiveConst('card.regular.height');
@@ -22,6 +20,7 @@
 
         data () {
             return {
+                card_bg: srsi.images.back,
                 // count: 36
             };
         },

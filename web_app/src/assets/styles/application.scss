@@ -78,6 +78,11 @@
   height: #{constant-responsive('card.regular.height')}px;
   border: 2px solid $gray-500;
 
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
   &.-selectable {
     &:hover {
       box-shadow: 0 0 5px 5px $gray-500;

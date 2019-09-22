@@ -2,18 +2,19 @@
     <div
      class="cards-pile">
         <div
-         v-for="position in cards_positions"
-         :key="position.card.id"
+         v-for="record in cardsModelView"
+         :key="record.card.id"
          class="srsi-card"
-         :style="position.css_styles"/>
+         :style="record.css_styles">
+            <img
+             :src="record.img_data"/>
+        </div>
     </div>
 </template>
 
 <script>
-    import randString from 'crypto-random-string';
-    import colorspace from 'colorspace';
-    import times from 'lodash/times';
     import { getResponsiveConst, cardCssTransformation, spreadInsideCircle } from '../utils';
+    import * as srsi from '../game';
 
     const CARD_WIDTH = getResponsiveConst('card.regular.width');
     const CARD_HEIGHT = getResponsiveConst('card.regular.height');
@@ -22,27 +23,35 @@
     export default {
 
         data () {
+            const deck = srsi.cards.createNewShuffledDeck();
             return {
-                cards_positions: times(20, (i) =>
-                    new Position({id: i},CARDS_SPREAD_RADIUS)
-                ),
+                cards: deck
             };
-        }
+        },
 
-    }
+        computed: {
 
-    class Position {
+            cardsModelView () {
+                return this.cards.map(card => {
 
-        constructor (card, spread) {
-            this.card = card;
+                    const [x, y] = spreadInsideCircle(
+                        CARDS_SPREAD_RADIUS,
+                        (Math.random() * 2 * Math.PI)
+                    );
+                    const rot = Math.random() * 2;
 
-            const [x, y] = spreadInsideCircle(spread, (Math.random() * 2 * Math.PI));
-            const rot = Math.random() * 2;
+                    return {
+                        card,
+                        img_data: srsi.images[card.id],
+                        css_styles: {
+                            transform: cardCssTransformation(
+                                x, y, rot, CARD_WIDTH, CARD_HEIGHT
+                            )
+                        }
+                    }
+                });
+            }
 
-            this.css_styles = {
-                backgroundColor: colorspace(randString({length: 10, type: 'base64'})),
-                transform: cardCssTransformation(x, y, rot, CARD_WIDTH, CARD_HEIGHT)
-            };
         }
 
     }
