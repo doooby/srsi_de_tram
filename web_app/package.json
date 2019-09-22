@@ -1,15 +1,21 @@
 {
-  "name": "srsi_de_tram",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "d3oby <zelazk.o@email.cz>",
-  "license": "MIT",
+  "name": "web_app",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
   },
-  "devDdependencies": {
-    "@vue/cli": "^3.11.0",
-    "@vue/cli-service": "^3.11.0"
+  "dependencies": {
+    "@vue/cli-service": "^3.11.0",
+    "bootstrap": "^4.3.1",
+    "colorspace": "^1.1.2",
+    "crypto-random-string": "^3.0.1",
+    "lodash": "^4.17.15",
+    "sass": "^1.18.0",
+    "sass-loader": "^7.1.0",
+    "vue": "^2.6.10",
+    "vue-template-compiler": "^2.6.10",
+    "vuex": "^3.0.1"
   }
 }

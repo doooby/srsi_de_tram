@@ -1,0 +1,30 @@
+.srsi {
+  background-color: #2a753a;
+
+  .cards-hand-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+
+    > div {
+      position: relative;
+    }
+
+    .card {
+      position: absolute;
+      top: 0;
+      transition: top 0.2s, transform 0.2s;
+      border: 1px solid gray;
+
+      width: #{constant-responsive('cards.hand.width')}px;
+      height: #{constant-responsive('cards.hand.height')}px;
+
+      &:hover {
+        box-shadow: 0 0 5px 5px gray;
+        top: -#{floor(constant-responsive('cards.hand.height') * 0.2)}px;
+      }
+    }
+  }
+
+}
