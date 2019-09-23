@@ -15,8 +15,8 @@ main.$mount('#srsi-entry');
 setTimeout(() => {
     const game = new srsi.Game(
         [
-            new srsi.Player('karel'),
-            new srsi.Player('marek'),
+            new srsi.Player('local'),
+            new srsi.Player('Remote Player'),
         ],
         0
     );

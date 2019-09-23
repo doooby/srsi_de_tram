@@ -22,7 +22,6 @@
     > .-remotes {
       grid-column: 4;
       grid-row: 1;
-      background-color: rgba(147, 198, 106, 0.56);
     }
 
     > .-ui {
@@ -42,24 +41,8 @@
     }
   }
 
-  .cards-deck {
-    position: relative;
-    .srsi-card {
-      position: absolute;
-    }
-  }
-
-  .cards-pile {
-    position: relative;
-    .srsi-card {
-      position: absolute;
-    }
-  }
-
   .cards-hand-local {
-    position: relative;
-    .srsi-card {
-      position: absolute;
+    &.srsi-cards > div {
       top: 0;
       transition: top 0.2s, transform 0.2s;
       &.-selectable {
@@ -67,6 +50,26 @@
           top: -#{ceil(constant-responsive('card.regular.height') * 0.2)}px;
         }
       }
+    }
+  }
+
+  .remotes-list {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    > div {
+      flex: 1 1;
+      position: relative;
+    }
+
+    .remote-label {
+      position: absolute;
+      left: 0;
+      z-index: 10;
+      padding: 5px;
+      background-color: rgba(169, 169, 169, 0.67);
+      font-weight: bold;
+      font-size: 140%;
     }
   }
 
@@ -79,19 +82,32 @@
   justify-content: center;
 }
 
-.srsi-card {
-  width: #{constant-responsive('card.regular.width')}px;
-  height: #{constant-responsive('card.regular.height')}px;
-  border: 2px solid $gray-500;
+.srsi-cards {
+  position: relative;
 
-  img {
-    width: 100%;
-    height: 100%;
+  > div {
+    position: absolute;
+    border: 2px solid $gray-500;
+
+    width: #{constant-responsive('card.regular.width')}px;
+    height: #{constant-responsive('card.regular.height')}px;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+    &.-selectable {
+      &:hover {
+        box-shadow: 0 0 5px 5px $gray-500;
+      }
+    }
   }
 
-  &.-selectable {
-    &:hover {
-      box-shadow: 0 0 5px 5px $gray-500;
+  &.-small {
+    > div {
+      width: #{constant-responsive('card.small.width')}px;
+      height: #{constant-responsive('card.small.height')}px;
     }
   }
 }

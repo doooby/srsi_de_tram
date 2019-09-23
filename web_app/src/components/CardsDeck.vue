@@ -1,11 +1,11 @@
 <template>
     <div
-     class="cards-deck">
+     class="cards-deck srsi-cards">
         <div
-         v-for="(record, i) in cardsModelView"
-         :key="record.card.id"
-         :class="record.css_class"
-         :style="record.css_styles">
+         v-for="item in cardsItems"
+         :key="item.id"
+         :class="item.css_class"
+         :style="item.css_styles">
             <img
              :src="card_bg"/>
         </div>
@@ -44,7 +44,7 @@
                 }
             },
 
-            cardsModelView () {
+            cardsItems () {
                 const data = this.cards.map(card => {
 
                     const [x, y] = spreadInsideCircle(
@@ -54,8 +54,8 @@
                     const rot = (Math.random() - 0.5) * CARDS_ROT_MAX;
 
                     return {
-                        card,
-                        css_class: 'srsi-card',
+                        id: card.id,
+                        css_class: '',
                         css_styles: {
                             transform: cardCssTransformation(
                                 x, y, rot, CARD_WIDTH, CARD_HEIGHT
@@ -66,7 +66,7 @@
 
                 if (data.length > 0) {
                     const card_data = data[data.length - 1];
-                    card_data.css_class = 'srsi-card -selectable';
+                    card_data.css_class += ' -selectable';
                 }
                 return data;
             }

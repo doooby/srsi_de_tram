@@ -45,4 +45,8 @@ export default class Game {
     invokeEvent (name, ...args) {
         this.players.forEach(p => p.invoke(name, ...args));
     }
+
+    remotePlayers () {
+        return this.players.filter(p => p!== this.local_player);
+    }
 }

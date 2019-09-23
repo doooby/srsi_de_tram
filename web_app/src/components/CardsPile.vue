@@ -1,13 +1,12 @@
 <template>
     <div
-     class="cards-pile">
+     class="cards-pile srsi-cards">
         <div
-         v-for="record in cardsModelView"
-         :key="record.card.id"
-         class="srsi-card"
-         :style="record.css_styles">
+         v-for="item in cardsItems"
+         :key="item.id"
+         :style="item.css_styles">
             <img
-             :src="record.img_data"/>
+             :src="item.img_data"/>
         </div>
     </div>
 </template>
@@ -37,7 +36,7 @@
                 }
             },
 
-            cardsModelView () {
+            cardsItems () {
                 return this.cards.map(card => {
 
                     const [x, y] = spreadInsideCircle(
@@ -47,7 +46,7 @@
                     const rot = Math.random() * 2;
 
                     return {
-                        card,
+                        id: card.id,
                         img_data: srsi.images[card.id],
                         css_styles: {
                             transform: cardCssTransformation(

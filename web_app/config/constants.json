@@ -5,6 +5,10 @@
     "regular": {
       "width": {"sm": 140},
       "height": {"sm": 200}
+    },
+    "small": {
+      "width": {"sm": 56},
+      "height": {"sm": 80}
     }
   }
 }

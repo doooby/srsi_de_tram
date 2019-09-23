@@ -17,8 +17,7 @@
 
             <div
              class="-remotes">
-                <div class="cards-remote-list"></div>
-                <div class="cards-remote-list"></div>
+                <cards-hands-remote/>
             </div>
 
             <div
@@ -46,13 +45,16 @@
     import CardsDeck from './components/CardsDeck.vue';
     import CardsPile from './components/CardsPile.vue';
     import CardsHandLocal from './components/CardsHandLocal.vue';
+    import CardsHandsRemote from './components/CardsHandsRemote.vue';
 
     export default {
         name: 'app',
+
         components: {
             CardsDeck,
             CardsPile,
             CardsHandLocal,
-        }
+            CardsHandsRemote,
+        },
     }
 </script>

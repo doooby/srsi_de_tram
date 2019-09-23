@@ -7,22 +7,22 @@ export default new Vuex.Store({
 
     state: {
         game_state: null,
-        global: Object.freeze({})
+        static: Object.freeze({})
     },
 
     mutations: {
 
         mutateSetGame (state, { game }) {
             state.game_state = null;
-            updateGlobalData(state, { game, begun: false });
+            updateStaticData(state, { game, begun: false });
         },
 
         mutateGameBegun (state) {
-            updateGlobalData(state, { begun: true });
+            updateStaticData(state, { begun: true });
         },
 
         mutatePutGameState (state) {
-            state.game_state = state.global.game.state.freeze();
+            state.game_state = state.static.game.state.freeze();
         },
 
     },
@@ -33,9 +33,9 @@ export default new Vuex.Store({
 
 });
 
-function updateGlobalData (state, new_data) {
-    state.global = Object.freeze({
-        ...state.global,
+function updateStaticData (state, new_data) {
+    state.static = Object.freeze({
+        ...state.static,
         ...new_data
     });
 }

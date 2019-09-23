@@ -21,3 +21,29 @@ export function spreadInsideCircle (radius, angle) {
         (Math.sin(angle) * radius * Math.random()),
     ];
 }
+
+export function mapCardsToFlapper (cards, size, mapper) {
+    const [card_width, card_height] = size;
+    const count = cards.length;
+
+    const middle = (count - 1) / 2;
+    const rel_stance_base = middle / count;
+
+    const prop_x_shift = 11.0 / (13.0 + count) * 0.6 * card_width;
+
+
+    return cards.map((card, i) => {
+        const stance = i - middle;
+        const rel_stance = (i - middle) / count;
+
+        const x = prop_x_shift * stance;
+        const y = 0.4 * card_height * (Math.abs(rel_stance) - rel_stance_base)
+            + 0.1 * card_height;
+        const rot = 0.2 * rel_stance;
+
+        const transform = cardCssTransformation(
+            x, y, rot, card_width, card_height
+        );
+        return mapper(card, transform);
+    });
+}
