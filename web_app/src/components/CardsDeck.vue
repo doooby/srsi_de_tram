@@ -13,9 +13,9 @@
 </template>
 
 <script>
-    import { mapState , mapGetters} from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
     import { cardCssTransformation, spreadInsideCircle } from '../utils';
-    import srsi from '../game';
+    import srsi from '../srsi';
 
     export default {
 
@@ -27,8 +27,8 @@
 
         computed: {
 
-            ...mapState(['game_state']),
-            ...mapGetters(['cardSizes']),
+            ...mapState(['game', 'game_state']),
+            ...mapGetters(['cardSizes', 'localPlayerOnTurn']),
 
             cards () {
                 if (this.game_state) {
@@ -58,7 +58,7 @@
                     }
                 });
 
-                if (data.length > 0) {
+                if (data.length > 0 && this.localPlayerOnTurn) {
                     const card_data = data[data.length - 1];
                     card_data.css_class += ' -selectable';
                 }

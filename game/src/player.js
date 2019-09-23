@@ -73,7 +73,7 @@ export default class Player {
         if (!EVENTS.includes(event)) throw `undefined event ${event}`;
 
         const sub = Subscription.fetch(this, event);
-        if (sub) sub.invoke(...args);
+        if (sub) sub.invoke(args);
     }
 
 }
@@ -93,7 +93,7 @@ class Subscription {
         if (i !== -1) this.subs.splice(i, 1);
     }
 
-    invoke (...args) {
+    invoke (args) {
         this.subs.forEach(fn => fn(...args));
     }
 

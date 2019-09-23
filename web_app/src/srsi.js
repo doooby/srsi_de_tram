@@ -1,6 +1,19 @@
 import { cards } from '../../game/src/card';
 import Game from '../../game/src/game';
 import Player from '../../game/src/player';
+import {
+    DrawMove,
+    LayMove,
+    QueerMove,
+    NoMove
+} from '../../game/src/move';
+
+const moves = {
+    draw () { return new DrawMove(); },
+    lay (card_index) { return new LayMove(card_index); },
+    queer (suit) { return new QueerMove(suit); },
+    no () { return new NoMove(); }
+};
 
 const images = (function () {
     const [width, height] = [182, 260];
@@ -74,5 +87,6 @@ export default {
     cards,
     images,
     Game,
-    Player
+    Player,
+    moves
 };

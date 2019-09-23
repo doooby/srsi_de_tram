@@ -17,7 +17,7 @@
 
             <div
              class="-remotes">
-                <cards-hands-remote/>
+                <remote-hands/>
             </div>
 
             <div
@@ -27,12 +27,16 @@
 
             <div
              class="-local-cards center-child">
-                <cards-hand-local/>
+                <local-hand/>
             </div>
 
             <div
              class="-printout center-child">
-                tohle je printout
+                <div
+                 v-if="printoutMessage"
+                 class="printout-alert">
+                    {{printoutMessage}}
+                </div>
             </div>
 
         </div>
@@ -42,10 +46,12 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     import CardsDeck from './components/CardsDeck.vue';
     import CardsPile from './components/CardsPile.vue';
-    import CardsHandLocal from './components/CardsHandLocal.vue';
-    import CardsHandsRemote from './components/CardsHandsRemote.vue';
+    import LocalHand from './components/LocalHand.vue';
+    import RemoteHands from './components/RemoteHands.vue';
 
     export default {
         name: 'app',
@@ -53,8 +59,15 @@
         components: {
             CardsDeck,
             CardsPile,
-            CardsHandLocal,
-            CardsHandsRemote,
+            LocalHand,
+            RemoteHands,
         },
+
+        computed: {
+            ...mapState({
+                printoutMessage: state => state.printout && state.printout.message
+            })
+        }
+
     }
 </script>

@@ -4,7 +4,7 @@ import store from './store';
 import App from './App.vue';
 import './assets/styles/index.scss';
 
-import srsi from './game';
+import srsi from './srsi';
 
 const main = new Vue({
     store,
@@ -20,11 +20,25 @@ setTimeout(() => {
         ],
         0
     );
-    store.commit('mutateSetGame', { game });
+    store.commit('mutateSetGame', game);
+    store.commit('mutateSetGameState', game.state);
 
     game.begin(srsi.cards.createNewShuffledDeck());
-    store.commit('mutatePutGameState');
+    store.commit('mutateSetGameState', game.state);
 
-    store.commit('mutateGameBegun');
+    const local = game.local_player;
+    local.subscribe('bad_move', (player, move) => {
+        if (local !== player) return;
+        store.dispatch('actionPrintoutMessage', move.error);
+    });
+    local.subscribe('moved', (player, move) => {
+        if (local !== player) return;
+        store.dispatch('actionMakeMove', {
+            player: local,
+            move
+        });
+    });
+
+    store.commit('mutateGameStarted');
 
 }, 1000);

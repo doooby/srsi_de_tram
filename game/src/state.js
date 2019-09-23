@@ -17,14 +17,6 @@ export default class State {
         return new State(this);
     }
 
-    freeze () {
-        Object.freeze(this.deck);
-        Object.freeze(this.pile);
-        Object.freeze(this.players);
-        Object.freeze(this);
-        return this;
-    }
-
     toNextPlayer () {
         let next = this.on_move + 1;
         if (next >= this.players.length) next = 0;

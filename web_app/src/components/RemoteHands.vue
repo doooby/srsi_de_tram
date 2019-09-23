@@ -29,7 +29,7 @@
 <script>
     import { mapState, mapGetters } from 'vuex';
     import { mapCardsToFlapper } from '../utils';
-    import srsi from '../game';
+    import srsi from '../srsi';
 
     export default {
 
@@ -41,30 +41,23 @@
 
         computed: {
 
-            ...mapState(['game_state']),
+            ...mapState(['game', 'game_state']),
             ...mapGetters(['cardSizes']),
 
             remoteHands () {
-                const { game, begun } = this.$store.state.static;
-                if (!game || !begun) return [];
-                if (!this.game_state) return [];
+                if (!this.game || !this.game_state) return [];
 
-                return game.remotePlayers().map(player => {
-
-                    const cards = mapCardsToFlapper(
+                return this.game.remotePlayers().map(player => ({
+                    player,
+                    cards: mapCardsToFlapper(
                         this.game_state.players[player.index],
                         this.cardSizes.small,
                         (card, transform) => ({
                             id: card.id,
                             css_styles: { transform }
                         })
-                    );
-
-                    return {
-                        player,
-                        cards
-                    };
-                });
+                    )
+                }));
             }
 
         }

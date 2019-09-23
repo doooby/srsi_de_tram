@@ -1,3 +1,5 @@
+$gray_bg: rgba(169, 169, 169, 0.67);
+
 .srsi {
   background-color: #2a753a;
 
@@ -67,10 +69,17 @@
       left: 0;
       z-index: 10;
       padding: 5px;
-      background-color: rgba(169, 169, 169, 0.67);
+      background-color: $gray_bg;
       font-weight: bold;
       font-size: 140%;
     }
+  }
+
+  .printout-alert {
+    font-size: 140%;
+    background-color: $gray_bg;
+    padding: 5px;
+    font-weight: bold;
   }
 
 }

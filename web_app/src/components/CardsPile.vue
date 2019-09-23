@@ -14,13 +14,13 @@
 <script>
     import { mapState, mapGetters } from 'vuex';
     import { cardCssTransformation, spreadInsideCircle } from '../utils';
-    import srsi from '../game';
+    import srsi from '../srsi';
 
     export default {
 
         computed: {
 
-            ...mapState(['game_state']),
+            ...mapState(['game', 'game_state']),
             ...mapGetters(['cardSizes']),
 
             cards () {

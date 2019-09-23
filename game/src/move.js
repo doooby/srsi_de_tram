@@ -83,13 +83,13 @@ export class DrawMove extends Move {
 
 export class LayMove extends Move {
 
-    constructor (card_i) {
+    constructor (card_index) {
         super();
-        this.card_i = card_i;
+        this.card_index = card_index;
     }
 
     serialize () {
-        return {m: 'l', c: this.card_i};
+        return {m: 'l', c: this.card_index};
     }
 
     evaluate (state) {
@@ -99,7 +99,7 @@ export class LayMove extends Move {
             return;
         }
 
-        let card = state.onMovePlayerCards()[this.card_i], pile = state.pileCard();
+        let card = state.onMovePlayerCards()[this.card_index], pile = state.pileCard();
 
         if (state.attack > 0 && (!card.isAttack() && card.rank !== cards.TEN)) {
             this.error = 'attack';
@@ -143,7 +143,7 @@ export class LayMove extends Move {
 
     applyTo (state) {
         state = state.duplicate();
-        let card = state.players[state.on_move].splice(this.card_i, 1)[0];
+        let card = state.players[state.on_move].splice(this.card_index, 1)[0];
         state.pile.push(card);
 
         let attack = state.attack, eights = state.eights;

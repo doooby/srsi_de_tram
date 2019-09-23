@@ -7,29 +7,59 @@ Vue.use(Vuex);
 export default new Vuex.Store({
 
     state: {
+
+        media: 'sm',
+
+        game: null,
         game_state: null,
-        static: Object.freeze({}),
-        media: 'sm'
+        game_started: false,
+        printout: null,
+
     },
 
     mutations: {
 
-        mutateSetGame (state, { game }) {
-            state.game_state = null;
-            updateStaticData(state, { game, begun: false });
+        mutateSetGame (state, game) {
+            state.game = game;
+            state.game_state = game.state;
+            state.game_started = false;
         },
 
-        mutateGameBegun (state) {
-            updateStaticData(state, { begun: true });
+        mutateGameStarted (state) {
+            state.game_started = true;
         },
 
-        mutatePutGameState (state) {
-            state.game_state = state.static.game.state.freeze();
+        mutateSetGameState (state, game_state) {
+            state.game_state = game_state;
+        },
+
+        mutateSetPrintout (state, record) {
+            state.printout = record;
         },
 
     },
 
     actions: {
+
+        actionMakeMove ({ state, commit }, { player, move }) {
+            state.game.setState(
+                move.applyTo(state.game_state),
+                player
+            );
+            commit('mutateSetGameState', state.game.state);
+        },
+
+        actionPrintoutMessage ({ state, commit }, message) {
+            const cleaner = () => {
+                if (state.printout === record) commit('mutateSetPrintout', null);
+            };
+
+            const record = Object.freeze({
+                message,
+                cleaner: setTimeout(cleaner, 3000)
+            });
+            commit('mutateSetPrintout', record);
+        },
 
     },
 
@@ -46,15 +76,13 @@ export default new Vuex.Store({
                     getResponsiveConst('card.small.height', media)
                 ]
             }
-        }
+        },
+
+        localPlayerOnTurn ({ game, game_state, game_started }) {
+            return game && game_state && game_started &&
+                game_state.on_move === game.local_player.index;
+        },
 
     }
 
 });
-
-function updateStaticData (state, new_data) {
-    state.static = Object.freeze({
-        ...state.static,
-        ...new_data
-    });
-}
