@@ -13,14 +13,9 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
-    import { getResponsiveConst, cardCssTransformation, spreadInsideCircle } from '../utils';
+    import { mapState , mapGetters} from 'vuex';
+    import { cardCssTransformation, spreadInsideCircle } from '../utils';
     import srsi from '../game';
-
-    const CARD_WIDTH = getResponsiveConst('card.regular.width');
-    const CARD_HEIGHT = getResponsiveConst('card.regular.height');
-    const CARDS_SPREAD_RADIUS = 0.06 * CARD_WIDTH;
-    const CARDS_ROT_MAX = 0.04;
 
     export default {
 
@@ -32,9 +27,8 @@
 
         computed: {
 
-            ...mapState([
-                'game_state'
-            ]),
+            ...mapState(['game_state']),
+            ...mapGetters(['cardSizes']),
 
             cards () {
                 if (this.game_state) {
@@ -48,17 +42,17 @@
                 const data = this.cards.map(card => {
 
                     const [x, y] = spreadInsideCircle(
-                        CARDS_SPREAD_RADIUS,
+                        0.06 * this.cardSizes.regular[0],
                         (Math.random() * 2 * Math.PI)
                     );
-                    const rot = (Math.random() - 0.5) * CARDS_ROT_MAX;
+                    const rot = (Math.random() - 0.5) * 0.04;
 
                     return {
                         id: card.id,
                         css_class: '',
                         css_styles: {
                             transform: cardCssTransformation(
-                                x, y, rot, CARD_WIDTH, CARD_HEIGHT
+                                x, y, rot, ...this.cardSizes.regular
                             )
                         }
                     }

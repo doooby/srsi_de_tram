@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { getResponsiveConst } from './utils';
 
 Vue.use(Vuex);
 
@@ -7,7 +8,8 @@ export default new Vuex.Store({
 
     state: {
         game_state: null,
-        static: Object.freeze({})
+        static: Object.freeze({}),
+        media: 'sm'
     },
 
     mutations: {
@@ -28,6 +30,23 @@ export default new Vuex.Store({
     },
 
     actions: {
+
+    },
+
+    getters: {
+
+        cardSizes ({ media }) {
+            return {
+                regular: [
+                    getResponsiveConst('card.regular.width', media),
+                    getResponsiveConst('card.regular.height', media)
+                ],
+                small: [
+                    getResponsiveConst('card.small.width', media),
+                    getResponsiveConst('card.small.height', media)
+                ]
+            }
+        }
 
     }
 

@@ -8,10 +8,10 @@ module.exports = {
         loaderOptions: {
             scss: {
                 functions: {
-                    'constant($key)': function (key) {
+                    'const($key)': function (key) {
                         return getConst(key);
                     },
-                    'constant-responsive($key, $media_size: null)': function (key, media_size) {
+                    'constr($key, $media_size: null)': function (key, media_size) {
                         return getResponsiveConst(key, media_size);
                     }
                 }

@@ -27,13 +27,9 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
-    import { getResponsiveConst, mapCardsToFlapper } from '../utils';
+    import { mapState, mapGetters } from 'vuex';
+    import { mapCardsToFlapper } from '../utils';
     import srsi from '../game';
-
-    const CARD_WIDTH = getResponsiveConst('card.small.width');
-    const CARD_HEIGHT = getResponsiveConst('card.small.height');
-    console.log(CARD_WIDTH, CARD_HEIGHT);
 
     export default {
 
@@ -45,9 +41,8 @@
 
         computed: {
 
-            ...mapState([
-                'game_state'
-            ]),
+            ...mapState(['game_state']),
+            ...mapGetters(['cardSizes']),
 
             remoteHands () {
                 const { game, begun } = this.$store.state.static;
@@ -58,7 +53,7 @@
 
                     const cards = mapCardsToFlapper(
                         this.game_state.players[player.index],
-                        [CARD_WIDTH, CARD_HEIGHT],
+                        this.cardSizes.small,
                         (card, transform) => ({
                             id: card.id,
                             css_styles: { transform }

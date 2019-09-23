@@ -13,20 +13,16 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
-    import { getResponsiveConst, mapCardsToFlapper } from '../utils';
+    import { mapState, mapGetters } from 'vuex';
+    import { mapCardsToFlapper } from '../utils';
     import srsi from '../game';
-
-    const CARD_WIDTH = getResponsiveConst('card.regular.width');
-    const CARD_HEIGHT = getResponsiveConst('card.regular.height');
 
     export default {
 
         computed: {
 
-            ...mapState([
-                'game_state'
-            ]),
+            ...mapState(['game_state']),
+            ...mapGetters(['cardSizes']),
 
             cards () {
                 if (this.game_state) {
@@ -38,7 +34,7 @@
 
             cardsItems () {
                 return mapCardsToFlapper(
-                    this.cards, [CARD_WIDTH, CARD_HEIGHT],
+                    this.cards, this.cardSizes.regular,
                     (card, transform) => ({
                         id: card.id,
                         img_data: srsi.images[card.id],
