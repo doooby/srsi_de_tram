@@ -1,4 +1,6 @@
 import { cards } from '../../game/src/card';
+import Game from '../../game/src/game';
+import Player from '../../game/src/player';
 
 const images = (function () {
     const [width, height] = [182, 260];
@@ -46,11 +48,21 @@ const images = (function () {
         canvas.height = height;
         const ctx = canvas.getContext('2d');
 
-        const margin = Math.ceil(height / 10);
+        const margin = Math.ceil(height / 11);
         ctx.fillStyle = 'gray';
         ctx.fillRect(0, 0, width, height);
         ctx.fillStyle = 'lightgray';
         ctx.fillRect(margin, margin, width - 2*margin, height - 2*margin);
+
+        ctx.fillStyle = 'gray';
+        let font = Math.ceil(height / 6);
+        ctx.font = `${font}px serif`;
+        let y_base = h_2 - font / 2;
+        [ 'SRŠÍ', 'DE', 'TRAM' ].forEach((text, i) => ctx.fillText(
+            text,
+            w_2 - ctx.measureText(text).width / 2,
+            y_base + i * font
+        ));
 
         return canvas.toDataURL();
     }());
@@ -58,7 +70,9 @@ const images = (function () {
     return index;
 }());
 
-export {
+export default {
     cards,
-    images
+    images,
+    Game,
+    Player
 };

@@ -13,8 +13,9 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import { getResponsiveConst, cardCssTransformation, spreadInsideCircle } from '../utils';
-    import * as srsi from '../game';
+    import srsi from '../game';
 
     const CARD_WIDTH = getResponsiveConst('card.regular.width');
     const CARD_HEIGHT = getResponsiveConst('card.regular.height');
@@ -22,14 +23,19 @@
 
     export default {
 
-        data () {
-            const deck = srsi.cards.createNewShuffledDeck();
-            return {
-                cards: deck
-            };
-        },
-
         computed: {
+
+            ...mapState([
+                'game_state'
+            ]),
+
+            cards () {
+                if (this.game_state) {
+                    return this.game_state.pile;
+                } else {
+                    return [];
+                }
+            },
 
             cardsModelView () {
                 return this.cards.map(card => {
