@@ -1,5 +1,5 @@
 {
-  "titles": {
+  "entities": {
     "deck": "Balík",
     "pile": "Kopa",
     "player": "Hráč"
@@ -10,6 +10,10 @@
     "draw": "Ber",
     "devour": "Žer",
     "queer": "Změň na"
+  },
+  "state": {
+    "attack": "Útok: %{power}",
+    "queer": "Změněno na: %{suit}"
   },
   "bad_move": {
     "nothing": "Musíš udělat tah!",
@@ -23,7 +27,7 @@
     "no_queen": "Nebyla zahrána dáma.",
     "queer": "Musíš vybrat novou barvu."
   },
-  "texts": {
+  "game": {
     "ai_fail": "Strojový výpočet tahu selhal.",
     "you_won": "Vyhrál jsi!",
     "you_lost": "Prohrál jsi."

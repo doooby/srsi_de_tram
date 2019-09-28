@@ -7,7 +7,7 @@
          class="center-child">
 
             <div
-             class="remote-label">
+             class="floating-label">
                 {{hand.player.name}}
             </div>
 

@@ -11,7 +11,7 @@
             </div>
 
             <div
-             class="pile center-child">
+             class="pile">
                 <cards-pile/>
             </div>
 
@@ -26,7 +26,7 @@
             </div>
 
             <div
-             class="local-cards center-child">
+             class="local-cards">
                 <local-hand/>
             </div>
 

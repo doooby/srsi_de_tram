@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import { localizedGetter } from '../lib/game_texts';
 import { getResponsiveConst } from './utils';
 
 Vue.use(Vuex);
@@ -79,6 +80,10 @@ export default new Vuex.Store({
                     getResponsiveConst('card.small.height', media)
                 ]
             }
+        },
+
+        textGet ({ locale }) {
+            return localizedGetter(locale);
         },
 
         localPlayerOnTurn ({ game, game_state, game_started }) {

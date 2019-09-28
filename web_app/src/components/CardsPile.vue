@@ -1,12 +1,26 @@
 <template>
     <div
-     class="cards-pile srsi-cards">
+     class="cards-pile center-child">
         <div
-         v-for="item in cardsItems"
-         :key="item.id"
-         :style="item.css_styles">
-            <img
-             :src="item.img_data"/>
+         class="srsi-cards">
+            <div
+             v-for="item in cardsItems"
+             :key="item.id"
+             :style="item.css_styles">
+                <img
+                 :src="item.img_data"/>
+            </div>
+        </div>
+
+        <div
+         v-if="overlay"
+         class="floating-label">
+            {{overlay.text}}
+            <span
+             v-if="overlay.queer"
+             :class="suitCssClass(overlay.queer)">
+                {{transcribe(overlay.queer)}}
+            </span>
         </div>
     </div>
 </template>
@@ -21,7 +35,7 @@
         computed: {
 
             ...mapState(['game', 'game_state']),
-            ...mapGetters(['cardSizes']),
+            ...mapGetters(['cardSizes', 'textGet']),
 
             cards () {
                 if (this.game_state) {
@@ -50,7 +64,34 @@
                         }
                     }
                 });
+            },
+
+            overlay () {
+                if (!this.game_state) return;
+                const { attack, queer } = this.game_state;
+
+                if (attack) return {
+                    text: this.textGet(
+                        'state.attack',
+                        { power: String(attack) }
+                    )
+                };
+
+                if (typeof queer === 'number') return {
+                    text: this.textGet(
+                        'state.queer',
+                        { suit: '' }
+                    ),
+                    queer
+                };
             }
+
+        },
+
+        methods: {
+
+            suitCssClass (suit) { return srsi.suitCssClass(suit); },
+            transcribe (suit) { return srsi.transcribe(suit); },
 
         }
 

@@ -1,14 +1,42 @@
 <template>
     <div
-     class="cards-hand-local srsi-cards">
+     class="cards-hand-local center-child">
         <div
-         v-for="(item, index) in cardsItems"
-         :key="item.id"
-         :class="cardsCssClass"
-         :style="item.css_styles"
-         @click="layCard(index)">
-            <img
-             :src="item.img_data"/>
+         class="srsi-cards">
+            <div
+             v-for="(item, index) in cardsItems"
+             :key="item.id"
+             :class="canLay ? '-selectable' : ''"
+             :style="item.css_styles"
+             @click="layCard(index)">
+                <img
+                 :src="item.img_data"/>
+            </div>
+        </div>
+
+        <div
+         v-if="canQueer"
+         class="floating-label">
+            <div
+             v-for="suit in allSuits()"
+             :key="suit"
+             class="button"
+             @click="queerSelect(suit)">
+                <span
+                 :class="suitCssClass(suit)">
+                    {{transcribe(suit)}}
+                </span>
+            </div>
+        </div>
+
+        <div
+         v-if="canNothing"
+         class="floating-label">
+            <div
+             class="button"
+             @click="doNothing()">
+                {{textGet('actions.stay')}}
+            </div>
         </div>
     </div>
 </template>
@@ -23,7 +51,7 @@
         computed: {
 
             ...mapState(['game', 'game_state']),
-            ...mapGetters(['cardSizes', 'localPlayerOnTurn']),
+            ...mapGetters(['cardSizes', 'textGet', 'localPlayerOnTurn']),
 
             cards () {
                 if (this.game && this.game_state) {
@@ -46,17 +74,43 @@
                 );
             },
 
-            cardsCssClass () {
-                return this.localPlayerOnTurn ? '-selectable' : '';
+            canQueer () {
+                return this.localPlayerOnTurn &&
+                    this.game_state.queer === true;
+            },
+
+            canLay () {
+                return this.localPlayerOnTurn &&
+                    !this.canQueer;
+            },
+
+            canNothing () {
+                const state = this.game_state;
+                return this.localPlayerOnTurn &&
+                    ( state.continuance &&
+                        state.realPileCard().rank === srsi.cards.ACE
+                    );
             }
 
         },
 
         methods: {
 
+            allSuits () { return srsi.cards.SUITS; },
+            suitCssClass (suit) { return srsi.suitCssClass(suit); },
+            transcribe (suit) { return srsi.transcribe(suit); },
+
             layCard (index) {
-                if (!this.localPlayerOnTurn) return;
+                if (!this.canLay) return;
                 this.game.local_player.makeMove('lay', index);
+            },
+
+            queerSelect (suit) {
+                this.game.local_player.makeMove('queer', suit);
+            },
+
+            doNothing () {
+                this.game.local_player.makeMove('no');
             }
 
         },

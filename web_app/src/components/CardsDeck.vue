@@ -51,8 +51,7 @@
                     return {
                         id: card.id,
                         playable: (
-                            i === arr.length - 1 &&
-                            this.localPlayerOnTurn
+                            i === arr.length - 1 && this.canDraw
                         ),
                         css_styles: {
                             transform: cardCssTransformation(
@@ -61,6 +60,15 @@
                         }
                     }
                 });
+            },
+
+            canDraw () {
+                const state = this.game_state;
+                return this.localPlayerOnTurn &&
+                    state.queer !== true &&
+                    !( state.continuance &&
+                        state.realPileCard().rank === srsi.cards.ACE
+                    );
             }
 
         },
@@ -68,7 +76,7 @@
         methods: {
 
             drawCards () {
-                if (!this.localPlayerOnTurn) return;
+                if (!this.canDraw) return;
                 this.game.local_player.makeMove('draw');
             }
 

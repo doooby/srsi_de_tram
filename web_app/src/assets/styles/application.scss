@@ -1,5 +1,12 @@
 $gray_bg: rgba(169, 169, 169, 0.67);
 
+%selectable {
+  border: 2px solid $gray-500;
+  &:hover {
+    box-shadow: 0 0 5px 5px $gray-500;
+  }
+}
+
 .srsi {
   background-color: #2a753a;
 
@@ -44,14 +51,32 @@ $gray_bg: rgba(169, 169, 169, 0.67);
 
   }
 
+  .cards-pile {
+    .floating-label {
+      position: absolute;
+      top: 10px;
+      .suit {
+        margin-left: 10px;
+      }
+    }
+  }
+
   .cards-hand-local {
-    &.srsi-cards > div {
+    .srsi-cards > div {
       top: 0;
       transition: top 0.2s, transform 0.2s;
       &.-selectable {
         &:hover {
           top: -#{ceil(constr('card.regular.height') * 0.2)}px;
         }
+      }
+    }
+
+    .floating-label {
+      position: absolute;
+      bottom: 0;
+      .button {
+        margin: 10px;
       }
     }
   }
@@ -65,22 +90,10 @@ $gray_bg: rgba(169, 169, 169, 0.67);
       position: relative;
     }
 
-    .remote-label {
+    .floating-label {
       position: absolute;
-      left: 0;
-      z-index: 10;
-      padding: 5px;
-      background-color: $gray_bg;
-      font-weight: bold;
-      font-size: 140%;
+      right: 10px;
     }
-  }
-
-  .printout-alert {
-    font-size: 140%;
-    background-color: $gray_bg;
-    padding: 5px;
-    font-weight: bold;
   }
 
 }
@@ -90,6 +103,7 @@ $gray_bg: rgba(169, 169, 169, 0.67);
   height: 100%;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 .srsi-cards {
@@ -108,9 +122,7 @@ $gray_bg: rgba(169, 169, 169, 0.67);
     }
 
     &.-selectable {
-      &:hover {
-        box-shadow: 0 0 5px 5px $gray-500;
-      }
+      @extend %selectable;
     }
   }
 
@@ -120,4 +132,33 @@ $gray_bg: rgba(169, 169, 169, 0.67);
       height: #{constr('card.small.height')}px;
     }
   }
+}
+
+.floating-label {
+  font-size: 1.4rem;
+  background-color: $gray_bg;
+  padding: 5px 10px;
+  font-weight: bold;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+
+  .suit {
+    font-size: 3rem;
+    line-height: 2rem;
+    &.-red { color: red; }
+  }
+}
+
+.button {
+  background-color: white;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  @extend %selectable;
+
+  &:hover {
+    cursor: pointer;
+  }
+
 }

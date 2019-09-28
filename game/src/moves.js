@@ -52,9 +52,9 @@ class DrawMove extends Move {
             return;
         }
 
-        let attack = state.attack, eights = state.eights, to_take = 1;
-        if (attack > 0) to_take = attack;
-        else if (eights > 0) to_take = eights;
+        let to_take = 1;
+        if (state.attack > 0) to_take = state.attack;
+        else if (state.eights > 0) to_take = state.eights;
 
         if (to_take > state.cardsLeftToTake()) {
             this.error = 'not_enough_cards';
@@ -67,13 +67,13 @@ class DrawMove extends Move {
         state.continuance = false;
         state.queer = null;
 
-        let attack = state.attack, eights = state.eights, to_take = 1;
-        if (attack > 0) {
-            to_take = attack;
+        let to_take = 1;
+        if (state.attack > 0) {
+            to_take = state.attack;
             state.attack = 0;
         }
-        else if (eights > 0) {
-            to_take = eights;
+        else if (state.eights > 0) {
+            to_take = state.eights;
             state.continuance = true;
             state.eights = 0;
         }
@@ -155,7 +155,6 @@ class LayMove extends Move {
         let card = state.players[state.on_move].splice(this.card_index, 1)[0];
         state.pile.push(card);
 
-        let attack = state.attack, eights = state.eights;
         state.continuance = true;
         state.queer = null;
         let end_of_move = true;
@@ -163,11 +162,11 @@ class LayMove extends Move {
         switch (card.rank) {
 
             case cards.SEVEN:
-                state.attack = attack + 2;
+                state.attack += 2;
                 break;
 
             case cards.EIGHT:
-                state.eights = eights + 1;
+                state.eights += 1;
                 end_of_move = false;
                 break;
 
@@ -181,11 +180,11 @@ class LayMove extends Move {
                 break;
 
             case cards.KING:
-                state.attack = attack + (card.suit === cards.LEAVES ? 4 : 0);
+                state.attack += (card.suit === cards.LEAVES ? 4 : 0);
                 break;
 
             case cards.JOKER:
-                state.attack = attack + 5;
+                state.attack += 5;
                 break;
         }
         if (end_of_move) state.toNextPlayer();
