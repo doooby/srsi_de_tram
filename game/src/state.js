@@ -1,7 +1,7 @@
-import {Card, cards} from './cards';
-import { LayMove } from './moves';
+const { Card, cards } = require('./cards');
+const { LayMove } = require('./moves');
 
-export default class State {
+class State {
 
     constructor (state) {
         this.deck = state.deck.slice();
@@ -120,3 +120,5 @@ State.at = function (options) {
 
     return state;
 };
+
+module.exports = State;

@@ -1,15 +1,11 @@
 {
-  "name": "srsi_de_tram",
-  "version": "1.0.0",
-  "description": "A card game",
-  "main": "index.js",
-  "author": "doooby <zelazk.o@email.cz>",
-  "license": "MIT",
+  "name": "game",
+  "version": "0.1.0",
   "private": true,
+  "scripts": {
+    "test": "jasmine"
+  },
   "dependencies": {
-    "@babel/core": "^7.2.0",
-    "@babel/preset-env": "^7.2.0",
-    "@babel/register": "^7.0.0",
-    "jasmine": "^3.3.0"
+    "jasmine": "^3.5.0"
   }
 }

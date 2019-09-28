@@ -8,7 +8,7 @@
 
 <script>
     import { mapState } from 'vuex';
-    import { localizedGetter } from '../../../game/texts/index';
+    import { localizedGetter } from '../../lib/game_texts';
 
     export default {
 

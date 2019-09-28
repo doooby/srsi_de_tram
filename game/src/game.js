@@ -1,7 +1,7 @@
-import {cards} from './cards';
-import State from './state';
+const { cards } = require('./cards');
+const State = require('./state');
 
-export default class Game {
+class Game {
 
     constructor (players, local_player_index) {
         this.state = State.empty.duplicate();
@@ -60,3 +60,5 @@ export default class Game {
         return this.local_player.others();
     }
 }
+
+module.exports = Game;

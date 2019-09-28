@@ -1,6 +1,6 @@
-import {cards, Card} from '../src/cards';
-import {LayMove, DrawMove, NoMove, QueerMove} from '../src/moves';
-import State from '../src/state';
+const { cards, Card } = require('../src/cards');
+const { LayMove, DrawMove, NoMove, QueerMove } = require('../src/moves');
+const State = require('../src/state');
 
 describe('game rules', () => {
 

@@ -1,6 +1,6 @@
-import {cards, Card} from '../src/cards';
-import Player from '../src/player';
-import State from '../src/state';
+const { cards, Card } = require('../src/cards');
+const Player = require('../src/player');
+const State = require('../src/state');
 
 describe('possible moves', () => {
 
@@ -75,7 +75,7 @@ describe('possible moves', () => {
             continuance: true,
             eights: 1
         });
-        expect(actions).toEqual(['draw', 'lay']);
+        expect(actions).toEqual(['eights', 'lay']);
     });
 
     it('after eight, having no more', () => {
@@ -84,7 +84,7 @@ describe('possible moves', () => {
             continuance: true,
             eights: 1
         });
-        expect(actions).toEqual(['draw', 'lay']);
+        expect(actions).toEqual(['eights', 'lay']);
     });
 
     it('attacked, having only ace', () => {

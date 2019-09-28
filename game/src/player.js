@@ -1,8 +1,8 @@
-import { createMove } from './moves';
+const { createMove } = require('./moves');
 
 const EVENTS = ['state_changed', 'moved', 'bad_move', 'out_of_order'];
 
-export default class Player {
+class Player {
 
     constructor (name) {
         this.name = name;
@@ -116,3 +116,5 @@ class Subscription {
     }
 
 }
+
+module.exports = Player;

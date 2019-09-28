@@ -1,6 +1,6 @@
-import {cards} from './cards';
+const { cards } = require('./cards');
 
-export default class SimpleAi {
+class SimpleAi {
 
     constructor () {
         this.events = {
@@ -116,3 +116,5 @@ export default class SimpleAi {
 function random_item (array) {
     return array[Math.floor(Math.random() * array.length)];
 }
+
+module.exports = SimpleAi;

@@ -112,4 +112,8 @@ cards.index = cards.reduce((memo, card) => {
 
 Object.freeze(cards);
 Object.freeze(transcriptions);
-export {Card, cards, transcriptions};
+module.exports = {
+    Card,
+    cards,
+    transcriptions
+};

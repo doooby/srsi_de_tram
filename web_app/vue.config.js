@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const path = require('path');
 const constants = require('./config/constants');
 const {getConst, getResponsiveConst} = require('./config/sass_constants');
 
@@ -20,6 +21,11 @@ module.exports = {
     },
 
     configureWebpack: {
+        resolve: {
+            alias: {
+                GAME_PATH: path.resolve(__dirname, '../game')
+            }
+        },
         plugins: [
             new webpack.DefinePlugin({
                 CONSTANTS: JSON.stringify(constants)

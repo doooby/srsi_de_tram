@@ -1,12 +1,4 @@
-import {cards} from './cards';
-
-export class Moves {
-
-    constructor () {
-        this.valid = true;
-    }
-
-}
+const { cards } = require('./cards');
 
 const moves = {
     draw () { return new DrawMove(); },
@@ -15,11 +7,11 @@ const moves = {
     no () { return new NoMove(); }
 };
 
-export function createMove (name, ...args) {
+function createMove (name, ...args) {
     return moves[name](...args);
 }
 
-Moves.parse = function (data) {
+function parseMove (data) {
     if (typeof data === 'object') switch (data.m) {
         case 'd':
             return new DrawMove();
@@ -33,9 +25,15 @@ Moves.parse = function (data) {
         case 'n':
             return new NoMove();
     }
-};
+}
 
-export class DrawMove extends Moves {
+class Move {
+    constructor () {
+        this.valid = true;
+    }
+}
+
+class DrawMove extends Move {
 
     serialize () {
         return {m: 'd'};
@@ -92,7 +90,7 @@ export class DrawMove extends Moves {
 
 }
 
-export class LayMove extends Moves {
+class LayMove extends Move {
 
     constructor (card_index) {
         super();
@@ -197,7 +195,7 @@ export class LayMove extends Moves {
 
 }
 
-export class QueerMove extends Moves {
+class QueerMove extends Move {
 
     constructor (suit) {
         super();
@@ -225,7 +223,7 @@ export class QueerMove extends Moves {
 
 }
 
-export class NoMove extends Moves {
+class NoMove extends Move {
 
     serialize () {
         return {m: 'n'};
@@ -254,3 +252,12 @@ export class NoMove extends Moves {
     }
 
 }
+
+module.exports = {
+    createMove,
+    parseMove,
+    DrawMove,
+    LayMove,
+    QueerMove,
+    NoMove,
+};

@@ -1,5 +1,5 @@
-import cs from './cs';
-import { getConstSafe } from '../../web_app/lib/constants_store';
+const cs = require('GAME_PATH/texts/cs');
+const { getConstSafe } = require('./constants_store');
 
 const LOCALES = {
     cs
@@ -18,6 +18,6 @@ function localizedGetter (locale) {
     }
 }
 
-export {
+module.exports = {
     localizedGetter
 };
