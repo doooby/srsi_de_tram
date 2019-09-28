@@ -13,6 +13,7 @@ const main = new Vue({
 main.$mount('#srsi-entry');
 
 setTimeout(() => {
+    // new game
     const game = new srsi.Game(
         [
             new srsi.Player('local'),
@@ -20,25 +21,33 @@ setTimeout(() => {
         ],
         0
     );
+    game.history = [];
+    window.GAME = game;
     store.commit('mutateSetGame', game);
-    store.commit('mutateSetGameState', game.state);
 
-    game.begin(srsi.cards.createNewShuffledDeck());
-    store.commit('mutateSetGameState', game.state);
-
+    // PLAYER
     const local = game.local_player;
     local.subscribe('bad_move', (player, move) => {
         if (local !== player) return;
-        store.dispatch('actionPrintoutMessage', move.error);
-    });
-    local.subscribe('moved', (player, move) => {
-        if (local !== player) return;
-        store.dispatch('actionMakeMove', {
-            player: local,
-            move
+        store.dispatch('actionPrintoutMessage', {
+            code: `bad_move.${move.error}`
         });
     });
+    local.subscribe('state_changed', () => {
+        store.commit('mutateSetGameState', game.state);
+    });
 
+    // AI
+    game.remotePlayers().forEach(player => {
+        const actor = new srsi.SimpleAi();
+        player.attachActor(actor);
+    });
+
+    // begin the game
+    game.begin(srsi.cards.createNewShuffledDeck());
+    store.commit('mutateSetGameState', game.state);
+    // let the players start
+    // TODO just the state's on_move !== -1
     store.commit('mutateGameStarted');
 
 }, 1000);

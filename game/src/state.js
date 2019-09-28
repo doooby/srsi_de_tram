@@ -1,4 +1,5 @@
-import {Card} from './card';
+import {Card, cards} from './cards';
+import { LayMove } from './moves';
 
 export default class State {
 
@@ -62,6 +63,34 @@ export default class State {
             }
         }
         return this.winner;
+    }
+
+    possibleActions () {
+        if (this.queer === true) return ['queer'];
+        else if (this.eights > 0) return ['eights', 'lay'];
+
+        let passive = 'draw';
+        if (this.continuance) {
+            if (this.pileCard().rank === cards.ACE) passive = 'stay';
+            else if (this.attack > 0) passive = 'devour';
+        }
+        let hand = this.onMovePlayerCards();
+        let last_is_ace = hand.length === 1 && hand[0].rank === cards.ACE;
+
+        return last_is_ace ? [passive] : [passive, 'lay'];
+    }
+
+    possibleToLay () {
+        const hand_size = this.onMovePlayerCards().length;
+        const possible = [];
+
+        for (let i=0; i<hand_size; i+=1) {
+            const move = new LayMove(i);
+            move.evaluate(this);
+            if (move.valid) possible.push(i);
+        }
+
+        return possible;
     }
 
 }

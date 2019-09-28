@@ -4,8 +4,9 @@
         <div
          v-for="item in cardsItems"
          :key="item.id"
-         :class="item.css_class"
-         :style="item.css_styles">
+         :class="item.playable ? '-selectable' : ''"
+         :style="item.css_styles"
+         @click="drawCards()">
             <img
              :src="card_bg"/>
         </div>
@@ -39,7 +40,7 @@
             },
 
             cardsItems () {
-                const data = this.cards.map(card => {
+                return this.cards.map((card, i, arr) => {
 
                     const [x, y] = spreadInsideCircle(
                         0.06 * this.cardSizes.regular[0],
@@ -49,7 +50,10 @@
 
                     return {
                         id: card.id,
-                        css_class: '',
+                        playable: (
+                            i === arr.length - 1 &&
+                            this.localPlayerOnTurn
+                        ),
                         css_styles: {
                             transform: cardCssTransformation(
                                 x, y, rot, ...this.cardSizes.regular
@@ -57,12 +61,15 @@
                         }
                     }
                 });
+            }
 
-                if (data.length > 0 && this.localPlayerOnTurn) {
-                    const card_data = data[data.length - 1];
-                    card_data.css_class += ' -selectable';
-                }
-                return data;
+        },
+
+        methods: {
+
+            drawCards () {
+                if (!this.localPlayerOnTurn) return;
+                this.game.local_player.makeMove('draw');
             }
 
         }

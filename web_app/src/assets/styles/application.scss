@@ -11,36 +11,37 @@ $gray_bg: rgba(169, 169, 169, 0.67);
     grid-template-columns: 10% 15% auto 35%;
     grid-template-rows: 50% 40% 10%;
 
-    > .-deck {
+    > .deck {
       grid-column: 1 / span 2;
       grid-row: 1;
     }
 
-    > .-pile {
+    > .pile {
       grid-column: 3;
       grid-row: 1;
     }
 
-    > .-remotes {
+    > .remotes {
       grid-column: 4;
       grid-row: 1;
     }
 
-    > .-ui {
+    > .ui {
       grid-column: 1;
       grid-row: 2 / span 2;
       background-color: rgba(255, 126, 0, 0.56);
     }
 
-    > .-local-cards {
+    > .local-cards {
       grid-column: 2 / span 3;
       grid-row: 2;
     }
 
-    > .-printout {
+    > .printout {
       grid-column: 2 / span 3;
       grid-row: 3;
     }
+
   }
 
   .cards-hand-local {

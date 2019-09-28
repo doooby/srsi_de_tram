@@ -1,4 +1,4 @@
-import {cards, Card} from '../src/card';
+import {cards, Card} from '../src/cards';
 import Player from '../src/player';
 import State from '../src/state';
 

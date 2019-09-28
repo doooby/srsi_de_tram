@@ -3,11 +3,27 @@ const slice = require('lodash/slice');
 function getConst (store, key) {
     const keys = key.split('.');
     let value = store;
+
     for (let i=0; i<keys.length; i+=1) {
         value = value[keys[i]];
         if (value === undefined) {
             const bad_key = slice(keys, 0, i + 1).join('.');
-            throw `constants_store: undefined at key ${bad_key}`;
+            throw `constants_store: undefined at ${bad_key}`;
+        }
+    }
+
+    return value;
+}
+
+function getConstSafe (store, key, failover) {
+    const keys = key.split('.');
+    let value = store;
+
+    for (let i=0; i<keys.length; i+=1) {
+        value = value[keys[i]];
+        if (value === undefined) {
+            if (failover) return failover(key, keys, i);
+            else return `no value at ${key}`;
         }
     }
 
@@ -17,7 +33,7 @@ function getConst (store, key) {
 function getResponsiveConst (store, key, media_size, media_sizes_list) {
     let value = getConst(store, key);
     if (typeof value !== 'object') {
-        throw `constants_store: not responsive key ${key}`;
+        throw `constants_store: not responsive at ${key}`;
     }
 
     if (media_sizes_list === undefined) media_sizes_list = store['media_sizes'];
@@ -29,7 +45,7 @@ function getResponsiveConst (store, key, media_size, media_sizes_list) {
         if (size_value !== undefined) return  size_value;
     }
 
-    throw `constants_store: responsive key ${key} has no value for ${media_size}`;
+    throw `constants_store: no value for ${media_size} at ${key}`;
 }
 
 function inherentMediaSizes (top, all_sizes) {
@@ -43,6 +59,7 @@ function inherentMediaSizes (top, all_sizes) {
 }
 
 module.exports = {
-  getConst,
-  getResponsiveConst
+    getConst,
+    getConstSafe,
+    getResponsiveConst
 };

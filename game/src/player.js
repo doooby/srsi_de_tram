@@ -1,5 +1,4 @@
-import {DrawMove, LayMove, NoMove, QueerMove} from './move';
-import {cards} from './card';
+import { createMove } from './moves';
 
 const EVENTS = ['state_changed', 'moved', 'bad_move', 'out_of_order'];
 
@@ -7,6 +6,7 @@ export default class Player {
 
     constructor (name) {
         this.name = name;
+        this.actor = null;
     }
 
     joinGame (game, index) {
@@ -14,44 +14,22 @@ export default class Player {
         this.index = index;
     }
 
-    forOthers (fn) {
-        this.game.players.forEach(p => {
-           if (p !== this) fn(p);
-        });
+    others () {
+        return this.game.players.filter(p => this !== p);
     }
 
     possibleActions () {
         const state = this.game.state;
         if (state.on_move !== this.index) return [];
-
-        if (state.queer === true) return ['queer'];
-        else if (state.eights > 0) return ['draw', 'lay'];
-
-        let passive = 'draw';
-        if (state.continuance) {
-            if (state.pileCard().rank === cards.ACE) passive = 'stay';
-            else if (state.attack > 0) passive = 'devour';
-        }
-        let player_cards = state.onMovePlayerCards();
-        let last_is_ace = player_cards.length === 1 && player_cards[0].rank === cards.ACE;
-
-        return last_is_ace ? [passive] : [passive, 'lay'];
+        else return state.possibleActions();
     }
 
-    lay (card_i) {
-        return new LayMove(card_i);
+    createMove (...args) {
+        return createMove(...args);
     }
 
-    draw () {
-        return new DrawMove();
-    }
-
-    doNothing () {
-        return new NoMove();
-    }
-
-    selectQueerSuit (suit) {
-        return new QueerMove(suit);
+    makeMove (...args) {
+        this.game.playerMoves(this, this.createMove(...args));
     }
 
     subscribe (event, fn) {
@@ -74,6 +52,34 @@ export default class Player {
 
         const sub = Subscription.fetch(this, event);
         if (sub) sub.invoke(args);
+    }
+
+    attachActor (actor) {
+        this.actor = actor;
+        actor.attach(this);
+
+        const { events } = this.actor;
+
+        if (events) {
+            Object.keys(events).forEach(name =>
+                this.subscribe(name, events[name])
+            );
+        }
+    }
+
+    detachActor () {
+        if (!this.actor) return;
+        const { detach, events } = this.actor;
+
+        if (detach) this.actor.detach();
+
+        if (events) {
+            Object.keys(events).forEach(name =>
+                this.unsubscribe(name, events[name])
+            );
+        }
+
+        this.actor = null;
     }
 
 }

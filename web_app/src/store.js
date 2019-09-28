@@ -8,6 +8,7 @@ export default new Vuex.Store({
 
     state: {
 
+        locale: 'cs',
         media: 'sm',
 
         game: null,
@@ -34,6 +35,7 @@ export default new Vuex.Store({
         },
 
         mutateSetPrintout (state, record) {
+            Object.freeze(record);
             state.printout = record;
         },
 
@@ -41,24 +43,25 @@ export default new Vuex.Store({
 
     actions: {
 
-        actionMakeMove ({ state, commit }, { player, move }) {
-            state.game.setState(
-                move.applyTo(state.game_state),
-                player
-            );
-            commit('mutateSetGameState', state.game.state);
-        },
-
-        actionPrintoutMessage ({ state, commit }, message) {
-            const cleaner = () => {
-                if (state.printout === record) commit('mutateSetPrintout', null);
+        actionPrintoutMessage ({ state, commit }, msg) {
+            const printout = {
+                text: msg.text,
+                code: msg.code
             };
 
-            const record = Object.freeze({
-                message,
-                cleaner: setTimeout(cleaner, 3000)
-            });
-            commit('mutateSetPrintout', record);
+            if (!msg.persistent) {
+                printout.cleaner = setTimeout(
+                    () => {
+                        const current = state.printout;
+                        if (current && current.cleaner === printout.cleaner) {
+                            commit('mutateSetPrintout', null);
+                        }
+                    },
+                    3000
+                );
+            }
+
+            commit('mutateSetPrintout', printout);
         },
 
     },

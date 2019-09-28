@@ -1,5 +1,5 @@
-import {cards, Card} from '../src/card';
-import {LayMove, DrawMove, NoMove, QueerMove} from '../src/move';
+import {cards, Card} from '../src/cards';
+import {LayMove, DrawMove, NoMove, QueerMove} from '../src/moves';
 import State from '../src/state';
 
 describe('game rules', () => {

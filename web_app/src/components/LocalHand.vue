@@ -36,7 +36,8 @@
 
             cardsItems () {
                 return mapCardsToFlapper(
-                    this.cards, this.cardSizes.regular,
+                    this.cards,
+                    this.cardSizes.regular,
                     (card, transform) => ({
                         id: card.id,
                         img_data: srsi.images[card.id],
@@ -55,10 +56,7 @@
 
             layCard (index) {
                 if (!this.localPlayerOnTurn) return;
-                this.game.playerMove(
-                    this.game.local_player,
-                    srsi.moves.lay(index)
-                );
+                this.game.local_player.makeMove('lay', index);
             }
 
         },

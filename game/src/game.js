@@ -1,4 +1,4 @@
-import {cards} from './card';
+import {cards} from './cards';
 import State from './state';
 
 export default class Game {
@@ -13,19 +13,27 @@ export default class Game {
     begin (deck) {
         let state = State.empty.duplicate();
         state.deck = (deck === undefined) ? cards.createNewShuffledDeck() : deck;
-        for (let i=0; i<this.players.length; i+=1) state.players[i] = state.deck.splice(0, 6);
+        for (let i=0; i<this.players.length; i+=1) {
+            state.players[i] = state.deck.splice(0, 10);
+        }
         state.pile = state.deck.splice(0, 1);
         state.on_move = 0;
-        this.setState(state, 'begin');
+        this.setState(state);
     }
 
-    setState (state, by_player) {
+    setState (state, player, move) {
         this.state = state;
-        if (this.history !== undefined) this.history.push(state);
-        this.invokeEvent('state_changed', by_player);
+        if (this.history !== undefined) {
+            this.history.push(
+                state,
+                player && player.index,
+                move && move.serialize()
+            );
+        }
+        this.invokeEvent('state_changed', player, state);
     }
 
-    playerMove (player, move) {
+    playerMoves (player, move) {
         if (this.state.on_move !== player.index) {
             this.invokeEvent('out_of_order', player);
             return;
@@ -43,10 +51,12 @@ export default class Game {
     }
 
     invokeEvent (name, ...args) {
-        this.players.forEach(p => p.invoke(name, ...args));
+        setTimeout(() => {
+            this.players.forEach(p => p.invoke(name, ...args));
+        }, 0);
     }
 
     remotePlayers () {
-        return this.players.filter(p => p!== this.local_player);
+        return this.local_player.others();
     }
 }
