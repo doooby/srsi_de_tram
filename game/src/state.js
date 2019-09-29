@@ -18,10 +18,14 @@ class State {
         return new State(this);
     }
 
-    toNextPlayer () {
+    nextPlayer () {
         let next = this.on_move + 1;
         if (next >= this.players.length) next = 0;
-        this.on_move = next;
+        return next;
+    }
+
+    toNextPlayer () {
+        this.on_move = this.nextPlayer();
     }
 
     cardsLeftToTake () {

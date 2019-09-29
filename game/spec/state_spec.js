@@ -286,7 +286,7 @@ describe('game rules', () => {
             expect(diff.list).toEqual(['pile', 'player', 'continuance', 'eights']);
         });
 
-        it('second eight', () => {
+        it('third eight', () => {
             const {diff, state, new_state} = state_after_move(State.at({
                     players: [
                         [new Card(cards.BELLS | cards.EIGHT)],
@@ -300,23 +300,6 @@ describe('game rules', () => {
             expect(diff.pile).toBe(1);
             expect(diff.player).toBe(-1);
             expect(new_state.eights).toBe(2);
-            expect(diff.list).toEqual(['pile', 'player', 'eights']);
-        });
-
-        it('third eight', () => {
-            const {diff, state, new_state} = state_after_move(State.at({
-                    players: [
-                        [new Card(cards.BELLS | cards.EIGHT)],
-                        []
-                    ],
-                    continuance: true,
-                    eights: 2
-                }),
-                new LayMove(0)
-            );
-            expect(diff.pile).toBe(1);
-            expect(diff.player).toBe(-1);
-            expect(new_state.eights).toBe(3);
             expect(diff.list).toEqual(['pile', 'player', 'eights']);
         });
 
@@ -338,6 +321,29 @@ describe('game rules', () => {
             expect(diff.player).toBe(2);
             expect(new_state.eights).toBe(0);
             expect(diff.list).toEqual(['deck', 'pile', 'player', 'on_move', 'eights']);
+        });
+
+        it('take four eights', () => {
+            const {diff, state, new_state} = state_after_move(State.at({
+                    deck: [
+                        new Card(cards.LEAVES | cards.NINE),
+                        new Card(cards.BELLS | cards.NINE),
+                        new Card(cards.LEAVES | cards.TEN),
+                        new Card(cards.BELLS | cards.TEN),
+                    ],
+                    players: [
+                        [],
+                        []
+                    ],
+                    continuance: true,
+                    eights: 4
+                }),
+                new DrawMove()
+            );
+            expect(diff.deck).toBe(-4);
+            expect(new_state.players[1].length).toBe(4);
+            expect(new_state.eights).toBe(0);
+            expect(diff.list).toEqual(['deck', 'on_move', 'eights']);
         });
 
     });

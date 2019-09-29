@@ -67,6 +67,7 @@ class DrawMove extends Move {
         state.continuance = false;
         state.queer = null;
 
+        let taker = state.on_move;
         let to_take = 1;
         if (state.attack > 0) {
             to_take = state.attack;
@@ -74,6 +75,7 @@ class DrawMove extends Move {
         }
         else if (state.eights > 0) {
             to_take = state.eights;
+            if (to_take >= 4) taker = state.nextPlayer();
             state.continuance = true;
             state.eights = 0;
         }
@@ -82,7 +84,7 @@ class DrawMove extends Move {
         if (to_take >= state.deck.length && left_in_pile > 0) {
             state.deck = state.deck.concat(state.pile.splice(0, left_in_pile));
         }
-        state.players[state.on_move] = state.players[state.on_move].concat(state.deck.splice(0, to_take));
+        state.players[taker] = state.players[taker].concat(state.deck.splice(0, to_take));
         state.toNextPlayer();
 
         return state;
