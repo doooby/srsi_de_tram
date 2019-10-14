@@ -4,11 +4,11 @@
         <div
          class="srsi-cards">
             <div
-             v-for="item in cardsItems"
-             :key="item.id"
-             :style="item.css_styles">
+             v-for="card in cards"
+             :key="card.id"
+             :style="card.css_styles">
                 <img
-                 :src="item.img_data"/>
+                 :src="card.img_data"/>
             </div>
         </div>
 
@@ -32,29 +32,30 @@
 
     export default {
 
-        computed: {
+        data () {
+            return {
+                cards: []
+            }
+        },
 
-            ...mapState(['game', 'game_state']),
-            ...mapGetters(['cardSizes', 'textGet']),
+        watch: {
+            pile (new_pile) {
+                if (new_pile.length === 0) this.cards = [];
 
-            cards () {
-                if (this.game_state) {
-                    return this.game_state.pile;
-                } else {
-                    return [];
+                if (this.cards.length > 0 &&
+                    this.cards[0].id !== new_pile[0].id)
+                {
+                    this.cards.length = 0;
                 }
-            },
 
-            cardsItems () {
-                return this.cards.map(card => {
-
+                for (let i=this.cards.length; i<new_pile.length; i+=1) {
+                    const card = new_pile[i];
                     const [x, y] = spreadInsideCircle(
                         0.35 * this.cardSizes.regular[0],
                         (Math.random() * 2 * Math.PI)
                     );
                     const rot = Math.random() * 2;
-
-                    return {
+                    this.cards.push({
                         id: card.id,
                         img_data: srsi.images[card.id],
                         css_styles: {
@@ -62,8 +63,22 @@
                                 x, y, rot, ...this.cardSizes.regular
                             )
                         }
-                    }
-                });
+                    });
+                }
+            }
+        },
+
+        computed: {
+
+            ...mapState(['game', 'game_state']),
+            ...mapGetters(['cardSizes', 'textGet']),
+
+            pile () {
+                if (this.game_state) {
+                    return this.game_state.pile;
+                } else {
+                    return [];
+                }
             },
 
             overlay () {
