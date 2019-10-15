@@ -1,0 +1,18 @@
+(function () {
+    var root = document.getElementById('<%= app_container %>');
+
+    var styles = document.createElement('LINK');
+    styles.setAttribute('rel', 'stylesheet');
+    styles.setAttribute('type', 'text/css');
+    styles.setAttribute('href', '<%= asset 'app_styles.css' %>');
+    root.appendChild(styles);
+
+    var app_div = document.createElement('DIV');
+    app_div.className = 'srsi';
+    app_div.innerHTML = '<div class="app-flash"><h2>Initializing ...</h2></div>';
+    root.appendChild(app_div);
+
+    var app = document.createElement('SCRIPT');
+    app.setAttribute('src', '<%= asset 'app.js' %>');
+    root.appendChild(app);
+}());

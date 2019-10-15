@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+bundle exec puma --pidfile tmp/puma.pid --port 3000

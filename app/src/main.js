@@ -2,7 +2,7 @@ import Vue from 'vue';
 import store from './store';
 
 import App from './App.vue';
-import './assets/styles/index.scss';
+import './styles/index.scss';
 
 import srsi from './srsi';
 

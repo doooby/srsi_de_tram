@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+bundle exec pumactl -p "$(cat tmp/puma.pid)" restart

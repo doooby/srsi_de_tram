@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require File.expand_path('../../application', __FILE__)
+require 'irb'
+binding.irb
