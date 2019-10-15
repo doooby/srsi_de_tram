@@ -1,5 +1,5 @@
 (function () {
-    var root = document.getElementById('<%= app_container %>');
+    var root = document.getElementById('srsi_app_container');
 
     var styles = document.createElement('LINK');
     styles.setAttribute('rel', 'stylesheet');
@@ -7,10 +7,15 @@
     styles.setAttribute('href', '<%= asset 'app_styles.css' %>');
     root.appendChild(styles);
 
-    var app_div = document.createElement('DIV');
-    app_div.className = 'srsi';
-    app_div.innerHTML = '<div class="app-flash"><h2>Initializing ...</h2></div>';
-    root.appendChild(app_div);
+    var mount = document.createElement('DIV');
+    mount.id = 'app-mount-point';
+    mount.className = 'srsi';
+    mount.innerHTML = `
+<div class="app-flash">
+  <h2>Initializing ...</h2>
+</div>
+    `;
+    root.appendChild(mount);
 
     var app = document.createElement('SCRIPT');
     app.setAttribute('src', '<%= asset 'app.js' %>');

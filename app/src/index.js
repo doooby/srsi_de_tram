@@ -1,16 +1,21 @@
 import Vue from 'vue';
 import store from './store';
 
-import App from './App.vue';
-import './styles/index.scss';
+import App from './App';
+import '../styles/app.scss';
 
 import srsi from './srsi';
 
-const main = new Vue({
-    store,
-    render: function (h) { return h(App); }
-});
-main.$mount('#srsi-entry');
+function mount(element) {
+    new Vue({
+        el: element,
+        store,
+        render: function (h) { return h(App); }
+    });
+}
+
+const mount_point = document.getElementById('app-mount-point');
+mount(mount_point);
 
 setTimeout(() => {
     // new game

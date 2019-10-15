@@ -20,11 +20,7 @@ string_inquirer_class = Class.new String do
 end
 RACK_ENV = string_inquirer_class.new(ENV['RACK_ENV'] ||= 'development')
 
-APP_PATH = if RACK_ENV.development?
-  'tmp/build'
-else
-  'public/app'
-end
+ASSETS_PATH = "#{ RACK_ENV.development? ? 'tmp/build' : 'public' }/assets"
 
 ### Load bundled gems
 Bundler.require :default, RACK_ENV

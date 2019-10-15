@@ -16,9 +16,7 @@ class Server < Sinatra::Base
 
   get '/loader.js' do
     content_type 'text/javascript'
-    erb :'loader.js', locals: {
-        app_container: 'app-container'
-    }
+    erb :'loader.js'
   end
 
   get '/assets/*' do |asset|
