@@ -1,0 +1,5 @@
+* Session class to hold game play
+* delete srsi file, import stuff ad hoc
+* remove store.game_started as state.on_move = -1 so use this
+* remove sass const
+* set font size + use rem in css

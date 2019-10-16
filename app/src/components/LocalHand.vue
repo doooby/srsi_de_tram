@@ -68,7 +68,7 @@
                     this.cardSizes.regular,
                     (card, transform) => ({
                         id: card.id,
-                        img_data: srsi.images[card.id],
+                        img_data: srsi.cardImage(card.id),
                         css_styles: { transform }
                     })
                 );

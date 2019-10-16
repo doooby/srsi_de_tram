@@ -1,7 +1,18 @@
 <template>
     <div
-     class="srsi">
+     class="srsi"
+     :style="css_style">
+
         <div
+         v-if="platform_message"
+         class="platform-flash">
+            <h2>
+                {{platform_message}}
+            </h2>
+        </div>
+
+        <div
+         v-else
 
          class="board">
 
@@ -37,11 +48,12 @@
 
         </div>
 
-
     </div>
 </template>
 
 <script>
+    import { mapState } from 'vuex';
+
     import CardsDeck from './components/CardsDeck.vue';
     import CardsPile from './components/CardsPile.vue';
     import LocalHand from './components/LocalHand.vue';
@@ -57,6 +69,18 @@
             LocalHand,
             PrintoutPanel,
             RemoteHands,
+        },
+
+        computed: {
+            ...mapState(['platform_message', 'platform_size']),
+
+            css_style () {
+                const [ width, height ] = this.platform_size;
+                return {
+                    width: `${width}px`,
+                    height: `${height}px`
+                };
+            }
         }
 
     }

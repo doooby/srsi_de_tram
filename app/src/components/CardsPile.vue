@@ -57,7 +57,7 @@
                     const rot = Math.random() * 2;
                     this.cards.push({
                         id: card.id,
-                        img_data: srsi.images[card.id],
+                        img_data: srsi.cardImage(card.id),
                         css_styles: {
                             transform: cardCssTransformation(
                                 x, y, rot, ...this.cardSizes.regular

@@ -1,0 +1,13 @@
+.srsi {
+  background-color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .platform-flash {
+    margin: 10px;
+    padding: 10px;
+    border: 3px solid $gray-400;
+    color: $gray-400;
+  }
+}

@@ -1,2 +1,2 @@
-require File.expand_path('../application', __FILE__)
+require File.expand_path('../server_boot', __FILE__)
 run Server

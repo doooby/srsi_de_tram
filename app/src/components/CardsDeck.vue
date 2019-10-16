@@ -22,7 +22,7 @@
 
         data () {
             return {
-                card_bg: srsi.images.back,
+                card_bg: srsi.cardImage('back'),
                 cards: []
             };
         },
