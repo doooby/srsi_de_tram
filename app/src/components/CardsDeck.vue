@@ -61,15 +61,12 @@
 
         computed: {
 
-            ...mapState(['game', 'game_state']),
+            ...mapState(['session']),
             ...mapGetters(['cardSizes', 'localPlayerOnTurn']),
 
             deck () {
-                if (this.game_state) {
-                    return this.game_state.deck;
-                } else {
-                    return [];
-                }
+                const { state } = this.session;
+                return state ? state.deck : [];
             },
 
             reversedCards () {
@@ -85,7 +82,7 @@
             },
 
             canDraw () {
-                const state = this.game_state;
+                const { state } = this.session;
                 return this.localPlayerOnTurn &&
                     state.queer !== true &&
                     !( state.continuance &&
@@ -103,7 +100,7 @@
 
             drawCards () {
                 if (!this.canDraw) return;
-                this.game.local_player.makeMove('draw');
+                this.session.game.local_player.makeMove('draw');
             }
 
         }

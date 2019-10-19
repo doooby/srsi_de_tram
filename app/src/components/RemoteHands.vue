@@ -41,20 +41,17 @@
 
         computed: {
 
-            ...mapState(['game', 'game_state']),
-            ...mapGetters(['cardSizes']),
-
-            sessionOn () {
-                return this.game &&this.game_state && this.game_state.on_move !== -1;
-            },
+            ...mapState(['session']),
+            ...mapGetters(['cardSizes', 'inSession']),
 
             remoteHands () {
-                if (!this.sessionOn) return [];
+                if (!this.inSession) return [];
 
-                return this.game.remotePlayers().map(player => ({
+                const { game, state } = this.session;
+                return game.remotePlayers().map(player => ({
                     player,
                     cards: mapCardsToFlapper(
-                        this.game_state.players[player.index],
+                        state.players[player.index],
                         this.cardSizes.small,
                         (card, transform) => ({
                             id: card.id,

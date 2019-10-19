@@ -51,17 +51,14 @@
 
         computed: {
 
-            ...mapState(['game', 'game_state']),
-            ...mapGetters(['cardSizes', 'textGet', 'localPlayerOnTurn']),
-
-            sessionOn () {
-                return this.game &&this.game_state && this.game_state.on_move !== -1;
-            },
+            ...mapState(['session']),
+            ...mapGetters(['cardSizes', 'textGet', 'inSession', 'localPlayerOnTurn']),
 
             cards () {
-                if (this.sessionOn) {
-                    const local = this.game.local_player.index;
-                    return this.game_state.players[local];
+                if (this.inSession) {
+                    const { game, state } = this.session;
+                    const local = game.local_player.index;
+                    return state.players[local];
                 } else {
                     return [];
                 }
@@ -81,7 +78,7 @@
 
             canQueer () {
                 return this.localPlayerOnTurn &&
-                    this.game_state.queer === true;
+                    this.session.state.queer === true;
             },
 
             canLay () {
@@ -90,11 +87,11 @@
             },
 
             canNothing () {
-                const state = this.game_state;
-                return this.localPlayerOnTurn &&
-                    ( state.continuance &&
-                        state.realPileCard().rank === cards.ACE
-                    );
+                if (this.localPlayerOnTurn) {
+                    const state = this.session.state;
+                    return state.continuance &&
+                        state.realPileCard().rank === cards.ACE;
+                }
             }
 
         },
@@ -107,15 +104,15 @@
 
             layCard (index) {
                 if (!this.canLay) return;
-                this.game.local_player.makeMove('lay', index);
+                this.session.game.local_player.makeMove('lay', index);
             },
 
             queerSelect (suit) {
-                this.game.local_player.makeMove('queer', suit);
+                this.session.game.local_player.makeMove('queer', suit);
             },
 
             doNothing () {
-                this.game.local_player.makeMove('no');
+                this.session.game.local_player.makeMove('no');
             }
 
         },

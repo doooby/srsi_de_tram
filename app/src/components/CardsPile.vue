@@ -71,34 +71,31 @@
 
         computed: {
 
-            ...mapState(['game', 'game_state']),
+            ...mapState(['session']),
             ...mapGetters(['cardSizes', 'textGet']),
 
             pile () {
-                if (this.game_state) {
-                    return this.game_state.pile;
-                } else {
-                    return [];
-                }
+                const { state } = this.session;
+                return state ? state.pile : [];
             },
 
             overlay () {
-                if (!this.game_state) return;
-                const { attack, queer } = this.game_state;
+                const { state } = this.session;
+                if (!state) return;
 
-                if (attack) return {
+                if (state.attack) return {
                     text: this.textGet(
                         'state.attack',
-                        { power: String(attack) }
+                        { power: String(state.attack) }
                     )
                 };
 
-                if (typeof queer === 'number') return {
+                if (typeof state.queer === 'number') return {
                     text: this.textGet(
                         'state.queer',
                         { suit: '' }
                     ),
-                    queer
+                    queer: state.queer
                 };
             }
 

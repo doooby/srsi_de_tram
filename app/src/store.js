@@ -14,8 +14,7 @@ export function createStore () {
             locale: 'cs',
             media: 'sm',
 
-            game: null,
-            game_state: null,
+            session: {},
             printout: null,
 
         },
@@ -44,9 +43,14 @@ const getters = {
         return localizedGetter(locale);
     },
 
-    localPlayerOnTurn ({ game, game_state }) {
-        return game && game_state &&
-            game_state.on_move === game.local_player.index;
+    inSession ({ session }) {
+        const { game, state } = session;
+        return game && state && state.on_move !== -1;
+    },
+
+    localPlayerOnTurn ({ session }) {
+        const { game, state } = session;
+        return game && state && state.on_move === game.local_player.index;
     },
 
 };
@@ -62,17 +66,21 @@ const mutations = {
     },
 
     mutateSetGame (state, game) {
-        state.game = game;
-        state.game_state = game.state;
+        state.session = Object.freeze({
+           game: game,
+           state: game.state
+        });
     },
 
     mutateSetGameState (state, game_state) {
-        state.game_state = game_state;
+        state.session = Object.freeze({
+           game: state.session.game,
+           state: game_state
+        });
     },
 
     mutateSetPrintout (state, record) {
-        Object.freeze(record);
-        state.printout = record;
+        state.printout = Object.freeze(record);
     },
 
 };
