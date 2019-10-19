@@ -5,3 +5,13 @@ $srsi-max-font-size: 16.0;
 @function rel-size ($size) {
   @return #{$size / $srsi-max-font-size}em;
 }
+
+$srsi-card-dimensions: (7 10);
+
+$srsi-card-regular: 20;
+$srsi-card-widht: $srsi-card-regular * nth($srsi-card-dimensions, 1);
+$srsi-card-height: $srsi-card-regular * nth($srsi-card-dimensions, 2);
+
+$srsi-card-small: 8;
+$srsi-card-small-widht: $srsi-card-small * nth($srsi-card-dimensions, 1);
+$srsi-card-small-height: $srsi-card-small * nth($srsi-card-dimensions, 2);

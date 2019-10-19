@@ -66,7 +66,7 @@ $gray_bg: rgba(169, 169, 169, 0.67);
       transition: top 0.2s, transform 0.2s;
       &.-selectable {
         &:hover {
-          top: rel-size(-ceil(constr('card.regular.height') * 0.2));
+          top: rel-size(- ceil($srsi-card-height * .2));
         }
       }
     }
@@ -112,8 +112,8 @@ $gray_bg: rgba(169, 169, 169, 0.67);
     position: absolute;
     border: rel-size(2) solid $gray-500;
 
-    width: rel-size(constr('card.regular.width'));
-    height: rel-size(constr('card.regular.height'));
+    width: rel-size($srsi-card-widht);
+    height: rel-size($srsi-card-height);
 
     img {
       width: 100%;
@@ -127,8 +127,8 @@ $gray_bg: rgba(169, 169, 169, 0.67);
 
   &.-small {
     > div {
-      width: rel-size(constr('card.small.width'));
-      height: rel-size(constr('card.small.height'));
+      width: rel-size($srsi-card-small-widht);
+      height: rel-size($srsi-card-small-height);
     }
   }
 }

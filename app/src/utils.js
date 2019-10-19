@@ -1,19 +1,11 @@
-import lib_store from '../lib/constants_store';
 import { transcriptions } from 'GAME_PATH/src/cards';
-
-export function getConst (key) {
-    return lib_store.getConst(CONSTANTS, key);
-}
-
-export function getResponsiveConst (key, media_size) {
-    return lib_store.getResponsiveConst(CONSTANTS, key, media_size);
-}
+import platform from './platform';
 
 export function cardCssTransformation (x, y, rot, width, height) {
-    x = Math.ceil(x - 0.5 * width);
-    y = Math.ceil(y - 0.5 * height);
+    x = relSize(x - 0.5 * width).toFixed(2);
+    y = relSize(y - 0.5 * height).toFixed(2);
     rot = (rot * Math.PI).toFixed(4);
-    return `translateX(${x}px) translateY(${y}px) rotate(${rot}rad)`;
+    return `translateX(${x}em) translateY(${y}em) rotate(${rot}rad)`;
 }
 
 export function spreadInsideCircle (radius, angle) {
@@ -58,4 +50,8 @@ export function suitCssClass (suit) {
         'suit -red' :
         'suit'
         ;
+}
+
+function relSize (value) {
+    return value / platform.app_max_font_size;
 }

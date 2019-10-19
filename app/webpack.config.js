@@ -1,13 +1,9 @@
 const fs = require('fs-extra');
 const path = require('path');
 const glob = require('glob');
-const webpack = require('webpack');
 
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-
-const constants = require('./config/constants');
-const {getConst, getResponsiveConst} = require('./config/sass_constants');
 
 module.exports = (_, argv) => {
     const production = argv.mode !== 'development';
@@ -39,9 +35,6 @@ module.exports = (_, argv) => {
 
         plugins: [
             new VueLoaderPlugin(),
-            new webpack.DefinePlugin({
-                CONSTANTS: JSON.stringify(constants)
-            }),
             new CopyWebpackPlugin(filesToCopy(production)),
             new AssetsManifestPlugin(assets_path)
         ]
@@ -57,18 +50,11 @@ function buildModuleRules (production) {
         {
             test: /\.s?css$/,
             use: [
-                { loader: 'file-loader', options: { name: outputFile('[name]', 'css', production) } },
-                { loader: 'sass-loader', options: {
-                        functions: {
-                            'const($key)': function (key) {
-                                return getConst(key);
-                            },
-                            'constr($key, $media_size: null)': function (key, media_size) {
-                                return getResponsiveConst(key, media_size);
-                            }
-                        }
+                { loader: 'file-loader', options: {
+                        name: outputFile('[name]', 'css', production)
                     }
-                }
+                },
+                { loader: 'sass-loader' }
             ]
         },
     ];

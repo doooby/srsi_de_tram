@@ -8,11 +8,19 @@ import { cards } from 'GAME_PATH/src/cards';
 import SimpleAi from 'GAME_PATH/src/simple_ai';
 import Session from './session';
 
+const PLATFORM_SIZE = [ 3, 2 ];
+const CARD_SIZE = [ 7, 10 ];
+
 const platform = {
 
     initialized: false,
 
-    card_size: [7, 10],
+    app_max_size_mod: 250,
+    app_max_font_size: 16,
+
+    card_regular_size: CARD_SIZE.map(a => a * 20),
+    card_small_size: CARD_SIZE.map(a => a * 8),
+
     images: {},
     getImageData (card_id) {
         return platform.images[card_id];
@@ -22,18 +30,14 @@ const platform = {
         if (platform.initialized) return;
 
         await buildCardsImages(
-            this.images, ...platform.card_size.map(s => s * 20)
+            this.images, ...platform.card_regular_size
         );
 
         platform.initialized = true;
     },
 
-    app_wh_base: [3, 2],
-    app_max_size_mod: 250,
-    app_max_font_size: 16,
-
     async createApp (root, options={}) {
-        if (!options.wh_base) options.wh_base = platform.app_wh_base;
+        if (!options.wh_base) options.wh_base = PLATFORM_SIZE;
         if (!options.max_size_mod) options.max_size_mod = platform.app_max_size_mod;
         const app = new Application(root, options);
 
@@ -94,7 +98,7 @@ class Application {
                     {
                         width,
                         height,
-                        font_size: this.computeFontSize(height)
+                        mod: this.computeRelSize(height)
                     }
                 );
             }
@@ -130,9 +134,9 @@ class Application {
         }
     }
 
-    computeFontSize (platform_height) {
-        const max_height = platform.app_wh_base[1] * platform.app_max_size_mod;
-        return platform_height / max_height * platform.app_max_font_size;
+    computeRelSize (platform_height) {
+        const max_height = PLATFORM_SIZE[1] * platform.app_max_size_mod;
+        return platform_height / max_height;
     }
 
     startSession () {

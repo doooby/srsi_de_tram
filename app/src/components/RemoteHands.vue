@@ -42,7 +42,7 @@
         computed: {
 
             ...mapState(['session']),
-            ...mapGetters(['cardSizes', 'inSession']),
+            ...mapGetters(['inSession']),
 
             remoteHands () {
                 if (!this.inSession) return [];
@@ -52,7 +52,7 @@
                     player,
                     cards: mapCardsToFlapper(
                         state.players[player.index],
-                        this.cardSizes.small,
+                        platform.card_small_size,
                         (card, transform) => ({
                             id: card.id,
                             css_styles: { transform }

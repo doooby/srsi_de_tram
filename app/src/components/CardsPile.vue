@@ -52,7 +52,7 @@
                 for (let i=this.cards.length; i<new_pile.length; i+=1) {
                     const card = new_pile[i];
                     const [x, y] = spreadInsideCircle(
-                        0.35 * this.cardSizes.regular[0],
+                        0.35 * platform.card_regular_size[0],
                         (Math.random() * 2 * Math.PI)
                     );
                     const rot = Math.random() * 2;
@@ -61,7 +61,7 @@
                         img_data: platform.getImageData(card.id),
                         css_styles: {
                             transform: cardCssTransformation(
-                                x, y, rot, ...this.cardSizes.regular
+                                x, y, rot, ...platform.card_regular_size
                             )
                         }
                     });
@@ -72,7 +72,7 @@
         computed: {
 
             ...mapState(['session']),
-            ...mapGetters(['cardSizes', 'textGet']),
+            ...mapGetters(['textGet']),
 
             pile () {
                 const { state } = this.session;

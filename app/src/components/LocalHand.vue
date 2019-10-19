@@ -52,7 +52,7 @@
         computed: {
 
             ...mapState(['session']),
-            ...mapGetters(['cardSizes', 'textGet', 'inSession', 'localPlayerOnTurn']),
+            ...mapGetters(['textGet', 'inSession', 'localPlayerOnTurn']),
 
             cards () {
                 if (this.inSession) {
@@ -67,7 +67,7 @@
             cardsItems () {
                 return mapCardsToFlapper(
                     this.cards,
-                    this.cardSizes.regular,
+                    platform.card_regular_size,
                     (card, transform) => ({
                         id: card.id,
                         img_data: platform.getImageData(card.id),

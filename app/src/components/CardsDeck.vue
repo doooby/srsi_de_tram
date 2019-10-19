@@ -39,7 +39,7 @@
                     for (let i=this.cards.length; i<new_deck.length; i+=1) {
                         const card = new_deck[i];
                         const [x, y] = spreadInsideCircle(
-                            0.06 * this.cardSizes.regular[0],
+                            0.06 * platform.card_regular_size[0],
                             (Math.random() * 2 * Math.PI)
                         );
                         const rot = (Math.random() - 0.5) * 0.04;
@@ -47,7 +47,7 @@
                             id: card.id,
                             css_styles: {
                                 transform: cardCssTransformation(
-                                    x, y, rot, ...this.cardSizes.regular
+                                    x, y, rot, ...platform.card_regular_size
                                 )
                             }
                         });
@@ -62,7 +62,7 @@
         computed: {
 
             ...mapState(['session']),
-            ...mapGetters(['cardSizes', 'localPlayerOnTurn']),
+            ...mapGetters(['localPlayerOnTurn']),
 
             deck () {
                 const { state } = this.session;

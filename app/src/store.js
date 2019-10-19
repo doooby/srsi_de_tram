@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { localizedGetter } from '../lib/game_texts';
-import { getResponsiveConst } from './utils';
 
 Vue.use(Vuex);
 
@@ -16,7 +15,6 @@ export function createStore () {
                 font_size: 0
             }),
             locale: 'cs',
-            media: 'sm',
 
             session: {},
             printout: null,
@@ -29,19 +27,6 @@ export function createStore () {
 }
 
 const getters = {
-
-    cardSizes ({ media }) {
-        return {
-            regular: [
-                getResponsiveConst('card.regular.width', media),
-                getResponsiveConst('card.regular.height', media)
-            ],
-            small: [
-                getResponsiveConst('card.small.width', media),
-                getResponsiveConst('card.small.height', media)
-            ]
-        }
-    },
 
     textGet ({ locale }) {
         return localizedGetter(locale);

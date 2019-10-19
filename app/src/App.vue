@@ -54,6 +54,8 @@
 <script>
     import { mapState } from 'vuex';
 
+    import platform from './platform';
+
     import CardsDeck from './components/CardsDeck.vue';
     import CardsPile from './components/CardsPile.vue';
     import LocalHand from './components/LocalHand.vue';
@@ -75,12 +77,12 @@
             ...mapState(['platform_message', 'platform_size']),
 
             css_style () {
-                const { width, height, font_size } = this.platform_size;
-                console.log(font_size);
+                const { width, height, mod } = this.platform_size;
+                const font_size = (mod * platform.app_max_font_size).toFixed(2);
                 return {
                     width: `${width}px`,
                     height: `${height}px`,
-                    fontSize: `${font_size.toFixed(2)}px`
+                    fontSize: `${font_size}px`
                 };
             }
         }
