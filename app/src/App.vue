@@ -75,10 +75,12 @@
             ...mapState(['platform_message', 'platform_size']),
 
             css_style () {
-                const [ width, height ] = this.platform_size;
+                const { width, height, font_size } = this.platform_size;
+                console.log(font_size);
                 return {
                     width: `${width}px`,
-                    height: `${height}px`
+                    height: `${height}px`,
+                    fontSize: `${font_size.toFixed(2)}px`
                 };
             }
         }

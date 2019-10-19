@@ -1,9 +1,9 @@
 $gray_bg: rgba(169, 169, 169, 0.67);
 
 %selectable {
-  border: 2px solid $gray-500;
+  border: rel-size(2) solid $gray-500;
   &:hover {
-    box-shadow: 0 0 5px 5px $gray-500;
+    box-shadow: 0 0 rel-size(5) rel-size(5) $gray-500;
   }
 }
 
@@ -53,9 +53,9 @@ $gray_bg: rgba(169, 169, 169, 0.67);
   .cards-pile {
     .floating-label {
       position: absolute;
-      top: 10px;
+      top: rel-size(10);
       .suit {
-        margin-left: 10px;
+        margin-left: rel-size(10);
       }
     }
   }
@@ -66,7 +66,7 @@ $gray_bg: rgba(169, 169, 169, 0.67);
       transition: top 0.2s, transform 0.2s;
       &.-selectable {
         &:hover {
-          top: -#{ceil(constr('card.regular.height') * 0.2)}px;
+          top: rel-size(-ceil(constr('card.regular.height') * 0.2));
         }
       }
     }
@@ -75,7 +75,7 @@ $gray_bg: rgba(169, 169, 169, 0.67);
       position: absolute;
       bottom: 0;
       .button {
-        margin: 10px;
+        margin: rel-size(10);
       }
     }
   }
@@ -91,7 +91,7 @@ $gray_bg: rgba(169, 169, 169, 0.67);
 
     .floating-label {
       position: absolute;
-      right: 10px;
+      right: rel-size(10);
     }
   }
 
@@ -110,10 +110,10 @@ $gray_bg: rgba(169, 169, 169, 0.67);
 
   > div {
     position: absolute;
-    border: 2px solid $gray-500;
+    border: rel-size(2) solid $gray-500;
 
-    width: #{constr('card.regular.width')}px;
-    height: #{constr('card.regular.height')}px;
+    width: rel-size(constr('card.regular.width'));
+    height: rel-size(constr('card.regular.height'));
 
     img {
       width: 100%;
@@ -127,31 +127,31 @@ $gray_bg: rgba(169, 169, 169, 0.67);
 
   &.-small {
     > div {
-      width: #{constr('card.small.width')}px;
-      height: #{constr('card.small.height')}px;
+      width: rel-size(constr('card.small.width'));
+      height: rel-size(constr('card.small.height'));
     }
   }
 }
 
 .floating-label {
-  font-size: 1.4rem;
+  font-size: 1.4em;
   background-color: $gray_bg;
-  padding: 5px 10px;
+  padding: rel-size(5) rel-size(10);
   font-weight: bold;
   z-index: 10;
   display: flex;
   align-items: center;
 
   .suit {
-    font-size: 3rem;
-    line-height: 2rem;
+    font-size: 3em;
+    line-height: 2em;
     &.-red { color: red; }
   }
 }
 
 .button {
   background-color: white;
-  padding: 5px 10px;
+  padding: rel-size(5) rel-size(10);
   display: flex;
   align-items: center;
   @extend %selectable;

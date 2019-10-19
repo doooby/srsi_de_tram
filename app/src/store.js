@@ -10,7 +10,11 @@ export function createStore () {
         state: {
 
             platform_message: null,
-            platform_size: Object.freeze([0, 0]),
+            platform_size: Object.freeze({
+                width: 0,
+                height: 0,
+                font_size: 0
+            }),
             locale: 'cs',
             media: 'sm',
 

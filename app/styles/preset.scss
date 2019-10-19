@@ -1,0 +1,7 @@
+
+$srsi-max-font-size: 16.0;
+
+// takes pixels and return em in relation to font max size
+@function rel-size ($size) {
+  @return #{$size / $srsi-max-font-size}em;
+}

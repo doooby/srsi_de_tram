@@ -5,9 +5,9 @@
   align-items: center;
 
   .platform-flash {
-    margin: 10px;
-    padding: 10px;
-    border: 3px solid $gray-400;
+    margin: rel-size(10);
+    padding: rel-size(10);
+    border: rel-size(3) solid $gray-400;
     color: $gray-400;
   }
 }

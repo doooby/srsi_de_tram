@@ -30,6 +30,7 @@ const platform = {
 
     app_wh_base: [3, 2],
     app_max_size_mod: 250,
+    app_max_font_size: 16,
 
     async createApp (root, options={}) {
         if (!options.wh_base) options.wh_base = platform.app_wh_base;
@@ -87,9 +88,14 @@ class Application {
         const callback = throttle(
             200, false,
             () => {
+                const [ width, height ] = this.computeSize();
                 this.store.commit(
                     'mutateSetPlatformSize',
-                    this.recomputeSize()
+                    {
+                        width,
+                        height,
+                        font_size: this.computeFontSize(height)
+                    }
                 );
             }
         );
@@ -99,7 +105,7 @@ class Application {
         callback();
     }
 
-    recomputeSize () {
+    computeSize () {
         const [w, h] = [
             this.root.clientWidth,
             this.root.clientHeight
@@ -122,6 +128,11 @@ class Application {
             ];
 
         }
+    }
+
+    computeFontSize (platform_height) {
+        const max_height = platform.app_wh_base[1] * platform.app_max_size_mod;
+        return platform_height / max_height * platform.app_max_font_size;
     }
 
     startSession () {
