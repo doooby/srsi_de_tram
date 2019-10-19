@@ -43,8 +43,9 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import { mapCardsToFlapper } from '../utils';
-    import srsi from '../srsi';
+    import { mapCardsToFlapper, suitCssClass, transcribeCard } from '../utils';
+    import { cards } from 'GAME_PATH/src/cards';
+    import platform from '../platform';
 
     export default {
 
@@ -53,8 +54,12 @@
             ...mapState(['game', 'game_state']),
             ...mapGetters(['cardSizes', 'textGet', 'localPlayerOnTurn']),
 
+            sessionOn () {
+                return this.game &&this.game_state && this.game_state.on_move !== -1;
+            },
+
             cards () {
-                if (this.game && this.game_state) {
+                if (this.sessionOn) {
                     const local = this.game.local_player.index;
                     return this.game_state.players[local];
                 } else {
@@ -68,7 +73,7 @@
                     this.cardSizes.regular,
                     (card, transform) => ({
                         id: card.id,
-                        img_data: srsi.cardImage(card.id),
+                        img_data: platform.getImageData(card.id),
                         css_styles: { transform }
                     })
                 );
@@ -88,7 +93,7 @@
                 const state = this.game_state;
                 return this.localPlayerOnTurn &&
                     ( state.continuance &&
-                        state.realPileCard().rank === srsi.cards.ACE
+                        state.realPileCard().rank === cards.ACE
                     );
             }
 
@@ -96,9 +101,9 @@
 
         methods: {
 
-            allSuits () { return srsi.cards.SUITS; },
-            suitCssClass (suit) { return srsi.suitCssClass(suit); },
-            transcribe (suit) { return srsi.transcribe(suit); },
+            allSuits () { return cards.SUITS; },
+            suitCssClass (suit) { return suitCssClass(suit); },
+            transcribe (suit) { return transcribeCard(suit); },
 
             layCard (index) {
                 if (!this.canLay) return;

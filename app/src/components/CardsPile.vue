@@ -27,8 +27,9 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import { cardCssTransformation, spreadInsideCircle } from '../utils';
-    import srsi from '../srsi';
+    import { cardCssTransformation, spreadInsideCircle , suitCssClass,
+        transcribeCard} from '../utils';
+    import platform from '../platform';
 
     export default {
 
@@ -57,7 +58,7 @@
                     const rot = Math.random() * 2;
                     this.cards.push({
                         id: card.id,
-                        img_data: srsi.cardImage(card.id),
+                        img_data: platform.getImageData(card.id),
                         css_styles: {
                             transform: cardCssTransformation(
                                 x, y, rot, ...this.cardSizes.regular
@@ -105,8 +106,8 @@
 
         methods: {
 
-            suitCssClass (suit) { return srsi.suitCssClass(suit); },
-            transcribe (suit) { return srsi.transcribe(suit); },
+            suitCssClass (suit) { return suitCssClass(suit); },
+            transcribe (suit) { return transcribeCard(suit); },
 
         }
 

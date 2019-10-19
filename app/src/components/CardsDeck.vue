@@ -16,13 +16,14 @@
 <script>
     import { mapState, mapGetters } from 'vuex';
     import { cardCssTransformation, spreadInsideCircle } from '../utils';
-    import srsi from '../srsi';
+    import { cards } from 'GAME_PATH/src/cards';
+    import platform from '../platform';
 
     export default {
 
         data () {
             return {
-                card_bg: srsi.cardImage('back'),
+                card_bg: platform.getImageData('back'),
                 cards: []
             };
         },
@@ -88,7 +89,7 @@
                 return this.localPlayerOnTurn &&
                     state.queer !== true &&
                     !( state.continuance &&
-                        state.realPileCard().rank === srsi.cards.ACE
+                        state.realPileCard().rank === cards.ACE
                     );
             }
 

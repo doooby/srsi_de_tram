@@ -29,13 +29,13 @@
 <script>
     import { mapState, mapGetters } from 'vuex';
     import { mapCardsToFlapper } from '../utils';
-    import srsi from '../srsi';
+    import platform from '../platform';
 
     export default {
 
         data () {
             return {
-                card_bg: srsi.cardImage('back'),
+                card_bg: platform.getImageData('back'),
             };
         },
 
@@ -44,8 +44,12 @@
             ...mapState(['game', 'game_state']),
             ...mapGetters(['cardSizes']),
 
+            sessionOn () {
+                return this.game &&this.game_state && this.game_state.on_move !== -1;
+            },
+
             remoteHands () {
-                if (!this.game || !this.game_state) return [];
+                if (!this.sessionOn) return [];
 
                 return this.game.remotePlayers().map(player => ({
                     player,

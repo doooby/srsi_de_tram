@@ -1,4 +1,5 @@
 import lib_store from '../lib/constants_store';
+import { transcriptions } from 'GAME_PATH/src/cards';
 
 export function getConst (key) {
     return lib_store.getConst(CONSTANTS, key);
@@ -46,4 +47,15 @@ export function mapCardsToFlapper (cards, size, mapper) {
         );
         return mapper(card, transform);
     });
+}
+
+export function transcribeCard (card_value) {
+    return transcriptions[card_value];
+}
+
+export function suitCssClass (suit) {
+    return transcriptions.isRed(suit) ?
+        'suit -red' :
+        'suit'
+        ;
 }

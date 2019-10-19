@@ -16,7 +16,6 @@ export function createStore () {
 
             game: null,
             game_state: null,
-            game_started: false,
             printout: null,
 
         },
@@ -45,8 +44,8 @@ const getters = {
         return localizedGetter(locale);
     },
 
-    localPlayerOnTurn ({ game, game_state, game_started }) {
-        return game && game_state && game_started &&
+    localPlayerOnTurn ({ game, game_state }) {
+        return game && game_state &&
             game_state.on_move === game.local_player.index;
     },
 
@@ -65,11 +64,6 @@ const mutations = {
     mutateSetGame (state, game) {
         state.game = game;
         state.game_state = game.state;
-        state.game_started = false;
-    },
-
-    mutateGameStarted (state) {
-        state.game_started = true;
     },
 
     mutateSetGameState (state, game_state) {
