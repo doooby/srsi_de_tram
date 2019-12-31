@@ -9,9 +9,16 @@ function localizedGetter (locale) {
     const locales = LOCALES[locale];
     if (typeof locales !== 'object')
         throw `game_texts: unknown locale ${locale}`;
-    return function (key, interpolations) {
-        return getText(locales, key, interpolations);
+
+    let fn = localizedGetter.locale;
+    if (!fn) {
+        fn = function (key, interpolations) {
+            return getText(locales, key, interpolations);
+        };
+        localizedGetter.locale = fn;
     }
+
+    return fn;
 }
 
 function getText (store, key, interpolations) {
