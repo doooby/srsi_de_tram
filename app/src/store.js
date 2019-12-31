@@ -4,7 +4,6 @@ import { localizedGetter } from '../lib/game_texts';
 import times from 'lodash/times';
 import Game from 'GAME_PATH/src/game';
 import Player from 'GAME_PATH/src/player';
-import { cards } from 'GAME_PATH/src/cards';
 
 Vue.use(Vuex);
 

@@ -8,6 +8,11 @@
 
             <div
              class="floating-label">
+                <span
+                 v-if="hand.on_move"
+                class="mr-3">
+                ⇨
+                </span>
                 {{hand.player.name}}
             </div>
 
@@ -57,7 +62,8 @@
                             id: card.id,
                             css_styles: { transform }
                         })
-                    )
+                    ),
+                    on_move: state.on_move === player.index
                 }));
             }
 
