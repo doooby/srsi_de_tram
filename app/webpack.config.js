@@ -50,7 +50,9 @@ function buildModuleRules (production) {
         {
             test: /\.s?css$/,
             use: [
-                { loader: 'file-loader', options: {
+                {
+                    loader: 'file-loader',
+                    options: {
                         name: outputFile('[name]', 'css', production)
                     }
                 },
@@ -105,13 +107,13 @@ class AssetsManifestPlugin {
     }
 
     buildManifest () {
-        const regex = /([\w\d-\/]+)(\.[\w\d]+)?(\.\w+)/;
+        const asset_regex = /([\w\d-\/]+)(\.[\w\d]+)?(\.\w+)/;
         const manifest = {};
 
         glob.sync(`${this.working_dir}**/*`).forEach(file => {
             file = file.replace(this.working_dir, '');
             if (file === 'manifest.json') return;
-            const parts = regex.exec(file);
+            const parts = asset_regex.exec(file);
 
             if (parts) {
                 const asset = `${parts[1]}${parts[3]}`;

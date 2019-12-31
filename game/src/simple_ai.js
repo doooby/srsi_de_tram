@@ -19,7 +19,6 @@ class SimpleAi {
 
     attach (player) {
         this.player = player;
-        return this.actor_model;
     }
 
     nextMove () {

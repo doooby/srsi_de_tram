@@ -1,6 +1,10 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { localizedGetter } from '../lib/game_texts';
+import times from 'lodash/times';
+import Game from 'GAME_PATH/src/game';
+import Player from 'GAME_PATH/src/player';
+import { cards } from 'GAME_PATH/src/cards';
 
 Vue.use(Vuex);
 
@@ -56,15 +60,15 @@ const mutations = {
 
     mutateSetGame (state, game) {
         state.session = Object.freeze({
-           game: game,
-           state: game.state
+            game: game,
+            state: game.state
         });
     },
 
     mutateSetGameState (state, game_state) {
         state.session = Object.freeze({
-           game: state.session.game,
-           state: game_state
+            game: state.session.game,
+            state: game_state
         });
     },
 
@@ -96,5 +100,28 @@ const actions = {
 
         commit('mutateSetPrintout', printout);
     },
+
+    actionStartNewSession ({ state, commit }, session) {
+        if (state.session.game) {
+            for (const player of state.session.game.players) {
+                player.detachActor();
+            }
+        }
+
+        const game = new Game(
+            times(session.actors.length, i => new Player(`P${i}`)),
+            session.local
+        );
+        game.history = [];
+        commit('mutateSetGame', game);
+
+        for (let i=0; i<session.actors.length; i+=1) {
+            game.players[i].attachActor(
+                session.actors[i]
+            );
+        }
+
+        game.begin(session.deck);
+    }
 
 };

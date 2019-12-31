@@ -5,8 +5,6 @@ import Vue from 'vue';
 import App from './App';
 
 import { cards } from 'GAME_PATH/src/cards';
-import SimpleAi from 'GAME_PATH/src/simple_ai';
-import Session from './session';
 
 const PLATFORM_SIZE = [ 3, 2 ];
 const CARD_SIZE = [ 7, 10 ];
@@ -45,6 +43,19 @@ const platform = {
         return app;
     },
 
+    newCardsDeck () {
+        return cards.createNewShuffledDeck();
+    },
+
+    serializeCardsDeck (deck) {
+        if (!deck) deck = cards.createNewShuffledDeck();
+        return deck.map(c => c.id);
+    },
+
+    parseCardsDeck (ids) {
+        return ids.map(id => cards.index[id]);
+    },
+
 };
 export { platform as default };
 
@@ -61,7 +72,6 @@ class Application {
         this.observeRootSize();
 
         this.startup();
-        this.session = null;
     }
 
     startup () {
@@ -139,38 +149,43 @@ class Application {
         return platform_height / max_height;
     }
 
-    startSession () {
-        if (this.session) throw 'not yet';
-
-        const session = new Session();
-        this.session = session;
+    createLocalActor () {
         const store = this.store;
-
-        session.init(
-            0,
-            [ 'local', 'remote' ]
-        );
-        store.commit('mutateSetGame', session.game);
-
-        session.attachLocalPlayer({
-            state_changed (state) {
-                store.commit('mutateSetGameState', state);
-            },
-            bad_move (move) {
-                store.dispatch('actionPrintoutMessage', {
-                    code: `bad_move.${move.error}`
+        return {
+            attach (player) {
+                this.player = player;
+                this.player.subscribe('state_changed', (_, state) => {
+                    store.commit('mutateSetGameState', state);
+                });
+                this.player.subscribe('bad_move', (player, move) => {
+                    if (this.player !== player) return;
+                    store.dispatch('actionPrintoutMessage', {
+                        code: `bad_move.${move.error}`
+                    });
                 });
             }
-        });
-        session.attachRemotePlayer(1, new SimpleAi());
+        }
+    }
 
-        session.begin(event => {
-            switch (event.name) {
-                case 'started':
-                    // already covered by state_changed event of local player
-                    break;
+    createRemoteActor (on_sync) {
+        return {
+            syncMove: on_sync,
+            attach (player) {
+                this.player = player;
+                this.player.subscribe('moved', (player, move) => {
+                    if (this.player !== player) {
+                        move = move.serialize();
+                        move.pl = player.index;
+                        this.syncMove(move);
+                    }
+                });
+            },
+            receiveMove (move) {
+                if (move.pl === this.player.index) {
+                    this.player.makeMove(move);
+                }
             }
-        });
+        }
     }
 
 }

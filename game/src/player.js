@@ -24,12 +24,8 @@ class Player {
         else return state.possibleActions();
     }
 
-    createMove (...args) {
-        return createMove(...args);
-    }
-
     makeMove (...args) {
-        this.game.playerMoves(this, this.createMove(...args));
+        this.game.playerMoves(this, createMove(...args));
     }
 
     subscribe (event, fn) {

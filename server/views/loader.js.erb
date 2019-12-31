@@ -1,10 +1,14 @@
 (function () {
     var root = document.getElementById('srsi_app_container');
+    if (!root) {
+        console.error('Expected to find a node with id=srsi_app_container.');
+        throw 'container not present';
+    }
 
     var styles = document.createElement('LINK');
     styles.setAttribute('rel', 'stylesheet');
     styles.setAttribute('type', 'text/css');
-    styles.setAttribute('href', '<%= asset 'app_styles.css' %>');
+    styles.setAttribute('href', '<%= asset 'app.css' %>');
     root.appendChild(styles);
 
     var mount = document.createElement('DIV');

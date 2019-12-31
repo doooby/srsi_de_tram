@@ -8,7 +8,8 @@ const moves = {
 };
 
 function createMove (name, ...args) {
-    return moves[name](...args);
+    if (typeof name === 'string') return moves[name](...args);
+    else return parseMove(name);
 }
 
 function parseMove (data) {
@@ -25,6 +26,7 @@ function parseMove (data) {
         case 'n':
             return new NoMove();
     }
+    return data;
 }
 
 class Move {
