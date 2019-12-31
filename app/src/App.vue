@@ -33,7 +33,7 @@
 
             <div
              class="ui">
-                UI
+                <ui-panel/>
             </div>
 
             <div
@@ -62,6 +62,8 @@
     import PrintoutPanel from './components/PrintoutPanel';
     import RemoteHands from './components/RemoteHands.vue';
 
+    import UiPanel from './components/UiPanel';
+
     export default {
         name: 'app',
 
@@ -71,6 +73,7 @@
             LocalHand,
             PrintoutPanel,
             RemoteHands,
+            UiPanel,
         },
 
         computed: {

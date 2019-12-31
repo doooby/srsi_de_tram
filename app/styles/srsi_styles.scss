@@ -11,6 +11,7 @@ $gray_bg: rgba(169, 169, 169, 0.67);
   .board {
     width: 100%;
     height: 100%;
+    position: relative;
     display: grid;
     background-color: #2a753a;
 
@@ -35,7 +36,6 @@ $gray_bg: rgba(169, 169, 169, 0.67);
     > .ui {
       grid-column: 1;
       grid-row: 2 / span 2;
-      background-color: rgba(255, 126, 0, 0.56);
     }
 
     > .local-cards {
@@ -95,6 +95,62 @@ $gray_bg: rgba(169, 169, 169, 0.67);
     }
   }
 
+  .ui-panel {
+    height: 100%;
+    border-bottom: none;
+    border-left: none;
+    border-radius: revert;
+    border-top-right-radius: $srsi-ui-panel-border-size;
+
+    > .-panel-holder {
+      height: 0;
+    }
+
+    > .ui-buttons {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+    }
+
+    .panel-overlay {
+      position: absolute;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .panel-container {
+      width: 70%;
+      height: 60%;
+      position: relative;
+
+      .-header {
+        $_header_height: 2rem;
+        position: absolute;
+        line-height: $_header_height;
+        top: - $_header_height;
+        padding: 0 ($_header_height / 2);
+      }
+
+      .-close {
+        $_close_height: 1.4rem;
+        $_close_shift: $_close_height / 2;
+        position: absolute;
+        line-height: $_close-height;
+        top: - $_close_shift;
+        right: - $_close_shift;
+        padding: 0 $_close_shift;
+      }
+    }
+  }
+
 }
 
 .center-child {
@@ -138,7 +194,7 @@ $gray_bg: rgba(169, 169, 169, 0.67);
   background-color: $gray_bg;
   padding: rel-size(5) rel-size(10);
   font-weight: bold;
-  z-index: 10;
+  z-index: 1;
   display: flex;
   align-items: center;
 
@@ -160,4 +216,19 @@ $gray_bg: rgba(169, 169, 169, 0.67);
     cursor: pointer;
   }
 
+}
+
+.srsi-panel {
+  background-color: $srsi-ui-color-bg;
+  border: $srsi-ui-panel-border;
+  border-radius: $srsi-ui-panel-border-size;
+}
+
+.srsi-control {
+  background-color: $srsi-ui-control;
+  border: $srsi-ui-panel-border;
+  border-radius: $srsi-ui-panel-border-size;
+  border-bottom: none;
+  border-left: none;
+  border-bottom-left-radius: revert;
 }

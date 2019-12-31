@@ -22,6 +22,8 @@ export function createStore () {
             session: {},
             printout: null,
 
+            ui_panel: null,
+
         },
         getters,
         mutations,

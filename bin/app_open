@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+firefox tmp/build/index.html

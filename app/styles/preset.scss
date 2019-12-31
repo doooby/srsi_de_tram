@@ -15,3 +15,10 @@ $srsi-card-height: $srsi-card-regular * nth($srsi-card-dimensions, 2);
 $srsi-card-small: 8;
 $srsi-card-small-widht: $srsi-card-small * nth($srsi-card-dimensions, 1);
 $srsi-card-small-height: $srsi-card-small * nth($srsi-card-dimensions, 2);
+
+$srsi-ui-color-bg: #ce9d95;
+$srsi-ui-color-2: #481518;
+$srsi-ui-control-bg-down: darken($srsi-ui-color-bg, 10%);
+$srsi-ui-control: #905a52;
+$srsi-ui-panel-border-size: 0.4rem;
+$srsi-ui-panel-border: $srsi-ui-panel-border-size outset $srsi-ui-color-2;
