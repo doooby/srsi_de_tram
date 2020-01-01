@@ -239,6 +239,7 @@ $gray_bg: rgba(169, 169, 169, 0.67);
 .srsi-panel {
   background-color: $srsi-ui-color-bg;
   border: $srsi-ui-panel-border;
+  border-style: solid;
   border-radius: $srsi-ui-panel-border-size;
 }
 
@@ -249,7 +250,7 @@ $gray_bg: rgba(169, 169, 169, 0.67);
   border-bottom: none;
   border-left: none;
   border-bottom-left-radius: revert;
-  color: $srsi-ui-color-2;
+  color: $srsi-ui-control-text;
   &:hover:active {
     background-color: $srsi-ui-control-bg-down;
   }
