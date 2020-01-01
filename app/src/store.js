@@ -25,7 +25,11 @@ export function createStore () {
             printout: null,
 
             ui_panel: null,
-            connected: 'u',
+            connected: {
+                state: 'u',
+                name: '',
+                id: null
+            },
         },
         getters,
         mutations,
@@ -87,9 +91,20 @@ const mutations = {
         state.ui_panel = null;
     },
 
-    mutateSetConnection (state, connection_state) {
-        state.connected = connection_state;
-    }
+    mutateSetConnectionPending (state) {
+        state.connected.state = 'p';
+    },
+
+    mutateSetConnectedUser (state, user) {
+        if (user) {
+            state.connected.state = 'y';
+            state.connected.id = user.id;
+            state.connected.name = user.name;
+        } else {
+            state.connected.state = 'n';
+            state.connected.id = null;
+        }
+    },
 
 };
 

@@ -277,6 +277,15 @@ $gray_bg: rgba(169, 169, 169, 0.67);
   }
 }
 
+.srsi-button-flat {
+  color: $srsi-ui-control;
+  border: none;
+  background-color: #00000000;
+  &:enabled:hover {
+    color: darken($srsi-ui-control, 20%);
+  }
+}
+
 .srsi-input {
   width: 100%;
 }

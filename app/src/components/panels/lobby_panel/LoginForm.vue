@@ -52,15 +52,15 @@
         },
 
         computed: {
-            ...mapState([
-                'connected'
-            ]),
+            ...mapState({
+                connected: state => state.connected.state,
+            }),
         },
 
         watch:{
             connected (value) {
                 switch (value){
-                    case 'c':
+                    case 'p':
                         this.message = 'Připojuji k serveru ...';
                         this.connecting = true;
                         break;

@@ -20,12 +20,25 @@ module WsServer
     end
   end
 
+  action 'get_users' do |req|
+    users = nil
+    CONNECTIONS_LOCK.with_read_lock do
+      users = CONNECTIONS.values.map do |conn|
+        {
+            id: conn.id,
+            name: conn.user_name
+        }
+      end
+    end
+    req.ok users: users
+  end
 
 
   ##############################################################################
+  # Internals
   #
 
-  CONNECTIONS = Concurrent::Hash.new
+  CONNECTIONS = Hash.new
   CONNECTIONS_LOCK = Concurrent::ReadWriteLock.new
 
   def self.call env

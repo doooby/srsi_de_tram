@@ -214,7 +214,7 @@ class Application {
     openConnection (user_name) {
         if (this.connected || this.connecting) return;
 
-        this.store.commit('mutateSetConnection', 'c');
+        this.store.commit('mutateSetConnectionPending');
 
         this.socket = new WebSocket(`ws://${window.location.host}/connect`);
         this.active_requests = new RequestQueue();
@@ -223,7 +223,10 @@ class Application {
             this.connected = true;
             const req = await this.sendRequest('set_name', { name: user_name });
             if (req.result.ok) {
-                this.store.commit('mutateSetConnection', 'y');
+                this.store.commit('mutateSetConnectedUser', {
+                    id: req.result.user_id,
+                    name: user_name
+                });
 
             } else {
                 this.socket.close();
@@ -233,7 +236,7 @@ class Application {
 
         this.socket.onclose = () => {
             this.connected = false;
-            this.store.commit('mutateSetConnection', 'n');
+            this.store.commit('mutateSetConnectedUser');
         };
 
         this.socket.onmessage = event => {
@@ -244,6 +247,10 @@ class Application {
 
             } catch {}
         }
+    }
+
+    closeConnection () {
+        if (this.connected) this.socket.close();
     }
 
     sendRequest (action, data={}) {
