@@ -41,5 +41,6 @@ function getText (store, key, interpolations) {
 }
 
 module.exports = {
-    localizedGetter
+    localizedGetter,
+    getText,
 };
