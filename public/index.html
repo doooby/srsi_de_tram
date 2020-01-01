@@ -10,14 +10,17 @@
             height: 100%;
             background-color: black;
         }
+        #srsi-mount-point {
+            height: 100%;
+        }
     </style>
 </head>
-<body id="app-container">
+<body id="srsi-app-container">
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var loader = document.createElement('SCRIPT');
         loader.setAttribute('src', '/loader.js?t=' + Date.now());
-        document.getElementById('app-container').appendChild(loader);
+        document.getElementById('srsi-app-container').appendChild(loader);
     });
 </script>
 </body>

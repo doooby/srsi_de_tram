@@ -1,4 +1,4 @@
-import { transcriptions } from 'GAME_PATH/src/cards';
+import { cards, transcriptions } from 'GAME_PATH/src/cards';
 import platform from './platform';
 
 export function cardCssTransformation (x, y, rot, width, height) {
@@ -83,4 +83,67 @@ export function throttle (time, immediate, fn) {
         if (immediate) invocation();
         else timeout = setTimeout(invocation, time);
     };
+}
+
+export async function buildCardsImages (index, width, height) {
+    const w_2 = width / 2;
+    const h_2 = height / 2;
+    const margin = Math.ceil(height / 30);
+
+    cards.forEach(card => {
+        const canvas = document.createElement('CANVAS');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, width, height);
+
+        ctx.fillStyle = card.isRed() ? 'red' : 'black';
+        ctx.textAlign = 'start';
+        ctx.textBaseline = 'top';
+        const text = card.transcription();
+
+        let font = Math.ceil(height / 3.5);
+        ctx.font = `${font}px serif`;
+        ctx.fillText(
+            text,
+            w_2 - ctx.measureText(text).width / 2,
+            h_2 - font / 2
+        );
+
+        font = Math.ceil(height / 9);
+        ctx.font = `${font}px serif`;
+        ctx.fillText(text, margin, margin, width);
+        ctx.translate(w_2, h_2);
+        ctx.rotate(Math.PI);
+        ctx.translate(-w_2, -h_2);
+        ctx.fillText(text, margin, margin, width);
+
+        index[card.id] = canvas.toDataURL();
+    });
+
+    index['back'] = (function () {
+        const canvas = document.createElement('CANVAS');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+
+        const margin = Math.ceil(height / 11);
+        ctx.fillStyle = 'gray';
+        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = 'lightgray';
+        ctx.fillRect(margin, margin, width - 2*margin, height - 2*margin);
+
+        ctx.fillStyle = 'gray';
+        let font = Math.ceil(height / 6);
+        ctx.font = `${font}px serif`;
+        let y_base = h_2 - font / 2;
+        [ 'SRŠÍ', 'DE', 'TRAM' ].forEach((text, i) => ctx.fillText(
+            text,
+            w_2 - ctx.measureText(text).width / 2,
+            y_base + i * font
+        ));
+
+        return canvas.toDataURL();
+    }());
 }

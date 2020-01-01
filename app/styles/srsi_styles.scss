@@ -272,7 +272,7 @@ $gray_bg: rgba(169, 169, 169, 0.67);
   border-left: none;
   border-bottom-left-radius: revert;
   color: $srsi-ui-control-text;
-  &:hover:active {
+  &:enabled:hover:active {
     background-color: $srsi-ui-control-bg-down;
   }
 }

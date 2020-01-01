@@ -27,6 +27,10 @@ class Server < Sinatra::Base
     end
   end
 
+  get '/connect' do
+    WsServer.call request.env
+  end
+
   helpers do
 
     def cors_preflight_headers

@@ -25,7 +25,7 @@ export function createStore () {
             printout: null,
 
             ui_panel: null,
-
+            connected: 'u',
         },
         getters,
         mutations,
@@ -86,6 +86,10 @@ const mutations = {
     mutateCloseUiPanel (state) {
         state.ui_panel = null;
     },
+
+    mutateSetConnection (state, connection_state) {
+        state.connected = connection_state;
+    }
 
 };
 

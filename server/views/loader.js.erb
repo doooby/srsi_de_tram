@@ -1,9 +1,10 @@
 (function () {
-    var root = document.getElementById('srsi_app_container');
+    var root = document.getElementById('srsi-app-container');
     if (!root) {
-        console.error('Expected to find a node with id=srsi_app_container.');
+        console.error('Expected to find a node with id=srsi-app-container.');
         throw 'container not present';
     }
+    root.innerHTML = '';
 
     var styles = document.createElement('LINK');
     styles.setAttribute('rel', 'stylesheet');
@@ -12,7 +13,7 @@
     root.appendChild(styles);
 
     var mount = document.createElement('DIV');
-    mount.id = 'app-mount-point';
+    mount.id = 'srsi-mount-point';
     mount.className = 'srsi';
     mount.innerHTML = `
 <div class="app-flash">

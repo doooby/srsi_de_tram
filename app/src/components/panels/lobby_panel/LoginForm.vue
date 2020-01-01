@@ -27,7 +27,8 @@
 
                 <button
                  class="srsi-button"
-                 @click="login">
+                 @click="login"
+                 :disabled="connecting">
                     VSTOUPIT
                 </button>
             </div>
@@ -37,8 +38,8 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex';
     import { throttle } from '../../../utils';
-
 
     export default {
 
@@ -46,6 +47,33 @@
             return {
                 login_input: '',
                 message: null,
+                connecting: false,
+            }
+        },
+
+        computed: {
+            ...mapState([
+                'connected'
+            ]),
+        },
+
+        watch:{
+            connected (value) {
+                switch (value){
+                    case 'c':
+                        this.message = 'Připojuji k serveru ...';
+                        this.connecting = true;
+                        break;
+
+                    case 'n':
+                        this.message = 'Nepodařilo se připojit.';
+                        this.connecting = false;
+                        break;
+
+                    default:
+                        this.connecting = false;
+                        break;
+                }
             }
         },
 
@@ -60,7 +88,7 @@
                     this.message = 'Jméno je příliš krátké.';
 
                 } else {
-                    this.message = 'Probíhá přihlášení ...';
+                    this.$app.openConnection(this.login_input);
 
                 }
             }),

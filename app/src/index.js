@@ -5,6 +5,12 @@ import '../styles/app.scss';
 
 (async function () {
 
+    const app0_mount_point = document.getElementById('srsi-mount-point');
+    if (!app0_mount_point) throw '#srsi-mount-point not present';
+    const app0 = await platform.createApp(app0_mount_point);
+    app0.ready();
+
+    return;
     const app1 = await platform.createApp('#app-1');
     app1.ready();
 

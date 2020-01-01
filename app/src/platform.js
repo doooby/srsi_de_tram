@@ -1,4 +1,5 @@
 import ResizeObserver from 'resize-observer-polyfill';
+import uuid from 'uuid/v4';
 import * as utils from './utils';
 
 import { createStore } from './store';
@@ -29,7 +30,7 @@ const platform = {
     async init () {
         if (platform.initialized) return;
 
-        await buildCardsImages(
+        await utils.buildCardsImages(
             this.images, ...platform.card_regular_size
         );
 
@@ -60,6 +61,23 @@ const platform = {
 };
 export { platform as default };
 
+Vue.use({
+    name: 'AppMixin',
+    version: '1.0.0',
+    install () {
+        Vue.mixin({
+            beforeCreate () {
+                const { parent, application } = this.$options;
+                if (application) {
+                    this.$app = application;
+                } else if (parent && parent.$app) {
+                    this.$app = parent.$app;
+                }
+            }
+        });
+    }
+});
+
 class Application {
 
     constructor (element, options) {
@@ -80,7 +98,8 @@ class Application {
         this.vue = new Vue({
             el: this.root.firstChild,
             store: this.store,
-            render: function (h) { return h(App); }
+            render: function (h) { return h(App); },
+            application: this
         });
 
         this.store.commit(
@@ -94,6 +113,7 @@ class Application {
             'mutateSetPlatformMessage',
             null
         );
+        window.app = this;
     }
 
     observeRootSize () {
@@ -191,67 +211,136 @@ class Application {
         }
     }
 
+    openConnection (user_name) {
+        if (this.connected || this.connecting) return;
+
+        this.store.commit('mutateSetConnection', 'c');
+
+        this.socket = new WebSocket(`ws://${window.location.host}/connect`);
+        this.active_requests = new RequestQueue();
+
+        this.socket.onopen = async () => {
+            this.connected = true;
+            const req = await this.sendRequest('set_name', { name: user_name });
+            if (req.result.ok) {
+                this.store.commit('mutateSetConnection', 'y');
+
+            } else {
+                this.socket.close();
+
+            }
+        };
+
+        this.socket.onclose = () => {
+            this.connected = false;
+            this.store.commit('mutateSetConnection', 'n');
+        };
+
+        this.socket.onmessage = event => {
+            try {
+                const data = JSON.parse(event.data);
+                const req = this.active_requests.find(data.req);
+                if (req) req.resolve(data);
+
+            } catch {}
+        }
+    }
+
+    sendRequest (action, data={}) {
+        const request = new Request(data, action);
+        this.active_requests.add(request);
+        this.socket.send(JSON.stringify(request.data));
+        return request.process(() => {
+            this.active_requests.remove(request);
+        });
+    }
+
 }
 
-async function buildCardsImages (index, width, height) {
-    const w_2 = width / 2;
-    const h_2 = height / 2;
-    const margin = Math.ceil(height / 30);
+class Request {
 
-    cards.forEach(card => {
-        const canvas = document.createElement('CANVAS');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, width, height);
+    constructor (data, action) {
+        this.id = uuid();
+        this.data = typeof data === 'object' ? data : {};
+        this.data.id = this.id;
+        this.data.action = action;
 
-        ctx.fillStyle = card.isRed() ? 'red' : 'black';
-        ctx.textAlign = 'start';
-        ctx.textBaseline = 'top';
-        const text = card.transcription();
+        this.result = null;
+        this.resolve = null;
+    }
 
-        let font = Math.ceil(height / 3.5);
-        ctx.font = `${font}px serif`;
-        ctx.fillText(
-            text,
-            w_2 - ctx.measureText(text).width / 2,
-            h_2 - font / 2
-        );
+    async process (on_done) {
+        const promise = new Promise (resolve => {
+            let resolved = false;
 
-        font = Math.ceil(height / 9);
-        ctx.font = `${font}px serif`;
-        ctx.fillText(text, margin, margin, width);
-        ctx.translate(w_2, h_2);
-        ctx.rotate(Math.PI);
-        ctx.translate(-w_2, -h_2);
-        ctx.fillText(text, margin, margin, width);
+            const timeout = setInterval(() => {
+                if (!resolved) {
+                    resolved = true;
+                    this.result = { ok: false, fail: 'timeout', };
+                    resolve();
+                }
+            }, 10000);
 
-        index[card.id] = canvas.toDataURL();
-    });
+            this.resolve = (result) => {
+                if (!resolved) {
+                    resolved = true;
+                    if (timeout) clearTimeout(timeout);
+                    this.result = result;
+                    resolve();
+                }
+            };
+        });
 
-    index['back'] = (function () {
-        const canvas = document.createElement('CANVAS');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
+        await promise;
+        on_done();
+        return this;
+    }
 
-        const margin = Math.ceil(height / 11);
-        ctx.fillStyle = 'gray';
-        ctx.fillRect(0, 0, width, height);
-        ctx.fillStyle = 'lightgray';
-        ctx.fillRect(margin, margin, width - 2*margin, height - 2*margin);
+}
 
-        ctx.fillStyle = 'gray';
-        let font = Math.ceil(height / 6);
-        ctx.font = `${font}px serif`;
-        let y_base = h_2 - font / 2;
-        [ 'SRŠÍ', 'DE', 'TRAM' ].forEach((text, i) => ctx.fillText(
-            text,
-            w_2 - ctx.measureText(text).width / 2,
-            y_base + i * font
-        ));
+class RequestQueue {
 
-        return canvas.toDataURL();
-    }());
+    constructor () {
+        this.clear();
+    }
+
+    clear () {
+        this.array = [];
+        this.last = -1;
+        this.size = 0;
+    }
+
+    find (id) {
+        for (const request of this.array) {
+            if (request && request.id === id) return request;
+        }
+    }
+
+    add (request) {
+        this.last += 1;
+        request.queue_position = this.last;
+        this.array[this.last] = request;
+        this.size += 1;
+    }
+
+    remove (request) {
+        const pos = request.queue_position;
+        if (request !== this.array[pos]) return;
+
+        this.array[pos] = undefined;
+        this.size -= 1;
+
+        if (this.last + 33 > this.size) {
+            this.compact();
+        }
+    }
+
+    compact () {
+        const old_array = this.array;
+        this.clear();
+        for (const request of old_array) {
+            if (request) this.add(request);
+        }
+    }
+
 }

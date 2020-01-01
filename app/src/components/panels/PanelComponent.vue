@@ -46,7 +46,7 @@
 
         methods: {
             closeUiPanel () {
-                this.$store.commit('mutateCloseUiPanel');
+                this.$app.store.commit('mutateCloseUiPanel');
             },
         }
 
