@@ -15,7 +15,9 @@ export function createStore () {
             platform_size: Object.freeze({
                 width: 0,
                 height: 0,
-                font_size: 0
+                modifier: 0,
+                font: 0,
+                icon: 0,
             }),
             locale: 'cs',
 
@@ -77,9 +79,28 @@ const mutations = {
         state.printout = Object.freeze(record);
     },
 
+    mutateOpenUiPanel (state, panel_data) {
+        state.ui_panel = Object.freeze(panel_data);
+    },
+
+    mutateCloseUiPanel (state) {
+        state.ui_panel = null;
+    },
+
 };
 
 const actions = {
+
+    toggleUiPanel ({ state, commit }, name) {
+        if (state.ui_panel && state.ui_panel.type === name) {
+            commit('mutateCloseUiPanel');
+
+        } else {
+            commit('mutateOpenUiPanel', {
+               type: name
+            });
+        }
+    },
 
     actionPrintoutMessage ({ state, commit }, msg) {
         const printout = {

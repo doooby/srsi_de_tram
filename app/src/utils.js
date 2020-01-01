@@ -2,8 +2,8 @@ import { transcriptions } from 'GAME_PATH/src/cards';
 import platform from './platform';
 
 export function cardCssTransformation (x, y, rot, width, height) {
-    x = relSize(x - 0.5 * width).toFixed(2);
-    y = relSize(y - 0.5 * height).toFixed(2);
+    x = fontRelSize(x - 0.5 * width).toFixed(2);
+    y = fontRelSize(y - 0.5 * height).toFixed(2);
     rot = (rot * Math.PI).toFixed(4);
     return `translateX(${x}em) translateY(${y}em) rotate(${rot}rad)`;
 }
@@ -52,6 +52,6 @@ export function suitCssClass (suit) {
         ;
 }
 
-function relSize (value) {
-    return value / platform.app_max_font_size;
+function fontRelSize (value) {
+    return value / platform.app_font_size;
 }

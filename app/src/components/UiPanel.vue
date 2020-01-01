@@ -2,58 +2,86 @@
     <div
      class="srsi-panel ui-panel">
         <div
-         v-if="panelIsOpened"
+         v-if="!!ui_panel"
          class="-panel-holder">
             <div
              class="panel-overlay">
-                <panel-component/>
+                <panel-component
+                 :panel-props="ui_panel"/>
             </div>
         </div>
 
         <div
          class="ui-buttons">
-
             <div>
-                <button
-                 class="srsi-control">
-                    b1
-                </button>
-            </div>
 
-            <div>
-                <button
-                 class="srsi-control">
-                    b2
-                </button>
-            </div>
+                <div>
+                    <button
+                     class="srsi-control"
+                     @click="toggleUiPanel('lobby')">
+                        <account-icon
+                        :size="iconSize"/>
+                    </button>
+                </div>
 
-            <div>
-                <button
-                 class="srsi-control">
-                    b3
-                </button>
-            </div>
+                <div>
+                    <button
+                     class="srsi-control"
+                     @click="toggleUiPanel('menu')">
+                        <settings-icon
+                         :size="iconSize"/>
+                    </button>
+                </div>
 
+                <div>
+                    <button
+                     class="srsi-control"
+                     @click="toggleUiPanel('messages')">
+                        <email-icon
+                         :size="iconSize"/>
+                    </button>
+                </div>
+
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import { mapState, mapActions } from 'vuex';
 
-    import PanelComponent from './ui/PanelComponent';
+    import PanelComponent from './panels/PanelComponent';
+
+    import AccountIcon from 'ICONS/Account.vue'
+    import SettingsIcon from 'ICONS/Settings.vue'
+    import EmailIcon from 'ICONS/Email.vue'
 
     export default {
 
         components: {
             PanelComponent,
+
+            AccountIcon,
+            SettingsIcon,
+            EmailIcon,
         },
 
         computed: {
-            ...mapState({
-                panelIsOpened: state => !!state.ui_panel
-            }),
+            ...mapState([
+                'ui_panel',
+                'platform_size'
+            ]),
+
+            iconSize () {
+                return this.platform_size.icon * 1.2;
+            },
         },
+
+        methods: {
+            ...mapActions([
+                'toggleUiPanel'
+            ]),
+        }
 
     }
 </script>

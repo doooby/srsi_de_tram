@@ -77,11 +77,15 @@
         },
 
         computed: {
-            ...mapState(['platform_message', 'platform_size']),
+            ...mapState([
+                'platform_message',
+                'platform_size'
+            ]),
 
             css_style () {
-                const { width, height, mod } = this.platform_size;
-                const font_size = (mod * platform.app_max_font_size).toFixed(2);
+                console.log(this.platform_size);
+                const { width, height, font } = this.platform_size;
+                const font_size = font.toFixed(2);
                 return {
                     width: `${width}px`,
                     height: `${height}px`,

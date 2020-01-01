@@ -6,18 +6,19 @@ import App from './App';
 
 import { cards } from 'GAME_PATH/src/cards';
 
-const PLATFORM_SIZE = [ 3, 2 ];
-const CARD_SIZE = [ 7, 10 ];
+const PLATFORM_NORMAL_SIZE = [ 3, 2 ];
+const CARD_NORMAL_SIZE = [ 7, 10 ];
 
 const platform = {
 
     initialized: false,
 
-    app_max_size_mod: 250,
-    app_max_font_size: 16,
+    app_size_mod: 250,
+    app_font_size: 16,
+    app_icon_size: 24,
 
-    card_regular_size: CARD_SIZE.map(a => a * 20),
-    card_small_size: CARD_SIZE.map(a => a * 8),
+    card_regular_size: CARD_NORMAL_SIZE.map(a => a * 20),
+    card_small_size: CARD_NORMAL_SIZE.map(a => a * 8),
 
     images: {},
     getImageData (card_id) {
@@ -35,8 +36,7 @@ const platform = {
     },
 
     async createApp (root, options={}) {
-        if (!options.wh_base) options.wh_base = PLATFORM_SIZE;
-        if (!options.max_size_mod) options.max_size_mod = platform.app_max_size_mod;
+        if (!options.wh_base) options.wh_base = PLATFORM_NORMAL_SIZE;
         const app = new Application(root, options);
 
         await platform.init();
@@ -68,7 +68,6 @@ class Application {
         this.root.innerHTML = '<div></div>';
 
         this.wh_base = options.wh_base;
-        this.max_size_mod = options.max_size_mod;
         this.observeRootSize();
 
         this.startup();
@@ -103,12 +102,15 @@ class Application {
             200, false,
             () => {
                 const [ width, height ] = this.computeSize();
+                const modifier = this.computeRelSize(height);
                 this.store.commit(
                     'mutateSetPlatformSize',
                     {
                         width,
                         height,
-                        mod: this.computeRelSize(height)
+                        modifier,
+                        font: modifier * platform.app_font_size,
+                        icon: modifier * platform.app_icon_size,
                     }
                 );
             }
@@ -125,7 +127,7 @@ class Application {
             this.root.clientHeight
         ];
 
-        const [mw, mh] = this.wh_base.map(v => v * this.max_size_mod);
+        const [mw, mh] = this.wh_base.map(v => v * platform.app_size_mod);
         if (w > mw && h > mh) {
             return [mw, mh];
 
@@ -145,7 +147,7 @@ class Application {
     }
 
     computeRelSize (platform_height) {
-        const max_height = PLATFORM_SIZE[1] * platform.app_max_size_mod;
+        const max_height = PLATFORM_NORMAL_SIZE[1] * platform.app_size_mod;
         return platform_height / max_height;
     }
 

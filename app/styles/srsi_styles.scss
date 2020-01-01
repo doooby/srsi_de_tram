@@ -108,10 +108,23 @@ $gray_bg: rgba(169, 169, 169, 0.67);
 
     > .ui-buttons {
       height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
+      position: relative;
+      > div {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 11;
+
+        .srsi-control {
+          padding: 0.2em 0.4em;
+        }
+      }
     }
 
     .panel-overlay {
@@ -130,9 +143,10 @@ $gray_bg: rgba(169, 169, 169, 0.67);
       width: 70%;
       height: 60%;
       position: relative;
+      padding: $srsi-ui-panel-border-size;
 
       .-header {
-        $_header_height: 2rem;
+        $_header_height: 2em;
         position: absolute;
         line-height: $_header_height;
         top: - $_header_height;
@@ -140,13 +154,17 @@ $gray_bg: rgba(169, 169, 169, 0.67);
       }
 
       .-close {
-        $_close_height: 1.4rem;
-        $_close_shift: $_close_height / 2;
         position: absolute;
-        line-height: $_close-height;
-        top: - $_close_shift;
-        right: - $_close_shift;
-        padding: 0 $_close_shift;
+        top: 0;
+        right: 0;
+
+        > div {
+          margin-top: -50%;
+          margin-left: 50%;
+        }
+        .srsi-control {
+          padding: 0 0;
+        }
       }
     }
   }
@@ -231,4 +249,8 @@ $gray_bg: rgba(169, 169, 169, 0.67);
   border-bottom: none;
   border-left: none;
   border-bottom-left-radius: revert;
+  color: $srsi-ui-color-2;
+  &:hover:active {
+    background-color: $srsi-ui-control-bg-down;
+  }
 }

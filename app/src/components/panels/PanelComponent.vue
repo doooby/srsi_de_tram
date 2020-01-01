@@ -1,0 +1,56 @@
+<template>
+    <div
+     class="srsi-panel panel-container">
+        <div
+         class="srsi-control -header">
+            Header - {{panelProps.type}}
+        </div>
+
+        <div
+         class="-close">
+            <div>
+                <button
+                 class="srsi-control"
+                 @click="closeUiPanel">
+                    <close-icon
+                     :size="platform_size.icon"/>
+                </button>
+            </div>
+        </div>
+
+        <div>
+            <panel-content
+             :type-name="panelProps.type"/>
+        </div>
+    </div>
+</template>
+
+<script>
+    import { mapState } from 'vuex';
+    import { panelContentProxy } from './panels';
+
+    import CloseIcon from 'ICONS/Close.vue'
+
+    export default {
+
+        props: [ 'panelProps' ],
+
+        components: {
+            PanelContent: panelContentProxy,
+            CloseIcon,
+        },
+
+        computed: {
+            ...mapState([
+                'platform_size'
+            ]),
+        },
+
+        methods: {
+            closeUiPanel () {
+                this.$store.commit('mutateCloseUiPanel');
+            },
+        }
+
+    }
+</script>

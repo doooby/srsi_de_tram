@@ -29,7 +29,8 @@ module.exports = (_, argv) => {
         resolve: {
             extensions: ['.js', '.json', '.vue'],
             alias: {
-                GAME_PATH: path.resolve(__dirname, '../game')
+                GAME_PATH: path.resolve(__dirname, '../game'),
+                ICONS: path.resolve(__dirname, 'node_modules/vue-material-design-icons'),
             }
         },
 
