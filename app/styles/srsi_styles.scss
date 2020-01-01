@@ -121,8 +121,8 @@ $gray_bg: rgba(169, 169, 169, 0.67);
         height: 100%;
         z-index: 11;
 
-        .srsi-control {
-          padding: 0.2em 0.4em;
+        .srsi-button {
+          padding: spacer(1) spacer(2);
         }
       }
     }
@@ -162,13 +162,34 @@ $gray_bg: rgba(169, 169, 169, 0.67);
           margin-top: -50%;
           margin-left: 50%;
         }
-        .srsi-control {
+        .srsi-button {
           padding: 0 0;
         }
       }
     }
   }
 
+  .ui-lobby-panel {
+    height: 100%;
+
+    .center-child.lobby-login-form > div {
+      width: 50%;
+    }
+  }
+
+}
+
+@each $size, $value in $srsi-spacers {
+  .srsi-m#{$size} { margin: $value; }
+  .srsi-mt#{$size} { margin-top: $value; }
+  .srsi-mr#{$size} { margin-right: $value; }
+  .srsi-mb#{$size} { margin-bottom: $value; }
+  .srsi-ml#{$size} { margin-left: $value; }
+  .srsi-p#{$size} { padding: $value; }
+  .srsi-pt#{$size} { padding-top: $value; }
+  .srsi-pr#{$size} { padding-right: $value; }
+  .srsi-pb#{$size} { padding-bottom: $value; }
+  .srsi-pl#{$size} { padding-left: $value; }
 }
 
 .center-child {
@@ -243,7 +264,7 @@ $gray_bg: rgba(169, 169, 169, 0.67);
   border-radius: $srsi-ui-panel-border-size;
 }
 
-.srsi-control {
+.srsi-button {
   background-color: $srsi-ui-control;
   border: $srsi-ui-panel-border;
   border-radius: $srsi-ui-panel-border-size;
@@ -254,4 +275,8 @@ $gray_bg: rgba(169, 169, 169, 0.67);
   &:hover:active {
     background-color: $srsi-ui-control-bg-down;
   }
+}
+
+.srsi-input {
+  width: 100%;
 }

@@ -6,6 +6,19 @@ $srsi-max-font-size: 16.0;
   @return #{$size / $srsi-max-font-size}em;
 }
 
+$srsi-spacers: (
+        0: 0,
+        1: 0.2em,
+        2: 0.4em,
+        3: 0.6em,
+        4: 1em,
+        5: 1.6em,
+);
+
+@function spacer ($num) {
+  @return map-get($srsi-spacers, $num);
+}
+
 $srsi-card-dimensions: (7 10);
 
 $srsi-card-regular: 20;

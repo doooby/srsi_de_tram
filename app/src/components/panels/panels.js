@@ -10,7 +10,6 @@ export const panelContentProxy = {
 
     methods: {
         getPanelContentComponent () {
-            console.log({type: this.typeName});
             switch (this.typeName) {
                 case 'lobby': return LobbyPanel;
                 default: return 'div';

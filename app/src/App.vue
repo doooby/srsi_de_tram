@@ -83,7 +83,6 @@
             ]),
 
             css_style () {
-                console.log(this.platform_size);
                 const { width, height, font } = this.platform_size;
                 const font_size = font.toFixed(2);
                 return {

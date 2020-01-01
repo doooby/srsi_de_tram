@@ -17,7 +17,7 @@
 
                 <div>
                     <button
-                     class="srsi-control"
+                     class="srsi-button"
                      @click="toggleUiPanel('lobby')">
                         <account-icon
                         :size="iconSize"/>
@@ -26,7 +26,7 @@
 
                 <div>
                     <button
-                     class="srsi-control"
+                     class="srsi-button"
                      @click="toggleUiPanel('menu')">
                         <settings-icon
                          :size="iconSize"/>
@@ -35,7 +35,7 @@
 
                 <div>
                     <button
-                     class="srsi-control"
+                     class="srsi-button"
                      @click="toggleUiPanel('messages')">
                         <email-icon
                          :size="iconSize"/>

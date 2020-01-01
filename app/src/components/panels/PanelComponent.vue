@@ -2,7 +2,7 @@
     <div
      class="srsi-panel panel-container">
         <div
-         class="srsi-control -header">
+         class="srsi-button -header">
             Header - {{panelProps.type}}
         </div>
 
@@ -10,7 +10,7 @@
          class="-close">
             <div>
                 <button
-                 class="srsi-control"
+                 class="srsi-button"
                  @click="closeUiPanel">
                     <close-icon
                      :size="platform_size.icon"/>
@@ -18,10 +18,8 @@
             </div>
         </div>
 
-        <div>
-            <panel-content
-             :type-name="panelProps.type"/>
-        </div>
+        <panel-content
+         :type-name="panelProps.type"/>
     </div>
 </template>
 
