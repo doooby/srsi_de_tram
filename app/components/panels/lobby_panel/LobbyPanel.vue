@@ -22,7 +22,7 @@
                  class="srsi-mr2">
                     |
                     </span>
-                Přítomo: {{present.length}}
+                {{$t('ui.lobby.present', { count: present.length })}}
                 <button
                  class="srsi-button-flat"
                  @click="getUsers"

@@ -2,9 +2,8 @@
     <div
      class="srsi-panel panel-container">
         <div
-         class="srsi-button -header">
-            Header - {{panelProps.type}}
-        </div>
+         class="srsi-button -header"
+         v-t="`ui.${panelProps.type}.header`"/>
 
         <div
          class="-close">

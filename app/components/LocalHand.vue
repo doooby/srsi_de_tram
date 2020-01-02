@@ -35,7 +35,7 @@
             <div
              class="button"
              @click="doNothing()">
-                {{textGet('actions.stay')}}
+                {{$t('game.actions.stay')}}
             </div>
         </div>
     </div>
@@ -50,7 +50,7 @@
         computed: {
 
             ...mapState(['session']),
-            ...mapGetters(['textGet', 'inSession', 'localPlayerOnTurn']),
+            ...mapGetters(['inSession', 'localPlayerOnTurn']),
 
             cards () {
                 if (this.inSession) {

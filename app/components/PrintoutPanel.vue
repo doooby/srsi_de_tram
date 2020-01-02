@@ -7,7 +7,7 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
+    import { mapState } from 'vuex';
 
     export default {
 
@@ -15,12 +15,11 @@
             ...mapState({
                 printout: state => state.printout,
             }),
-            ...mapGetters(['textGet']),
 
             message () {
                 if (this.printout) {
                     const { text, code } = this.printout;
-                    return text || this.textGet(code);
+                    return text || this.$t(code);
                 }
             }
         }

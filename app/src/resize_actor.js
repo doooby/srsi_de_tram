@@ -1,5 +1,5 @@
 import ResizeObserver from 'resize-observer-polyfill';
-import { throttle } from './helpers';
+import { throttle } from 'HELPERS';
 
 export default class ResizeActor {
 

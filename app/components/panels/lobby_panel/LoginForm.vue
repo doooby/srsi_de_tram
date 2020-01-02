@@ -4,9 +4,8 @@
         <div>
 
             <div
-             class="text-left srsi-mb2">
-                Jméno
-            </div>
+             class="text-left srsi-mb2"
+             v-t="'ui.lobby.login.name'"/>
 
             <input
              type="text"
@@ -20,17 +19,15 @@
                     <small
                      v-if="message !== null"
                      class="position-absolute w-100"
-                     style="line-height: 1.15em;">
-                        {{message}}
-                    </small>
+                     style="line-height: 1.15em;"
+                     v-t="`ui.lobby.login.msg.${message}`"/>
                 </div>
 
                 <button
                  class="srsi-button"
                  @click="login"
-                 :disabled="connecting">
-                    VSTOUPIT
-                </button>
+                 :disabled="connecting"
+                 v-t="'ui.lobby.login.enter'"/>
             </div>
 
         </div>
@@ -39,7 +36,7 @@
 
 <script>
     import { mapState } from 'vuex';
-    import { throttle } from '../../../src/helpers';
+    import { throttle } from 'HELPERS';
 
     export default {
 
@@ -61,12 +58,12 @@
             connected (value) {
                 switch (value){
                     case 'p':
-                        this.message = 'Připojuji k serveru ...';
+                        this.message = 'connecting';
                         this.connecting = true;
                         break;
 
                     case 'n':
-                        this.message = 'Nepodařilo se připojit.';
+                        this.message = 'failed';
                         this.connecting = false;
                         break;
 
@@ -85,7 +82,7 @@
 
             login: throttle(600, true, function () {
                 if (this.login_input.length < 5) {
-                    this.message = 'Jméno je příliš krátké.';
+                    this.message = 'name_short';
 
                 } else {
                     this.$app.openConnection(this.login_input);

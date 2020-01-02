@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { localizedGetter } from '../lib/game_texts';
 import times from 'lodash/times';
 import Game from 'GAME_PATH/src/game';
 import Player from 'GAME_PATH/src/player';
@@ -19,7 +18,6 @@ export function createStore () {
                 font: 0,
                 icon: 0,
             }),
-            locale: 'cs',
 
             session: {},
             printout: null,
@@ -38,10 +36,6 @@ export function createStore () {
 }
 
 const getters = {
-
-    textGet ({ locale }) {
-        return localizedGetter(locale);
-    },
 
     inSession ({ session }) {
         const { game, state } = session;

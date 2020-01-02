@@ -52,9 +52,9 @@
 
     import PanelComponent from './panels/PanelComponent';
 
-    import AccountIcon from 'ICONS/Account.vue'
-    import SettingsIcon from 'ICONS/Settings.vue'
-    import EmailIcon from 'ICONS/Email.vue'
+    import AccountIcon from 'ICONS/Account.vue';
+    import SettingsIcon from 'ICONS/Settings.vue';
+    import EmailIcon from 'ICONS/Email.vue';
 
     export default {
 

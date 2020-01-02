@@ -2,6 +2,7 @@ import Vue from 'vue';
 import uuid from 'uuid/v4';
 
 import { createStore } from './store';
+import { createI18n } from './i18n';
 import App from '../components/App';
 import CardsDrawing from './cards_drawing';
 import ResizeActor from './resize_actor';
@@ -36,6 +37,7 @@ export default class Application {
         this.cards_drawing = new CardsDrawing(this);
 
         this.store = null;
+        this.i18n = null;
         this.vue = null;
 
         this.connected = false;
@@ -47,11 +49,13 @@ export default class Application {
 
     startup () {
         this.store = createStore();
+        this.i18n = createI18n();
         this.resize_actor.start();
 
         this.vue = new Vue({
             el: this.root.firstChild,
             store: this.store,
+            i18n: this.i18n,
             render: function (h) { return h(App); },
             application: this
         });
@@ -91,7 +95,7 @@ export default class Application {
                 this.player.subscribe('bad_move', (player, move) => {
                     if (this.player !== player) return;
                     store.dispatch('actionPrintoutMessage', {
-                        code: `bad_move.${move.error}`
+                        code: `game.bad_move.${move.error}`
                     });
                 });
             }

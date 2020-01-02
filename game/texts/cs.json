@@ -12,8 +12,8 @@
     "queer": "Změň na"
   },
   "state": {
-    "attack": "Útok: %{power}",
-    "queer": "Změněno na: %{suit}"
+    "attack": "Útok: {power}",
+    "queer": "Změněno na: {suit}"
   },
   "bad_move": {
     "nothing": "Musíš udělat tah!",

@@ -26,7 +26,7 @@
 </template>
 
 <script>
-    import { mapState, mapGetters } from 'vuex';
+    import { mapState } from 'vuex';
 
     export default {
 
@@ -69,9 +69,7 @@
         },
 
         computed: {
-
             ...mapState(['session']),
-            ...mapGetters(['textGet']),
 
             pile () {
                 const { state } = this.session;
@@ -83,15 +81,15 @@
                 if (!state) return;
 
                 if (state.attack) return {
-                    text: this.textGet(
-                        'state.attack',
+                    text: this.$t(
+                        'game.state.attack',
                         { power: String(state.attack) }
                     )
                 };
 
                 if (typeof state.queer === 'number') return {
-                    text: this.textGet(
-                        'state.queer',
+                    text: this.$t(
+                        'game.state.queer',
                         { suit: '' }
                     ),
                     queer: state.queer
