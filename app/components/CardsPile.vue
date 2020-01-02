@@ -27,9 +27,6 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import { cardCssTransformation, spreadInsideCircle , suitCssClass,
-        transcribeCard} from '../utils';
-    import platform from '../platform';
 
     export default {
 
@@ -49,19 +46,21 @@
                     this.cards.length = 0;
                 }
 
+                const drawing = this.$app.cards_drawing;
+
                 for (let i=this.cards.length; i<new_pile.length; i+=1) {
                     const card = new_pile[i];
-                    const [x, y] = spreadInsideCircle(
-                        0.35 * platform.card_regular_size[0],
+                    const [x, y] = drawing.spreadInsideCircle(
+                        0.35 * drawing.card_regular_size[0],
                         (Math.random() * 2 * Math.PI)
                     );
                     const rot = Math.random() * 2;
                     this.cards.push({
                         id: card.id,
-                        img_data: platform.getImageData(card.id),
+                        img_data: drawing.getImageData(card.id),
                         css_styles: {
-                            transform: cardCssTransformation(
-                                x, y, rot, ...platform.card_regular_size
+                            transform: drawing.cardCssTransformation(
+                                x, y, rot, ...drawing.card_regular_size
                             )
                         }
                     });
@@ -103,8 +102,13 @@
 
         methods: {
 
-            suitCssClass (suit) { return suitCssClass(suit); },
-            transcribe (suit) { return transcribeCard(suit); },
+            suitCssClass (suit) {
+                return this.$app.cards_drawing.suitCssClass(suit);
+            },
+
+            transcribe (suit) {
+                return this.$app.cards_drawing.transcribeCard(suit);
+            },
 
         }
 

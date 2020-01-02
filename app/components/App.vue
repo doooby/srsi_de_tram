@@ -54,15 +54,12 @@
 <script>
     import { mapState } from 'vuex';
 
-    import platform from './platform';
-
-    import CardsDeck from './components/CardsDeck.vue';
-    import CardsPile from './components/CardsPile.vue';
-    import LocalHand from './components/LocalHand.vue';
-    import PrintoutPanel from './components/PrintoutPanel';
-    import RemoteHands from './components/RemoteHands.vue';
-
-    import UiPanel from './components/UiPanel';
+    import CardsDeck from './CardsDeck.vue';
+    import CardsPile from './CardsPile.vue';
+    import LocalHand from './LocalHand.vue';
+    import PrintoutPanel from './PrintoutPanel';
+    import RemoteHands from './RemoteHands.vue';
+    import UiPanel from './UiPanel';
 
     export default {
         name: 'app',

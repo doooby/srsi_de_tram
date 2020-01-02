@@ -33,14 +33,12 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import { mapCardsToFlapper } from '../utils';
-    import platform from '../platform';
 
     export default {
 
         data () {
             return {
-                card_bg: platform.getImageData('back'),
+                card_bg: this.$app.cards_drawing.getImageData('back'),
             };
         },
 
@@ -52,12 +50,13 @@
             remoteHands () {
                 if (!this.inSession) return [];
 
+                const drawing = this.$app.cards_drawing;
                 const { game, state } = this.session;
                 return game.remotePlayers().map(player => ({
                     player,
-                    cards: mapCardsToFlapper(
+                    cards: drawing.mapCardsToFlapper(
                         state.players[player.index],
-                        platform.card_small_size,
+                        drawing.card_small_size,
                         (card, transform) => ({
                             id: card.id,
                             css_styles: { transform }

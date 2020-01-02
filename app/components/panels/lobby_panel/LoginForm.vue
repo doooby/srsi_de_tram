@@ -39,7 +39,7 @@
 
 <script>
     import { mapState } from 'vuex';
-    import { throttle } from '../../../utils';
+    import { throttle } from '../../../src/helpers';
 
     export default {
 

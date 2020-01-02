@@ -43,9 +43,7 @@
 
 <script>
     import { mapState, mapGetters } from 'vuex';
-    import { mapCardsToFlapper, suitCssClass, transcribeCard } from '../utils';
     import { cards } from 'GAME_PATH/src/cards';
-    import platform from '../platform';
 
     export default {
 
@@ -65,12 +63,13 @@
             },
 
             cardsItems () {
-                return mapCardsToFlapper(
+                const drawing = this.$app.cards_drawing;
+                return drawing.mapCardsToFlapper(
                     this.cards,
-                    platform.card_regular_size,
+                    drawing.card_regular_size,
                     (card, transform) => ({
                         id: card.id,
-                        img_data: platform.getImageData(card.id),
+                        img_data: drawing.getImageData(card.id),
                         css_styles: { transform }
                     })
                 );
@@ -99,8 +98,14 @@
         methods: {
 
             allSuits () { return cards.SUITS; },
-            suitCssClass (suit) { return suitCssClass(suit); },
-            transcribe (suit) { return transcribeCard(suit); },
+
+            suitCssClass (suit) {
+                return this.$app.cards_drawing.suitCssClass(suit);
+            },
+
+            transcribe (suit) {
+                return this.$app.cards_drawing.transcribeCard(suit);
+            },
 
             layCard (index) {
                 if (!this.canLay) return;
