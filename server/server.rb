@@ -28,7 +28,7 @@ class Server < Sinatra::Base
   end
 
   get '/connect' do
-    WsServer.call request.env
+    Application::Ws.call request.env
   end
 
   helpers do
@@ -56,7 +56,7 @@ class Server < Sinatra::Base
 
     def render_json data={}
       response.headers['Content-Type'] = 'application/json'
-      JSON.dump data
+      JSON.generate data
     end
 
     def asset name
