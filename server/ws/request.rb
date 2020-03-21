@@ -1,7 +1,7 @@
 module Ws
   class Request
 
-    attr_reader :connection, :data
+    attr_reader :connection, :data, :result
 
     def initialize connection, message
       @connection = connection
@@ -22,12 +22,16 @@ module Ws
     end
 
     def ok data=nil
-      [ true, data ]
+      @result = [ true, data ]
     end
 
     def fail reason, data={}
       data[:fail] = reason.to_s
-      [ false, data ]
+      @result = [ false, data ]
+    end
+
+    def done?
+      defined? @result
     end
 
     def log

@@ -34,7 +34,8 @@ module Ws
       Ws.process self, request if request.data
     end
 
-    def respond request, result, data
+    def respond request
+      result, data = request.result
       data = {} unless Hash === data
       data[:req] = request.id
       data[:ok] = !!result

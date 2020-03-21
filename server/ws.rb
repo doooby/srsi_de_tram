@@ -14,12 +14,13 @@ module Ws
     request.log
 
     begin
-      result, data = action.call request
-      request.failed?
-      connection.respond request, result, data
+      response = action.call request
+      request.ok response if !request.done? && Hash === response
     rescue => e
-      connection.respond request, *(request.fail e.message)
+      request.fail e.message
     end
+
+    connection.respond request
   end
 
 end
