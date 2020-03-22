@@ -7,11 +7,11 @@ module Ws
 
     action 'A:SET_NAME' do |req|
       name = req['name']
-      name = nil unless String === name && name.length >= 5
+      name = nil unless String === name && /^[\w\d\s\-.,_!?@#&]{5,20}$/ === name
 
       if name
         req.connection.set_user_name name
-        { user_id: req.connection.id }
+        { user: req.connection.name }
       else
         req.fail 'bad_name'
       end
