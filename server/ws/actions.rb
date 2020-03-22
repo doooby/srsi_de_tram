@@ -1,9 +1,11 @@
+#frozen_string_literal: true
+
 module Ws
   module Actions
 
-    include Lib::Actions
+    extend Lib::Actions
 
-    action 'set_name' do |req|
+    action 'A:SET_NAME' do |req|
       name = req['name']
       name = nil unless String === name && name.length >= 5
 
@@ -15,7 +17,7 @@ module Ws
       end
     end
 
-    action 'get_users' do
+    action 'A:GET_USER' do
       { users: Connection.store.query(:list) }
     end
 

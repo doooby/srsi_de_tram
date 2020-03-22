@@ -1,10 +1,12 @@
+#frozen_string_literal: true
+
 require 'rubygems'
 require 'bundler'
 
 require 'json'
 require 'pathname'
 
-pwd = Pathname.pwd
+ROOT = Pathname.new( ENV['RACK_ROOT'] || Dir.pwd )
 
 string_inquirer_class = Class.new String do
   def respond_to_missing?(method_name, include_private = false)
@@ -22,18 +24,22 @@ RACK_ENV = string_inquirer_class.new(ENV['RACK_ENV'] ||= 'development')
 
 ASSETS_PATH = "#{ RACK_ENV.development? ? 'tmp/build' : 'public' }/assets"
 
+LOGGER = unless RACK_ENV.test?
+  Logger.new ROOT.join("log/#{RACK_ENV}.log")
+end
+
 ### Load bundled gems
 Bundler.require :default, RACK_ENV
 
 ### Auto-loading
 loader = Zeitwerk::Loader.new
-loader.push_dir pwd.join('server')
+loader.push_dir ROOT.join('server')
 
 if RACK_ENV.development?
   loader.enable_reloading
 
-else
-  raise "cannot yet run for env #{RACK_ENV}"
+elsif RACK_ENV.test?
+  # nothing
 
 end
 
@@ -44,7 +50,7 @@ loader.setup
 if loader.reloading_enabled?
 
   # server files
-  server_file = pwd.join('server/server.rb').to_s
+  server_file = ROOT.join('server/server.rb').to_s
   listen = Listen.to *loader.dirs, only: /\.rb$/ do |changed, *_|
     loader.reload
     if changed.include?(server_file) && File.exists?('tmp/puma.pid')
@@ -54,7 +60,7 @@ if loader.reloading_enabled?
   listen.start
 
   # assets files
-  assets_full_path = pwd.join ASSETS_PATH
+  assets_full_path = ROOT.join ASSETS_PATH
   system "mkdir -p #{assets_full_path}"
   manifest_file = assets_full_path.join('manifest.json').to_s
   listen = Listen.to assets_full_path do |changed, *_|

@@ -10,7 +10,8 @@ gem 'puma'
 gem 'faye-websocket'
 gem 'concurrent-ruby'
 
-group :development do 
+group :development, :test do
   gem 'listen'
   gem 'byebug'
+  gem 'rspec'
 end

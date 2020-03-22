@@ -1,3 +1,5 @@
+#frozen_string_literal: true
+
 module Lib
   module Messages
 
@@ -11,7 +13,7 @@ module Lib
 
     def generate_message name, *args
       generator = messages[name] || return
-      generator.send *args
+      generator.call *args
     end
 
   end

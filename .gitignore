@@ -1,6 +1,10 @@
+.ruby-version
+.byebug_history
+
 /.idea
 *.iml
-.byebug_history
+
+/log
 /tmp
 
 /public/loader*.js

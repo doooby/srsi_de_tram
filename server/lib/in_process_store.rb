@@ -1,3 +1,5 @@
+#frozen_string_literal: true
+
 module Lib
   class InProcessStore
 
@@ -25,15 +27,22 @@ module Lib
     end
 
     def add object
-      write do |index|
-        raise 'non-unique ID' if index.has_key? object.id
-        index[object.id] = object
+      write do
+        raise 'non-unique ID' if @index.has_key? object.id
+        @index[object.id] = object
       end
     end
 
     def remove object
-      write do |index|
-        index.delete object.id
+      write do
+        @index.delete object.id
+      end
+    end
+
+    def clear
+      write do
+        @index.clear
+        @cache.clear
       end
     end
 

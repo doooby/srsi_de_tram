@@ -1,3 +1,5 @@
+#frozen_string_literal: true
+
 module Ws
   class Request
 
@@ -10,11 +12,11 @@ module Ws
     end
 
     def id
-      data['id'.freeze]
+      data['id']
     end
 
     def action_name
-      data['action'.freeze]
+      data['action']
     end
 
     def [] key
@@ -35,7 +37,7 @@ module Ws
     end
 
     def log
-      Server.logger.debug "[WS-REQ] #{data.inspect}"
+      LOGGER&.debug "[WS-REQ] #{data.inspect}"
     end
 
   end

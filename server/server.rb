@@ -1,7 +1,14 @@
+#frozen_string_literal: true
+
 class Server < Sinatra::Base
 
-  enable :logging
+  disable :logging unless LOGGER
   disable :static
+
+  before do
+    request.env['rack.logger'] = LOGGER
+    cors_restrict_origin
+  end
 
   before{ cors_restrict_origin }
 

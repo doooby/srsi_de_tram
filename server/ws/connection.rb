@@ -1,3 +1,5 @@
+#frozen_string_literal: true
+
 module Ws
   class Connection
 
@@ -25,12 +27,16 @@ module Ws
       end
     end
 
-    def set_user_name name; @user_name = name; end
+    def set_user_name name
+      @user_name = name
+    end
 
-    def name; @name ||= "#{user_name} #{id}"; end
+    def name
+      @name ||= "#{user_name} #{id}"
+    end
 
-    def process_request message
-      request = Request.new self, message
+    def process_request data
+      request = Request.new self, data
       Ws.process self, request if request.data
     end
 
@@ -42,27 +48,31 @@ module Ws
       send JSON.generate(data)
     end
 
-    def send raw_data; @socket.send raw_data; end
+    def pass_msg raw_data
+      @socket.send raw_data
+    end
 
     def broadcast_msg *args
       msg = Messages.generate_message(*args) || return
+      msg[:msg] = args.first
       raw_msg = JSON.generate msg
       Connection.store.read do |index|
         index.values.each do |connection|
-          connection.send raw_msg
+          connection.pass_msg raw_msg
         end
       end
     end
 
     class << self
       attr_reader :store
-      @store = Lib::InProcessStore.new.tap do |store|
+    end
 
-        store.define_query :list, cacheable: true do |index|
-          index.values.map &:name
-        end
+    @store = Lib::InProcessStore.new.tap do |store|
 
+      store.define_query :list, cacheable: true do |index|
+        index.values.map &:name
       end
+
     end
 
   end

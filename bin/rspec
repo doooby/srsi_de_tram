@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+export RACK_ENV=test
+export RACK_ROOT=$(pwd)
+(cd server && bundle exec --gemfile=../Gemfile rspec)
