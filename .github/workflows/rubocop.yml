@@ -16,7 +16,7 @@ jobs:
       - name: Rubocop Linter
         uses: andrewmcodes/rubocop-linter-action@v3.1.0
         with:
-#          rubocop_fail_level: refactor
-          action_config_path: '.rubocop.yml'
+          fail_level: error
+          action_config_path: .rubocop.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

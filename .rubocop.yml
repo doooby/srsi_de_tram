@@ -6,7 +6,7 @@ AllCops:
     - server/views/**/*
     - server/spec/**/*
 
-Metrics/LineLength:
+Layout/LineLength:
   Max: 80
 
 Layout/EmptyLinesAroundClassBody:
