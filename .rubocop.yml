@@ -1,0 +1,31 @@
+AllCops:
+  Include:
+    - server/**/*
+  Exclude:
+    - bin/**/*
+    - server/views/**/*
+    - server/spec/**/*
+
+Metrics/LineLength:
+  Max: 80
+
+Layout/EmptyLinesAroundClassBody:
+  EnforcedStyle: empty_lines_except_namespace
+
+Style/MethodDefParentheses:
+  EnforcedStyle: require_no_parentheses_except_multiline
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  EnforcedStyle: space
+
+Style/RescueModifier:
+  Enabled: false
+
+Style/CaseEquality:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
