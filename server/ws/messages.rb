@@ -5,17 +5,26 @@ module Ws
 
     extend Lib::Messages
 
-    message 'M:CONN_NEW' do |connection|
+    message 'M:CONN-NEW' do |connection|
       {
           name: connection.name
       }
     end
 
-    message 'M:CONN_LOST' do |connection|
+    message 'M:CONN-LOST' do |connection|
       {
           name: connection.name
       }
     end
+
+    # 'M:MSG-LOBBY'
+    # 'M:MSG-BOARD'
+    #
+    # 'M:BOARD-USER-IN'
+    # 'M:BOARD-USER-OUT'
+    # 'M:BOARD-STARTED'
+    # 'M:BOARD-MOVE'
+    # 'M:BOARD-ENDED'
 
   end
 end

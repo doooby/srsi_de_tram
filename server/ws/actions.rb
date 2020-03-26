@@ -21,5 +21,20 @@ module Ws
       { users: Connection.store.query(:list) }
     end
 
+    # 'A:CONN-IN'
+    # 'A:CONN-OUT'
+    # 'A:CONN-RE'
+    #
+    # 'A:LOBBY-ENTER'
+    # 'A:LOBBY-INFO'
+    # 'A:LOBBY-MUTE'
+    # 'A:LOBBY-UNMUTE'
+    #
+    # 'A:BOARD-NEW'
+    # 'A:BOARD-ENTER'
+    # 'A:BOARD-LEAVE'
+    # 'A:BOARD-KICK'
+    # 'A:BOARD-READY'
+
   end
 end
