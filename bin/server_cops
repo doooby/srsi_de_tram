@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -e
+
+cmd="
+    require 'erb'
+    template = ERB.new File.read('.rubocop.yml.erb')
+    puts template.result
+"
+bundle exec ruby -e "$cmd"  | bundle exec rubocop -f simple -c /dev/stdin "$@"

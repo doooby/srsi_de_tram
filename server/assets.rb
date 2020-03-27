@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 class Assets
 
@@ -28,7 +28,8 @@ class Assets
   private
 
   def parse_manifest!
-    JSON.parse File.read(path.join 'manifest.json')
+    file = path.join 'manifest.json'
+    JSON.parse File.read(file)
   end
 
 end

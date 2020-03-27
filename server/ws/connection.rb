@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 module Ws
   class Connection
@@ -64,13 +64,15 @@ module Ws
     end
 
     class << self
+
       attr_reader :store
+
     end
 
     @store = Lib::InProcessStore.new.tap do |store|
 
       store.define_query :list, cacheable: true do |index|
-        index.values.map &:name
+        index.values.map(&:name)
       end
 
     end

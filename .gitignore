@@ -3,6 +3,7 @@
 
 /.idea
 *.iml
+.rubocop.yml
 
 /log
 /tmp

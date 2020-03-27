@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 module Lib
   class InProcessStore
@@ -28,7 +28,8 @@ module Lib
 
     def add object
       write do
-        raise 'non-unique ID' if @index.has_key? object.id
+        raise 'non-unique ID' if @index.key? object.id
+
         @index[object.id] = object
       end
     end
@@ -59,7 +60,7 @@ module Lib
       end
 
       action = @queries[name] || return
-      result = read &action
+      result = read(&action)
 
       if cacheable
         @lock.with_write_lock do

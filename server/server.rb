@@ -1,4 +1,4 @@
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 class Server < Sinatra::Base
 
@@ -27,11 +27,9 @@ class Server < Sinatra::Base
   end
 
   get '/assets/*' do |asset|
-    if Assets.instance.exists? asset
-      send_file Assets.instance.path.join(asset)
-    else
-      raise Sinatra::NotFound
-    end
+    raise Sinatra::NotFound unless Assets.instance.exists? asset
+
+    send_file Assets.instance.path.join(asset)
   end
 
   get '/connect' do
@@ -39,7 +37,6 @@ class Server < Sinatra::Base
   end
 
   helpers do
-
     def cors_preflight_headers
       response.headers['Access-Control-Allow-Methods'] = 'POST, GET, OPTIONS'
       response.headers['Access-Control-Allow-Headers'] =
@@ -69,7 +66,6 @@ class Server < Sinatra::Base
     def asset name
       "/assets/#{Assets.instance.get_path name}"
     end
-
   end
 
 end

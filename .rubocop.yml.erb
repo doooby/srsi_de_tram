@@ -1,0 +1,51 @@
+AllCops:
+  Include:
+    - server/**/*
+  Exclude:
+    - bin/**/*
+    - server/views/**/*
+    - server/spec/**/*
+
+Layout/LineLength:
+  Max: 80
+
+Metrics/MethodLength:
+  Max: 20
+
+<%
+  JUST_DISABLE = %w[
+    Layout/AssignmentIndentation
+    Layout/ElseAlignment
+    Layout/EndAlignment
+    Layout/EmptyLinesAroundBlockBody
+    Layout/FirstHashElementIndentation
+    Layout/IndentationWidth
+    Lint/DuplicateMethods
+    Naming/AccessorMethodName
+    Style/CaseEquality
+    Style/Documentation
+    Style/DoubleNegation
+    Style/RescueModifier
+    Style/RescueStandardError
+  ]
+%>
+
+Layout/EmptyLinesAroundClassBody:
+  EnforcedStyle: empty_lines_except_namespace
+
+Layout/EmptyLinesAroundModuleBody:
+  EnforcedStyle: empty_lines_except_namespace
+
+Style/MethodDefParentheses:
+  EnforcedStyle: require_no_parentheses_except_multiline
+
+Layout/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: no_space
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  EnforcedStyle: space
+
+Layout/SpaceBeforeBlockBraces:
+  EnforcedStyle: no_space
+
+<%= JUST_DISABLE.map{|n| "#{n}:\n  Enabled: false\n" }.join '' %>
