@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Ws
+module Application
   class Request
 
     attr_reader :connection, :data, :result
@@ -24,6 +24,7 @@ module Ws
     end
 
     def ok data=nil
+      data ||= { ok: true }
       @result = [ true, data ]
     end
 

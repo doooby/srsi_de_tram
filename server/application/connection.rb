@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-module Ws
+module Application
   class Connection
 
     attr_reader :id, :user_name, :name
+    attr_writer :restore_token
 
     def initialize socket
-      @id = SecureRandom.hex 6
+      @id = Application.generate_object_id
       @socket = socket
 
       @user_name = nil
@@ -15,7 +16,6 @@ module Ws
 
     def connect
       Connection.store.add self
-      Ws.broadcast_msg 'CONN_NEW', self
 
       @socket.on :message do |event|
         process_request event.data
@@ -23,12 +23,20 @@ module Ws
 
       @socket.on :close do
         Connection.store.remove self
-        Ws.broadcast_msg 'CONN_LOST', self
+        self.restore_token = SecureRandom.uuid
+        broadcast_msg 'M:CONN_LOST', self
       end
     end
 
     def set_user_name name
+      if name.respond_to? :match?
+        name = nil unless name.match? Application::VALID_USER_NAME
+      else
+        name = nil
+      end
       @user_name = name
+      Connection.store.clear_cache if name
+      name
     end
 
     def name
@@ -37,7 +45,7 @@ module Ws
 
     def process_request data
       request = Request.new self, data
-      Ws.process self, request if request.data
+      Application.process self, request if request.data
     end
 
     def respond request
@@ -48,19 +56,30 @@ module Ws
       send JSON.generate(data)
     end
 
-    def pass_msg raw_data
+    def pass_raw_msg raw_data
       @socket.send raw_data
     end
 
+    def pass_psg *args
+      msg = Connection.generate_raw_msg(*args)
+      connection.pass_raw_msg msg if connection.user_name.nil?
+    end
+
     def broadcast_msg *args
-      msg = Messages.generate_message(*args) || return
-      msg[:msg] = args.first
-      raw_msg = JSON.generate msg
+      msg = Connection.generate_raw_msg(*args)
       Connection.store.read do |index|
         index.values.each do |connection|
-          connection.pass_msg raw_msg
+          next if connection.user_name.nil?
+          connection.pass_raw_msg msg
         end
       end
+      mag
+    end
+
+    def self.generate_raw_msg *args
+      msg = Messages.generate_message(*args) || return
+      msg[:msg] = args.first
+      JSON.generate msg
     end
 
     class << self

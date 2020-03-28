@@ -1,21 +1,32 @@
 # frozen_string_literal: true
 
-module Ws
+module Application
   module Messages
 
     extend Lib::Messages
 
     message 'M:CONN-NEW' do |connection|
       {
+          id: connection.id,
           name: connection.name
       }
     end
 
     message 'M:CONN-LOST' do |connection|
       {
-          name: connection.name
+          id: connection.id
       }
     end
+
+    message 'M:BOARD-STATUS' do |board|
+      board.status
+    end
+
+    # message 'M:BOARD-KICKED-OUT' do |board|
+    #   {
+    #       board_id: board.id
+    #   }
+    # end
 
     # 'M:MSG-LOBBY'
     # 'M:MSG-BOARD'

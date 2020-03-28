@@ -33,7 +33,7 @@ class Server < Sinatra::Base
   end
 
   get '/connect' do
-    Application::Ws.call request.env
+    Application.call request.env
   end
 
   helpers do

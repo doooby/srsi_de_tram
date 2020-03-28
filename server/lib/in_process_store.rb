@@ -10,6 +10,9 @@ module Lib
       @queries = {}
       @cache = {}
       @cacheable = {}
+
+      @referenced_by = []
+      @triggers = {}
     end
 
     def read
@@ -18,11 +21,21 @@ module Lib
       end
     end
 
-    def write
-      @lock.with_write_lock do
-        result = yield @index
-        @cache.clear
-        result
+    def get id
+      read do |index|
+        index[id]
+      end
+    end
+
+    def find &block
+      read do |index|
+        index.values.find(&block)
+      end
+    end
+
+    def select &block
+      read do |index|
+        index.values.select(&block)
       end
     end
 
@@ -37,6 +50,7 @@ module Lib
     def remove object
       write do
         @index.delete object.id
+        invoke_trigger :on_removed, object
       end
     end
 
@@ -45,6 +59,10 @@ module Lib
         @index.clear
         @cache.clear
       end
+    end
+
+    def clear_cache
+      @cache.clear
     end
 
     def define_query name, cacheable: false, &block
@@ -69,6 +87,25 @@ module Lib
       end
 
       result
+    end
+
+    def reference_by store, **triggers
+      @referenced_by.push store
+      triggers.each{|name, action| @triggers[name] = action }
+    end
+
+    def invoke_trigger name, arg
+      @triggers[name]&.call arg
+    end
+
+    private
+
+    def write
+      @lock.with_write_lock do
+        result = yield @index
+        @cache.clear
+        result
+      end
     end
 
   end

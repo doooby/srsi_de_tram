@@ -1,6 +1,6 @@
 require 'spec_helper.rb'
 
-RSpec.describe Ws::Actions do
+RSpec.describe Application::Actions do
 
   ACTION = 'A:TEST'
 
