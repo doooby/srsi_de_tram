@@ -52,7 +52,7 @@ loader.setup
 ### Reloading
 if loader.reloading_enabled?
   Application.print_msg 'BOOT', 'Enabling code reloading'
-  LOGGER&.info "[BOOT] Enabling code reloading"
+  LOGGER&.debug "[BOOT] Enabling code reloading"
 
   # server files
   server_file = ROOT.join('server/server.rb').to_s

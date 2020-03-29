@@ -13,7 +13,10 @@ module Lib
 
     def generate_message name, *args
       generator = messages[name] || return
-      generator.call(*args)
+
+      msg = generator.call(*args)
+      msg[:msg] = name
+      msg
     end
 
   end

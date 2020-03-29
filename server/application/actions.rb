@@ -8,13 +8,13 @@ module Application
     action 'A:LOBBY-ENTER-AS' do |req|
       name = req['name']
       if req.connection.set_user_name name
-        response = {
+        req.after_response do
+          Application.broadcast_message 'M:CONN-NEW', req.connection
+        end
+        {
             id: req.connection.id,
-            user: req.connection.user_name,
             token: req.connection.restore_token
         }
-        req.connection.broadcast_msg 'M:CONN-NEW', req.connection
-        response
       else
         req.fail 'bad_name'
       end
@@ -24,10 +24,19 @@ module Application
     #
     # end
 
-    action 'A:LOBBY-INFO' do
-      {
-          users: Connection.store.query(:list)
-      }
+    action 'A:LOBBY-LEAVE' do |req|
+      req.connection.set_user_name nil
+      req.after_response do
+        Application.broadcast_message 'M:CONN-LOST', req.connection
+      end
+      req.ok
+    end
+
+    action 'A:LOBBY-STATE' do |req|
+      req.after_response do
+        req.connection.message 'M:LOBBY-STATE'
+      end
+      req.ok
     end
 
     # action 'A:LOBBY-MUTE' do |req|
@@ -49,7 +58,7 @@ module Application
     action 'A:BOARD-ENTER' do |req|
       board = Board.store.get req['board_id'].to_s
       if board.enter req.connection
-        board.broadcast_msg 'M:BOARD-STATUS', board
+        board.broadcast_message 'M:BOARD-STATUS', board
         req.ok
       else
         req.fail 'denied'
@@ -59,7 +68,7 @@ module Application
     action 'A:BOARD-LEAVE' do |req|
       board = Board.store.get req['board_id'].to_s
       if board.leave req.connection
-        board.broadcast_msg 'M:BOARD-STATUS', board
+        board.broadcast_message 'M:BOARD-STATUS', board
       end
       req.ok
     end
@@ -68,8 +77,8 @@ module Application
     #   board = Board.store.get req['board_id'].to_s
     #   to_kick = Connection.store.get req['kick'].to_s
     #   if board.kick req.connection, to_kick
-    #     board.broadcast_msg 'M:BOARD-STATUS', board
-    #     to_kick.pass_psg
+    #     board.broadcast_message 'M:BOARD-STATUS', board
+    #     to_kick.pass_msg
     #   end
     #   req.ok
     # end
@@ -77,23 +86,6 @@ module Application
     action 'A:BOARD-READY' do |req|
 
     end
-
-    ##########
-
-    # 'A:CONN-IN'
-    # 'A:CONN-OUT'
-    # 'A:CONN-RE'
-    #
-    # 'A:LOBBY-ENTER'
-    # 'A:LOBBY-INFO'
-    # 'A:LOBBY-MUTE'
-    # 'A:LOBBY-UNMUTE'
-    #
-    # 'A:BOARD-NEW'
-    # 'A:BOARD-ENTER'
-    # 'A:BOARD-LEAVE'
-    # 'A:BOARD-KICK'
-    # 'A:BOARD-READY'
 
   end
 end

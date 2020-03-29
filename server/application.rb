@@ -31,6 +31,20 @@ module Application
     connection.respond request
   end
 
+  def self.broadcast_message *args
+    raw_data = Connection.generate_raw_msg(*args)
+    LOGGER&.info "[CONN] Broadcast | #{args.first} | <<"
+    LOGGER&.info raw_data
+
+    Connection.store.read do |index|
+      index.values.each do |connection|
+        next if connection.user_name.nil?
+        connection.pass_raw_msg raw_data
+      end
+    end
+    raw_data
+  end
+
   def self.generate_object_id
     SecureRandom.hex 8
   end

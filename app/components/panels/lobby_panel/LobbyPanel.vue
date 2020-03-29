@@ -3,11 +3,10 @@
      class="ui-lobby-panel">
 
         <div
-         v-if="connected"
+         v-if="userIsConnected"
          class="d-flex flex-column h-100">
 
-            <lobby-browser
-             :users="present"/>
+            <lobby-browser />
 
             <div
              class="d-flex justify-content-center">
@@ -22,10 +21,10 @@
                  class="srsi-mr2">
                     |
                     </span>
-                {{$t('ui.lobby.present', { count: present.length })}}
+                {{$t('ui.lobby.present', { count: users_count })}}
                 <button
                  class="srsi-button-flat"
-                 @click="getUsers"
+                 @click="updateLobbyInfo"
                  :disabled="fetching">
                     <sync-icon
                      :size="platform_size.icon * 0.75"/>
@@ -40,7 +39,7 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
 
     import LoginForm from './LoginForm';
     import LobbyBrowser from './LobbyBrowser';
@@ -52,8 +51,7 @@
 
         data () {
             return {
-                fetching: false,
-                present: []
+                fetching: false
             };
         },
 
@@ -65,26 +63,17 @@
         },
 
         computed: {
+            ...mapGetters([
+                'userIsConnected',
+            ]),
             ...mapState([
-                'platform_size'
+                'platform_size', 'connected'
             ]),
             ...mapState({
-                connected: store_state => {
-                    const { state, id, name } = store_state.connected;
-                    if (state !== 'y') return null;
-                    else return { id, name };
+                users_count (state) {
+                    return state.lobby.users.length;
                 }
-            }),
-        },
-
-        watch: {
-            connected(value) {
-                if (value) this.getUsers();
-            }
-        },
-
-        mounted () {
-            if (this.connected) this.getUsers();
+            })
         },
 
         methods: {
@@ -92,12 +81,10 @@
                 this.$app.closeConnection();
             },
 
-            async getUsers () {
+            async updateLobbyInfo () {
                 this.fetching = true;
-                const req = await this.$app.sendRequest('get_users');
+                await this.$app.sendRequest('A:LOBBY-STATE');
                 this.fetching = false;
-                console.log(req.result);
-                this.present = req.result.users || [];
             }
         },
 

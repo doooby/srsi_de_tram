@@ -18,6 +18,12 @@ module Application
       }
     end
 
+    message 'M:LOBBY-STATE' do
+      {
+          users: Connection.store.query(:users_in_lobby)
+      }
+    end
+
     message 'M:BOARD-STATUS' do |board|
       board.status
     end
@@ -27,15 +33,6 @@ module Application
     #       board_id: board.id
     #   }
     # end
-
-    # 'M:MSG-LOBBY'
-    # 'M:MSG-BOARD'
-    #
-    # 'M:BOARD-USER-IN'
-    # 'M:BOARD-USER-OUT'
-    # 'M:BOARD-STARTED'
-    # 'M:BOARD-MOVE'
-    # 'M:BOARD-ENDED'
 
   end
 end

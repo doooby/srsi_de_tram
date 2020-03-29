@@ -16,7 +16,7 @@
         <div
          class="flex-fill lobby-table srsi-mt3">
             <div
-             v-for="({id, name}) in filteredUsers"
+             v-for="({id, name}) in shownUsers"
              class="d-flex">
 
                 <div>
@@ -50,10 +50,6 @@
 
     export default {
 
-        props: [
-            'users'
-        ],
-
         components: {
             MagnifyIcon,
             EmailIcon,
@@ -64,6 +60,10 @@
                 search_input: '',
                 filter: '',
             }
+        },
+
+        mounted () {
+            this.$app.sendRequest('A:LOBBY-STATE');
         },
 
         watch: {
@@ -79,16 +79,31 @@
             ...mapState([
                 'platform_size'
             ]),
+            ...mapState({
+                connected_user_id (state) {
+                    return state.connected.id;
+                },
+
+                present_users (state) {
+                    return state.lobby.users;
+                }
+            }),
 
             iconSize () {
                 return this.platform_size.icon;
             },
 
-            filteredUsers () {
+            shownUsers () {
                 const filter = this.filter.toLowerCase();
-                return this.users.filter(
-                    ({name}) => name.toLowerCase().includes(filter)
-                );
+                const users = [];
+                for (let user of this.present_users) {
+                    if (this.connected_user_id === user.id) continue;
+                    if (filter && !user.name.toLowerCase().includes(filter)) continue;
+
+                    users.push(user);
+                    if (users.lenght >= 10) break;
+                }
+                return users;
             },
 
         },

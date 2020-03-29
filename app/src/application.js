@@ -140,13 +140,15 @@ export default class Application {
         this.socket.onopen = async () => {
             console.log('[SOCKET] Opened');
             this.connected = true;
-            const req = await this.sendRequest('A:LOBBY-ENTER-AS', { name: user_name });
+            const req = await this.sendRequest('A:LOBBY-ENTER-AS', {
+                name: user_name
+            });
             if (req.result.fail) {
                 this.socket.close();
 
             } else {
                 this.store.commit('mutateSetConnectedUser', {
-                    id: req.result.user_id,
+                    id: req.result.id,
                     name: user_name
                 });
 
@@ -155,20 +157,31 @@ export default class Application {
 
         this.socket.onclose = () => {
             this.connected = false;
-            this.store.commit('mutateSetConnectedUser');
+            this.store.commit('mutateSetConnectedUser', null);
         };
 
         this.socket.onmessage = event => {
             try {
                 const data = JSON.parse(event.data);
-                const req = this.active_requests.find(data.req);
-                if (req) {
-                    delete data.req;
-                    req.resolve(data);
+                if (data.req) {
+                    const req = this.active_requests.find(data.req);
+                    if (req) {
+                        delete data.req;
+                        console.log(
+                            `[SOCKET] Request | ${req.data.action} |`,
+                            data
+                        );
+                        req.resolve(data);
+                    }
+
+                } else if (data.msg) {
+                    this.process_message(data);
+
                 }
 
             } catch (err) {
-                console.error('[SOCKET] Failed | onmessage |', err.message)
+                console.error('[SOCKET] Failed | onmessage |');
+                console.error(err);
             }
         }
     }
@@ -184,6 +197,16 @@ export default class Application {
         return request.process(() => {
             this.active_requests.remove(request);
         });
+    }
+
+    process_message (data) {
+        const msg_name = data.msg;
+        delete data.msg;
+        console.log(
+            `[SOCKET] Message | ${msg_name} |`,
+            data
+        );
+        this.store.commit(msg_name, data);
     }
 
 }
@@ -207,7 +230,7 @@ class Request {
             const timeout = setInterval(() => {
                 if (!resolved) {
                     resolved = true;
-                    this.result = { ok: false, fail: 'timeout', };
+                    this.result = { fail: true, msg: 'timeout', };
                     resolve();
                 }
             }, 10000);
@@ -218,7 +241,6 @@ class Request {
                     if (timeout) clearTimeout(timeout);
 
                     this.result = result;
-                    console.log('[SOCKET] Request | A:LOBBY-ENTER-AS |', result);
                     resolve();
                 }
             };

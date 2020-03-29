@@ -15,6 +15,9 @@ module Application
         @id = data.delete 'id'
         @action_name = data.delete 'action'
       end
+
+      @result = nil
+      @after_response = nil
     end
 
     def [] key
@@ -33,7 +36,19 @@ module Application
     end
 
     def done?
-      defined? @result
+      result
+    end
+
+    def failed?
+      result[:fail]
+    end
+
+    def after_response &block
+      @after_response = block
+    end
+
+    def trigger_after_response
+      @after_response&.call unless failed?
     end
 
   end

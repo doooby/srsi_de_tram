@@ -28,6 +28,10 @@ export function createStore () {
                 name: '',
                 id: null
             },
+
+            lobby: {
+                users: []
+            },
         },
         getters,
         mutations,
@@ -36,6 +40,10 @@ export function createStore () {
 }
 
 const getters = {
+
+    userIsConnected ({ connected }) {
+        return connected.state === 'y';
+    },
 
     inSession ({ session }) {
         const { game, state } = session;
@@ -100,6 +108,23 @@ const mutations = {
         }
     },
 
+    'M:CONN-NEW': function (state, { id, name }) {
+        state.lobby.users.push({ id, name });
+    },
+
+    'M:CONN-LOST': function (state, { id }) {
+        const users = state.lobby.users;
+        const lost_user = users.find(user => user.id === id);
+        if (!lost_user) return;
+
+        const index = users.indexOf(lost_user);
+        users.splice(index, 1);
+    },
+
+    'M:LOBBY-STATE': function (state, { users }) {
+        state.lobby.users = users;
+    }
+
 };
 
 const actions = {
@@ -157,6 +182,6 @@ const actions = {
         }
 
         game.begin(session.deck);
-    }
+    },
 
 };

@@ -47,12 +47,15 @@ module Application
       @connections.delete connection
     end
 
-    def broadcast_msg *args
-      msg = Connection.generate_raw_msg(*args)
+    def broadcast_message *args
+      raw_data = Connection.generate_raw_msg(*args)
+      LOGGER&.info "[BOARD] Broadcast | #{id} | <<"
+      LOGGER&.info raw_data
+
       @connections.each do |connection|
-        connection.pass_raw_msg msg
+        connection.pass_raw_msg raw_data
       end
-      msg
+      raw_data
     end
 
     def status
