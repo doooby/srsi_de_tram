@@ -24,7 +24,7 @@ export function createStore () {
 
             ui_panel: null,
             connected: {
-                state: 'u',
+                state: '0',
                 name: '',
                 id: null
             },

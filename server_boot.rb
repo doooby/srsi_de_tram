@@ -5,6 +5,7 @@ require 'bundler'
 
 require 'json'
 require 'pathname'
+require 'logger'
 
 ROOT = Pathname.new( ENV['RACK_ROOT'] || Dir.pwd )
 
@@ -27,6 +28,8 @@ ASSETS_PATH = "#{ RACK_ENV.development? ? 'tmp/build' : 'public' }/assets"
 LOGGER = unless RACK_ENV.test?
   Logger.new ROOT.join("log/#{RACK_ENV}.log")
 end
+LOGGER&.info "[BOOT] Started"
+
 
 ### Load bundled gems
 Bundler.require :default, RACK_ENV
@@ -48,6 +51,8 @@ loader.setup
 
 ### Reloading
 if loader.reloading_enabled?
+  Application.print_msg 'BOOT', 'Enabling code reloading'
+  LOGGER&.info "[BOOT] Enabling code reloading"
 
   # server files
   server_file = ROOT.join('server/server.rb').to_s

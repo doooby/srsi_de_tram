@@ -61,8 +61,6 @@ module Application
           owner: owner.id,
           present: @connections.map(&:id),
           # lost: @lost_connections.map(&:id),
-
-          in_game: false
       }
     end
 

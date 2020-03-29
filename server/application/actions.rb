@@ -10,7 +10,7 @@ module Application
       if req.connection.set_user_name name
         response = {
             id: req.connection.id,
-            user: req.connection.name,
+            user: req.connection.user_name,
             token: req.connection.restore_token
         }
         req.connection.broadcast_msg 'M:CONN-NEW', req.connection

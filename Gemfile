@@ -3,6 +3,7 @@
 source 'https://rubygems.org'
 
 gem 'zeitwerk'
+gem 'colorize'
 
 gem 'sinatra'
 gem 'puma'

@@ -8,7 +8,7 @@ module Application
     message 'M:CONN-NEW' do |connection|
       {
           id: connection.id,
-          name: connection.name
+          name: connection.user_name
       }
     end
 

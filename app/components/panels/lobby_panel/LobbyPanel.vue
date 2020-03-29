@@ -69,9 +69,9 @@
                 'platform_size'
             ]),
             ...mapState({
-                connected: state => {
-                    const { id, name } = state.connected;
-                    if (!id) return null;
+                connected: store_state => {
+                    const { state, id, name } = store_state.connected;
+                    if (state !== 'y') return null;
                     else return { id, name };
                 }
             }),

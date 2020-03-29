@@ -3,11 +3,11 @@
 module Application
   class Connection
 
-    attr_reader :id, :user_name, :name
-    attr_writer :restore_token
+    attr_reader :id, :user_name, :name, :restore_token
 
     def initialize socket
       @id = Application.generate_object_id
+      @restore_token = SecureRandom.uuid
       @socket = socket
 
       @user_name = nil
@@ -23,7 +23,6 @@ module Application
 
       @socket.on :close do
         Connection.store.remove self
-        self.restore_token = SecureRandom.uuid
         broadcast_msg 'M:CONN_LOST', self
       end
     end
@@ -49,14 +48,14 @@ module Application
     end
 
     def respond request
-      result, data = request.result
-      data = {} unless Hash === data
-      data[:req] = request.id
-      data[:ok] = !!result
-      send JSON.generate(data)
+      result = request.result
+      result[:req] = request.id
+      pass_raw_msg JSON.generate(result)
     end
 
     def pass_raw_msg raw_data
+      LOGGER&.debug "[CONN] Sending | #{id} | <<"
+      LOGGER&.debug raw_data
       @socket.send raw_data
     end
 
@@ -73,7 +72,7 @@ module Application
           connection.pass_raw_msg msg
         end
       end
-      mag
+      msg
     end
 
     def self.generate_raw_msg *args

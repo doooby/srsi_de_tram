@@ -71,6 +71,8 @@ export default class Application {
             'mutateSetPlatformMessage',
             null
         );
+
+        // if DEBUG
         window.SRSI_DE_TRAM = this;
     }
 
@@ -136,16 +138,17 @@ export default class Application {
         this.active_requests = new RequestQueue();
 
         this.socket.onopen = async () => {
+            console.log('[SOCKET] Opened');
             this.connected = true;
-            const req = await this.sendRequest('set_name', { name: user_name });
-            if (req.result.ok) {
+            const req = await this.sendRequest('A:LOBBY-ENTER-AS', { name: user_name });
+            if (req.result.fail) {
+                this.socket.close();
+
+            } else {
                 this.store.commit('mutateSetConnectedUser', {
                     id: req.result.user_id,
                     name: user_name
                 });
-
-            } else {
-                this.socket.close();
 
             }
         };
@@ -159,9 +162,14 @@ export default class Application {
             try {
                 const data = JSON.parse(event.data);
                 const req = this.active_requests.find(data.req);
-                if (req) req.resolve(data);
+                if (req) {
+                    delete data.req;
+                    req.resolve(data);
+                }
 
-            } catch {}
+            } catch (err) {
+                console.error('[SOCKET] Failed | onmessage |', err.message)
+            }
         }
     }
 
@@ -208,7 +216,9 @@ class Request {
                 if (!resolved) {
                     resolved = true;
                     if (timeout) clearTimeout(timeout);
+
                     this.result = result;
+                    console.log('[SOCKET] Request | A:LOBBY-ENTER-AS |', result);
                     resolve();
                 }
             };
