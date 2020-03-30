@@ -6,6 +6,13 @@ import Player from 'GAME_PATH/src/player';
 
 Vue.use(Vuex);
 
+function createRecord (klass, attributes={}) {
+    attributes.__proto__ = klass.prototype;
+    if (klass.constructor) klass.constructor.call(attributes);
+    Object.freeze(attributes);
+    return attributes;
+}
+
 export function createStore () {
     return new Vuex.Store({
         state: {
@@ -32,6 +39,11 @@ export function createStore () {
             lobby: {
                 users: []
             },
+
+            messages: {
+                last_read: 0,
+                list: []
+            }
         },
         getters,
         mutations,
@@ -123,7 +135,13 @@ const mutations = {
 
     'M:LOBBY-STATE': function (state, { users }) {
         state.lobby.users = users;
-    }
+    },
+
+    'MSG-LOBBY-MESSAGE': function (state, msg) {
+        state.messages.list.push(
+            createRecord(Message, msg)
+        );
+    },
 
 };
 
@@ -185,3 +203,8 @@ const actions = {
     },
 
 };
+
+class Message {
+
+
+}

@@ -144,7 +144,7 @@ export default class Application {
                 name: user_name
             });
             if (req.result.fail) {
-                this.socket.close();
+                this.closeConnection();
 
             } else {
                 this.store.commit('mutateSetConnectedUser', {
@@ -187,10 +187,16 @@ export default class Application {
     }
 
     closeConnection () {
-        if (this.connected) this.socket.close();
+        if (this.connected) {
+            this.socket.close();
+            this.connected = false;
+            this.socket = null;
+        }
     }
 
     sendRequest (action, data={}) {
+        if (!this.connected) throw `${action} requested, but connection is down`;
+
         const request = new Request(data, action);
         this.active_requests.add(request);
         this.socket.send(JSON.stringify(request.data));

@@ -8,8 +8,8 @@ module Application
     action 'A:LOBBY-ENTER-AS' do |req|
       name = req['name']
       if req.connection.set_user_name name
-        req.after_response do
-          Application.broadcast_message 'M:CONN-NEW', req.connection
+        req.after do
+          req.broadcast_msg 'M:CONN-NEW', req.connection
         end
         {
             id: req.connection.id,
@@ -26,17 +26,23 @@ module Application
 
     action 'A:LOBBY-LEAVE' do |req|
       req.connection.set_user_name nil
-      req.after_response do
-        Application.broadcast_message 'M:CONN-LOST', req.connection
+      req.after do
+        req.broadcast_msg 'M:CONN-LOST', req.connection
       end
-      req.ok
     end
 
     action 'A:LOBBY-STATE' do |req|
-      req.after_response do
-        req.connection.message 'M:LOBBY-STATE'
+      req.after do
+        req.connection.pass_message 'M:LOBBY-STATE'
       end
-      req.ok
+    end
+
+    action 'ACTION-LOBBY-MSG' do |req|
+      req.after do
+        req.broadcast_msg 'MSG-LOBBY-MESSAGE', req.connection, {
+            text: req['text']
+        }
+      end
     end
 
     # action 'A:LOBBY-MUTE' do |req|

@@ -29,6 +29,10 @@ module Application
       @result = data
     end
 
+    def broadcast_msg message, *context
+      Application.broadcast_message message, *context
+    end
+
     def fail reason, data={}
       data[:fail] = true
       data[:msg] = reason.to_s
@@ -45,7 +49,10 @@ module Application
 
     def after_response &block
       @after_response = block
+      nil
     end
+
+    alias after after_response
 
     def trigger_after_response
       @after_response&.call unless failed?

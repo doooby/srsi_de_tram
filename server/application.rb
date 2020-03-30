@@ -22,9 +22,21 @@ module Application
 
     begin
       response = action.call request
-      request.ok response if !request.done? && Hash === response
+
+      unless request.done?
+        case response
+          when nil, Hash then request.ok response
+          else nil
+        end
+      end
+
     rescue => e
-      print_exception e
+      write_exception e
+      request.fail 'failed-to-process'
+    end
+
+    unless request.done?
+      write_fail "Action #{request.action_name} not done"
       request.fail 'failed-to-process'
     end
 
@@ -49,26 +61,40 @@ module Application
     SecureRandom.hex 8
   end
 
-  def self.print_msg stage, msg
-    puts "* [#{stage}] #{msg}".yellow
+  def self.print_msg stage, msg, color=nil, &body_block
+    puts [
+        "* [#{stage}]".yellow,
+        (color ? msg.colorize(color) : msg.uncolorize)
+    ].join(' ')
+
+    if body_block
+      body = body_block.call
+      body.respond_to?(:each) && body.each{puts _1}
+    end
   end
 
-  def self.print_exception e
-    LOGGER&.debug "[REQ] Fail | #{e.message}"
-
-    print_msg 'REQ', 'Fail | <<'
-
-    root = ROOT.to_s
-    stack = e.backtrace.to_a.reverse
-    stack.map! do |trace|
-      if trace.start_with? root
-        trace[(root.length)..-1]
-      else
-        nil
+  def self.write_exception e
+    LOGGER&.error "[REQ] Fail | #{e.message}"
+    print_msg 'REQ', 'Fail | <<', :red do
+      root = ROOT.to_s
+      stack = e.backtrace.map do |trace|
+        if trace.start_with? root
+          trace[(root.length)..-1]
+        else
+          nil
+        end
       end
+
+      [
+          *stack.compact.reverse,
+          "#{e.class} #{e.message}".red
+      ]
     end
-    puts stack.compact
-    puts "#{e.class} #{e.message}".red
+  end
+
+  def self.write_fail msg
+    LOGGER&.error "[REQ] Fail | #{msg}"
+    print_msg 'REQ', "Fail | #{msg}", :red
   end
 
 end

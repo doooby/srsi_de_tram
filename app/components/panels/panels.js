@@ -1,4 +1,5 @@
 import LobbyPanel from './lobby_panel/LobbyPanel';
+import MessagesPanel from './messages_panel/MessagesPanel';
 
 export const panelContentProxy = {
 
@@ -12,6 +13,7 @@ export const panelContentProxy = {
         getPanelContentComponent () {
             switch (this.typeName) {
                 case 'lobby': return LobbyPanel;
+                case 'messages': return MessagesPanel;
                 default: return 'div';
             }
         }

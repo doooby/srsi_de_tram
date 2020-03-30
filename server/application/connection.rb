@@ -44,7 +44,7 @@ module Application
       Application.process self, request if request.data
     end
 
-    def message *args
+    def pass_message *args
       return if user_name.nil?
 
       raw_data = Connection.generate_raw_msg(*args)

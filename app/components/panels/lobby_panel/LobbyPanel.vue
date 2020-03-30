@@ -6,7 +6,7 @@
          v-if="userIsConnected"
          class="d-flex flex-column h-100">
 
-            <lobby-browser />
+            <lobby-browser/>
 
             <div
              class="d-flex justify-content-center">

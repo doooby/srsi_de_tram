@@ -24,6 +24,14 @@ module Application
       }
     end
 
+    message 'MSG-LOBBY-MESSAGE' do |connection, message|
+      message.merge!(
+          author_id: connection.id,
+          author: connection.user_name,
+          time: Time.now,
+      )
+    end
+
     message 'M:BOARD-STATUS' do |board|
       board.status
     end
