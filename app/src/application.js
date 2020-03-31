@@ -140,7 +140,7 @@ export default class Application {
         this.socket.onopen = async () => {
             console.log('[SOCKET] Opened');
             this.connected = true;
-            const req = await this.sendRequest('A:LOBBY-ENTER-AS', {
+            const req = await this.sendRequest('ACTION-LOBBY-ENTER', {
                 name: user_name
             });
             if (req.result.fail) {

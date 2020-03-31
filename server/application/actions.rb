@@ -5,11 +5,11 @@ module Application
 
     extend Lib::Actions
 
-    action 'A:LOBBY-ENTER-AS' do |req|
+    action 'ACTION-LOBBY-ENTER' do |req|
       name = req['name']
       if req.connection.set_user_name name
         req.after do
-          req.broadcast_msg 'M:CONN-NEW', req.connection
+          req.broadcast_msg 'MSG-CONN-NEW', req.connection
         end
         {
             id: req.connection.id,
@@ -24,16 +24,9 @@ module Application
     #
     # end
 
-    action 'A:LOBBY-LEAVE' do |req|
-      req.connection.set_user_name nil
+    action 'ACTION-LOBBY-REFRESH' do |req|
       req.after do
-        req.broadcast_msg 'M:CONN-LOST', req.connection
-      end
-    end
-
-    action 'A:LOBBY-STATE' do |req|
-      req.after do
-        req.connection.pass_message 'M:LOBBY-STATE'
+        req.connection.pass_message 'MSG-LOBBY-STATE'
       end
     end
 

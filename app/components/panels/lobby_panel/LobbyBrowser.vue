@@ -63,7 +63,7 @@
         },
 
         mounted () {
-            this.$app.sendRequest('A:LOBBY-STATE');
+            this.$app.sendRequest('ACTION-LOBBY-REFRESH');
         },
 
         watch: {

@@ -19,7 +19,7 @@ export function createI18n () {
 
 const ui_cs = {
     lobby: {
-        header: 'Lobby',
+        header: 'Loby',
         present: 'Přítomno: {count}',
         search: 'Vyhledat dle jména ...',
         login: {
@@ -32,5 +32,11 @@ const ui_cs = {
             }
         },
     },
+    messages: {
+        header: 'Zprávy',
+        send: {
+            btn: 'Odeslat'
+        }
+    }
 };
 

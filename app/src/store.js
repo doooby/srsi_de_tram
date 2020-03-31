@@ -120,11 +120,11 @@ const mutations = {
         }
     },
 
-    'M:CONN-NEW': function (state, { id, name }) {
+    'MSG-CONN-NEW': function (state, { id, name }) {
         state.lobby.users.push({ id, name });
     },
 
-    'M:CONN-LOST': function (state, { id }) {
+    'MSG-CONN-LOST': function (state, { id }) {
         const users = state.lobby.users;
         const lost_user = users.find(user => user.id === id);
         if (!lost_user) return;
@@ -133,14 +133,15 @@ const mutations = {
         users.splice(index, 1);
     },
 
-    'M:LOBBY-STATE': function (state, { users }) {
+    'MSG-LOBBY-STATE': function (state, { users }) {
         state.lobby.users = users;
     },
 
     'MSG-LOBBY-MESSAGE': function (state, msg) {
-        state.messages.list.push(
-            createRecord(Message, msg)
-        );
+        const list = state.messages.list;
+        list.push(createRecord(Message, msg));
+        const overflow = list.length - 50;
+        if (overflow > 0) list.splice(0, overflow);
     },
 
 };

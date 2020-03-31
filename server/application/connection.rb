@@ -22,7 +22,7 @@ module Application
 
       @socket.on :close do
         store.remove self
-        Application.broadcast_message 'M:CONN-LOST', self
+        Application.broadcast_message 'MSG-CONN-LOST', self
       end
     end
 

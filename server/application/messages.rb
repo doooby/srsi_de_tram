@@ -5,20 +5,20 @@ module Application
 
     extend Lib::Messages
 
-    message 'M:CONN-NEW' do |connection|
+    message 'MSG-CONN-NEW' do |connection|
       {
           id: connection.id,
           name: connection.user_name
       }
     end
 
-    message 'M:CONN-LOST' do |connection|
+    message 'MSG-CONN-LOST' do |connection|
       {
           id: connection.id
       }
     end
 
-    message 'M:LOBBY-STATE' do
+    message 'MSG-LOBBY-STATE' do
       {
           users: Connection.store.query(:users_in_lobby)
       }

@@ -83,7 +83,7 @@
 
             async updateLobbyInfo () {
                 this.fetching = true;
-                await this.$app.sendRequest('A:LOBBY-STATE');
+                await this.$app.sendRequest('ACTION-LOBBY-REFRESH');
                 this.fetching = false;
             }
         },

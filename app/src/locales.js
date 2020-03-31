@@ -1,1 +1,0 @@
-const cs = require('GAME_PATH/texts/cs');

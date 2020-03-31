@@ -196,6 +196,18 @@ $gray_bg: rgba(169, 169, 169, 0.67);
     }
   }
 
+  .ui-messages-panel {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .messages-listing {
+      flex: 1;
+      overflow-y: scroll;
+    }
+
+  }
+
 }
 
 @each $size, $value in $srsi-spacers {
@@ -307,4 +319,19 @@ $gray_bg: rgba(169, 169, 169, 0.67);
 
 .srsi-input {
   width: 100%;
+  padding: 1px;
+  border: 1px solid $srsi-ui-control;
+}
+
+.srsi-input-with-button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  > input {
+    flex: 1;
+    padding: 2px;
+    border: 1px solid $srsi-ui-control;
+    padding-right: calc( 2px + #{$srsi-ui-panel-border-size});
+    margin-right: - $srsi-ui-panel-border-size;
+  }
 }
