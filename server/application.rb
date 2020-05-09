@@ -14,32 +14,25 @@ module Application
     socket.rack_response
   end
 
-  def self.process connection, request
+  def self.process connection, request, handle_exception: true
     action = Actions.actions[request.action_name] || return
-    msg_header = "Processing | #{request.action_name} | #{request.data.inspect}"
+
+    msg_header = 'Processing | %s | %s' % [
+        request.action_name,
+        request.data.inspect
+    ]
     LOGGER&.info "[REQ] #{msg_header}"
     print_msg 'REQ', msg_header
 
     begin
-      response = action.call request
-
-      unless request.done?
-        case response
-          when nil, Hash then request.ok response
-          else nil
-        end
-      end
-
+      action.call request
     rescue => e
+      raise e unless handle_exception
       write_exception e
       request.fail 'failed-to-process'
     end
 
-    unless request.done?
-      write_fail "Action #{request.action_name} not done"
-      request.fail 'failed-to-process'
-    end
-
+    request.respond unless request.done?
     connection.respond request
   end
 
@@ -62,6 +55,8 @@ module Application
   end
 
   def self.print_msg stage, msg, color=nil, &body_block
+    return if RACK_ENV.test?
+
     puts [
         "* [#{stage}]".yellow,
         (color ? msg.colorize(color) : msg.uncolorize)

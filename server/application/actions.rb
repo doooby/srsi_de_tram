@@ -11,10 +11,10 @@ module Application
         req.after do
           req.broadcast_msg 'MSG-CONN-NEW', req.connection
         end
-        {
+        req.respond({
             id: req.connection.id,
             token: req.connection.restore_token
-        }
+        })
       else
         req.fail 'bad_name'
       end
@@ -26,7 +26,7 @@ module Application
 
     action 'ACTION-LOBBY-REFRESH' do |req|
       req.after do
-        req.connection.pass_message 'MSG-LOBBY-STATE'
+        req.pass_msg 'MSG-LOBBY-STATE'
       end
     end
 
@@ -49,16 +49,15 @@ module Application
     action 'A:BOARD-NEW' do |req|
       board = Board.new req.connection
       Board.store.add board
-      {
+      req.response({
           id: board.id
-      }
+      })
     end
 
     action 'A:BOARD-ENTER' do |req|
       board = Board.store.get req['board_id'].to_s
       if board.enter req.connection
         board.broadcast_message 'M:BOARD-STATUS', board
-        req.ok
       else
         req.fail 'denied'
       end
@@ -69,7 +68,6 @@ module Application
       if board.leave req.connection
         board.broadcast_message 'M:BOARD-STATUS', board
       end
-      req.ok
     end
 
     # action 'A:BOARD-KICK' do |req|

@@ -24,13 +24,9 @@ module Application
       data[key]
     end
 
-    def ok data=nil
+    def respond data=nil
       data ||= { fail: false }
       @result = data
-    end
-
-    def broadcast_msg message, *context
-      Application.broadcast_message message, *context
     end
 
     def fail reason, data={}
@@ -40,7 +36,7 @@ module Application
     end
 
     def done?
-      result
+      not result.nil?
     end
 
     def failed?
@@ -56,6 +52,14 @@ module Application
 
     def trigger_after_response
       @after_response&.call unless failed?
+    end
+
+    def broadcast_msg message, *context
+      Application.broadcast_message message, *context
+    end
+
+    def pass_msg message, *context
+      connection.pass_message message, *context
     end
 
   end

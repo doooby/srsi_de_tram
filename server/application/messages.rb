@@ -28,7 +28,7 @@ module Application
       message.merge!(
           author_id: connection.id,
           author: connection.user_name,
-          time: Time.now,
+          time: Time.now
       )
     end
 
