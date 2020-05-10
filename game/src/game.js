@@ -1,13 +1,18 @@
 const { cards } = require('./cards');
 const State = require('./state');
+const Player = require('./player');
 
 class Game {
 
-    constructor (players, local_player_index) {
+    constructor (players_count, local_player_index) {
         this.state = State.empty.duplicate();
-        this.players = players;
+        this.players = [];
+        for (let i=0; i<players_count; i+=1) {
+            const player = new Player(`P${i+1}`);
+            player.joinGame(this, i);
+            this.players[i] = player;
+        }
         this.local_player = this.players[local_player_index];
-        players.forEach((p, i) => p.joinGame(this, i));
     }
 
     begin (deck) {

@@ -36,6 +36,10 @@ const ui_cs = {
         header: 'Zprávy',
         send: {
             btn: 'Odeslat'
+        },
+        invite: {
+            header: 'Pozvání do hry od {name}',
+            link: 'připojit se k sezení'
         }
     }
 };

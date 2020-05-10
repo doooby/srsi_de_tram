@@ -19,14 +19,12 @@
              v-for="({id, name}) in shownUsers"
              class="d-flex">
 
-                <div>
-
-                </div>
-
                 <button
+                 v-if="!inSession"
                  class="srsi-button-flat">
-                    <email-icon
-                     :size="iconSize * 0.75"/>
+                    <cards-playing-outline-icon
+                     :size="iconSize * 0.75"
+                     @click="playWith(id)"/>
                 </button>
 
                 <div
@@ -42,17 +40,18 @@
 </template>
 
 <script>
-    import { mapState } from 'vuex';
+    import { mapState, mapGetters } from 'vuex';
     import { throttle } from 'HELPERS';
 
     import MagnifyIcon from 'ICONS/Magnify.vue';
-    import EmailIcon from 'ICONS/Email.vue'
+    import CardsPlayingOutlineIcon from 'ICONS/CardsPlayingOutline.vue'
+    import platform from "../../../src/platform";
 
     export default {
 
         components: {
             MagnifyIcon,
-            EmailIcon,
+            CardsPlayingOutlineIcon,
         },
 
         data ( ) {
@@ -63,7 +62,7 @@
         },
 
         mounted () {
-            this.$app.sendRequest('ACTION-LOBBY-REFRESH');
+            this.$app.sendRequest('ACT-LOBBY-REFRESH');
         },
 
         watch: {
@@ -77,7 +76,10 @@
 
         computed: {
             ...mapState([
-                'platform_size'
+                'platform_size',
+            ]),
+            ...mapGetters([
+                'inSession',
             ]),
             ...mapState({
                 connected_user_id (state) {
@@ -86,7 +88,7 @@
 
                 present_users (state) {
                     return state.lobby.users;
-                }
+                },
             }),
 
             iconSize () {
@@ -106,6 +108,33 @@
                 return users;
             },
 
+        },
+
+        methods: {
+            async playWith (opponent_id) {
+                let req = await this.$app.sendRequest('ACT-BOARD-NEW');
+                const board_id = req.result.id;
+
+                req = await this.$app.sendRequest('ACT-BOARD-ENTER', {
+                    board_id
+                });
+                if (req.result.fail) {
+                    console.error(req.result);
+                    throw 'playWith';
+                }
+
+                this.$store.dispatch('actionInitBoard', {
+                    id: board_id,
+                    local_player: 0,
+                    players: 2,
+                    deck: platform.newCardsDeck(),
+                });
+
+                this.$app.sendRequest('ACT-BOARD-INVITE', {
+                   board_id,
+                   conn_id: opponent_id
+                });
+            },
         },
 
     }

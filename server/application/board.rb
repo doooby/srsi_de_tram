@@ -3,7 +3,7 @@
 module Application
   class Board
     
-    attr_reader :id
+    attr_reader :id, :owner
 
     def initialize owner
       @id = Application.generate_object_id
@@ -87,7 +87,7 @@ module Application
 
       Connection.store.reference_by store,
           on_removed: -> (conn) {
-            Board.store.
+            store.
                 select{|b| b.has_active_connection? conn }.
                 each{|b| b.on_connection_lost conn }
           }

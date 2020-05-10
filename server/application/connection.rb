@@ -32,10 +32,7 @@ module Application
       else
         name = nil
       end
-      if name != @user_name
-        @user_name = name
-        Connection.store.clear_cache
-      end
+      @user_name = name if name != @user_name
       name
     end
 
@@ -85,7 +82,12 @@ module Application
 
     @store = Lib::InProcessStore.new.tap do |store|
 
-      store.define_query :users_in_lobby, cacheable: true do |index|
+      store.define_query :find_present do |index, id|
+        connection = index[id]
+        connection.user_name ? connection : nil
+      end
+
+      store.define_query :users_in_lobby do |index|
         index.values
             .select{|conn| conn.user_name }
             .map{ |conn|

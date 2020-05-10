@@ -1,17 +1,8 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import times from 'lodash/times';
 import Game from 'GAME_PATH/src/game';
-import Player from 'GAME_PATH/src/player';
 
 Vue.use(Vuex);
-
-function createRecord (klass, attributes={}) {
-    attributes.__proto__ = klass.prototype;
-    if (klass.constructor) klass.constructor.call(attributes);
-    Object.freeze(attributes);
-    return attributes;
-}
 
 export function createStore () {
     return new Vuex.Store({
@@ -79,16 +70,17 @@ const mutations = {
         state.platform_size = Object.freeze(size);
     },
 
-    mutateSetGame (state, game) {
+    mutateSetGame (state, { game, board_id }) {
         state.session = Object.freeze({
             game: game,
+            board_id,
             state: game.state
         });
     },
 
     mutateSetGameState (state, game_state) {
         state.session = Object.freeze({
-            game: state.session.game,
+            ...state.session,
             state: game_state
         });
     },
@@ -138,12 +130,24 @@ const mutations = {
     },
 
     'MSG-LOBBY-MESSAGE': function (state, msg) {
-        const list = state.messages.list;
-        list.push(createRecord(Message, msg));
-        const overflow = list.length - 50;
-        if (overflow > 0) list.splice(0, overflow);
+        listPushAndLimit(
+            state.messages.list,
+            createRecord(Message, msg)
+        );
     },
 
+    'MSG-BOARD-STATUS': function (state, { board }) {
+    },
+
+    'MSG-BOARD-INVITE': function (state, invite) {
+        listPushAndLimit(
+            state.messages.list,
+            createRecord(Message, {
+                type: 'invite',
+                ...invite
+            })
+        );
+    },
 };
 
 const actions = {
@@ -180,32 +184,35 @@ const actions = {
         commit('mutateSetPrintout', printout);
     },
 
-    actionStartNewSession ({ state, commit }, session) {
-        if (state.session.game) {
-            for (const player of state.session.game.players) {
-                player.detachActor();
-            }
-        }
-
+    actionInitBoard ({ state, commit }, board) {
         const game = new Game(
-            times(session.actors.length, i => new Player(`P${i}`)),
-            session.local
+            board.players,
+            board.local_player
         );
         game.history = [];
-        commit('mutateSetGame', game);
-
-        for (let i=0; i<session.actors.length; i+=1) {
-            game.players[i].attachActor(
-                session.actors[i]
-            );
-        }
-
-        game.begin(session.deck);
+        game.begin(board.deck);
+        commit('mutateSetGame', { game, board_id: board.id });
     },
 
 };
 
+function createRecord (klass, attributes={}) {
+    attributes.__proto__ = klass.prototype;
+    if (attributes.initialize) attributes.initialize();
+    Object.freeze(attributes);
+    return attributes;
+}
+
+function listPushAndLimit (list, item, max=50) {
+    list.push(item);
+    const overflow = list.length - max;
+    if (overflow > 0) list.splice(0, overflow);
+}
+
 class Message {
 
+    initialize () {
+        this.time = new Date();
+    }
 
 }

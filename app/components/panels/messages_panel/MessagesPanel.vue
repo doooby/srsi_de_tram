@@ -4,13 +4,10 @@
 
         <div
          class="messages-listing">
-            <div
-             v-for="msg in messages_list">
-                <strong>
-                    {{msg.author}} :
-                </strong>
-                {{msg.text}}
-            </div>
+            <message-component
+             v-for="msg in messages_list"
+             :key="Number(msg.time)"
+             :msg="msg"/>
         </div>
 
         <div
@@ -33,12 +30,36 @@
 <script>
     import { mapState, mapGetters } from 'vuex';
 
+    import TextualMessage from './TextualMessage';
+    import InvitationMessage from './InvitationMessage';
+
+    const MessageComponent = {
+        props: [ 'msg' ],
+        render (h) {
+            return h(this.getComponent(), {
+                props: { msg: this.msg }
+            });
+        },
+        methods: {
+            getComponent () {
+                switch (this.msg.type) {
+                    case 'invite': return InvitationMessage;
+                    default: return TextualMessage;
+                }
+            }
+        }
+    };
+
     export default {
 
         data () {
             return {
                 text: ''
             };
+        },
+
+        components: {
+            MessageComponent
         },
 
         computed: {
@@ -69,7 +90,7 @@
                 const text = this.text;
                 if (text.length === 0) return;
                 this.text = '';
-                this.$app.sendRequest('ACTION-LOBBY-MSG', { text });
+                this.$app.sendRequest('ACT-LOBBY-MSG', { text });
             },
 
         },

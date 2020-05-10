@@ -27,13 +27,20 @@ module Application
     message 'MSG-LOBBY-MESSAGE' do |connection, message|
       message.merge!(
           author_id: connection.id,
-          author: connection.user_name,
-          time: Time.now
+          author: connection.user_name
       )
     end
 
-    message 'M:BOARD-STATUS' do |board|
+    message 'MSG-BOARD-STATUS' do |board|
       board.status
+    end
+
+    message 'MSG-BOARD-INVITE' do |connection, board_id|
+      {
+          author_id: connection.id,
+          author: connection.user_name,
+          board_id: board_id
+      }
     end
 
     # message 'M:BOARD-KICKED-OUT' do |board|

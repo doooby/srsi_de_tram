@@ -8,9 +8,6 @@ module Lib
       @lock = Concurrent::ReadWriteLock.new
 
       @queries = {}
-      @cache = {}
-      @cacheable = {}
-
       @referenced_by = []
       @triggers = {}
     end
@@ -57,36 +54,18 @@ module Lib
     def clear
       write do
         @index.clear
-        @cache.clear
       end
     end
 
-    def clear_cache
-      @cache.clear
-    end
-
-    def define_query name, cacheable: false, &block
+    def define_query name, &block
       @queries[name] = block
-      @cacheable[name] = cacheable
     end
 
-    def query name
-      cacheable = @cacheable[name]
-      if cacheable
-        result = @lock.with_read_lock{ @cache[name] }
-        return result unless result.nil?
-      end
-
+    def query name, *args
       action = @queries[name] || return
-      result = read(&action)
-
-      if cacheable
-        @lock.with_write_lock do
-          @cache[name] = result
-        end
+      @lock.with_read_lock do
+        action.call @index, *args
       end
-
-      result
     end
 
     def reference_by store, **triggers
@@ -102,9 +81,7 @@ module Lib
 
     def write
       @lock.with_write_lock do
-        result = yield @index
-        @cache.clear
-        result
+        yield @index
       end
     end
 

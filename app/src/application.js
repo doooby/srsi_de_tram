@@ -83,47 +83,47 @@ export default class Application {
         );
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // GAME
-
-    createLocalActor () {
-        const store = this.store;
-        return {
-            attach (player) {
-                this.player = player;
-                this.player.subscribe('state_changed', (_, state) => {
-                    store.commit('mutateSetGameState', state);
-                });
-                this.player.subscribe('bad_move', (player, move) => {
-                    if (this.player !== player) return;
-                    store.dispatch('actionPrintoutMessage', {
-                        code: `game.bad_move.${move.error}`
-                    });
-                });
-            }
-        }
-    }
-
-    createRemoteActor (on_sync) {
-        return {
-            syncMove: on_sync,
-            attach (player) {
-                this.player = player;
-                this.player.subscribe('moved', (player, move) => {
-                    if (this.player !== player) {
-                        move = move.serialize();
-                        move.pl = player.index;
-                        this.syncMove(move);
-                    }
-                });
-            },
-            receiveMove (move) {
-                if (move.pl === this.player.index) {
-                    this.player.makeMove(move);
-                }
-            }
-        }
-    }
+    // ////////////////////////////////////////////////////////////////////////////
+    // // GAME
+    //
+    // createLocalActor () {
+    //     const store = this.store;
+    //     return {
+    //         attach (player) {
+    //             this.player = player;
+    //             this.player.subscribe('state_changed', (_, state) => {
+    //                 store.commit('mutateSetGameState', state);
+    //             });
+    //             this.player.subscribe('bad_move', (player, move) => {
+    //                 if (this.player !== player) return;
+    //                 store.dispatch('actionPrintoutMessage', {
+    //                     code: `game.bad_move.${move.error}`
+    //                 });
+    //             });
+    //         }
+    //     }
+    // }
+    //
+    // createRemoteActor (on_sync) {
+    //     return {
+    //         syncMove: on_sync,
+    //         attach (player) {
+    //             this.player = player;
+    //             this.player.subscribe('moved', (player, move) => {
+    //                 if (this.player !== player) {
+    //                     move = move.serialize();
+    //                     move.pl = player.index;
+    //                     this.syncMove(move);
+    //                 }
+    //             });
+    //         },
+    //         receiveMove (move) {
+    //             if (move.pl === this.player.index) {
+    //                 this.player.makeMove(move);
+    //             }
+    //         }
+    //     }
+    // }
 
 
     ////////////////////////////////////////////////////////////////////////////
@@ -140,7 +140,7 @@ export default class Application {
         this.socket.onopen = async () => {
             console.log('[SOCKET] Opened');
             this.connected = true;
-            const req = await this.sendRequest('ACTION-LOBBY-ENTER', {
+            const req = await this.sendRequest('ACT-LOBBY-ENTER', {
                 name: user_name
             });
             if (req.result.fail) {

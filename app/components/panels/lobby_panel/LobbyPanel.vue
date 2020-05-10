@@ -14,7 +14,7 @@
                 <button
                  class="srsi-button-flat"
                  @click="logout">
-                    <close-circle-outline-icon
+                    <logout-icon
                      :size="platform_size.icon * 0.75"/>
                 </button>
                 <span
@@ -44,7 +44,7 @@
     import LoginForm from './LoginForm';
     import LobbyBrowser from './LobbyBrowser';
 
-    import CloseCircleOutlineIcon from 'ICONS/CloseCircleOutline.vue'
+    import LogoutIcon from 'ICONS/Logout.vue'
     import SyncIcon from 'ICONS/Sync.vue'
 
     export default {
@@ -58,7 +58,7 @@
         components: {
             LoginForm,
             LobbyBrowser,
-            CloseCircleOutlineIcon,
+            LogoutIcon,
             SyncIcon,
         },
 
@@ -83,7 +83,7 @@
 
             async updateLobbyInfo () {
                 this.fetching = true;
-                await this.$app.sendRequest('ACTION-LOBBY-REFRESH');
+                await this.$app.sendRequest('ACT-LOBBY-REFRESH');
                 this.fetching = false;
             }
         },
