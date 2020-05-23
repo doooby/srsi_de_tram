@@ -57,12 +57,12 @@
         watch:{
             connected (value) {
                 switch (value){
-                    case 'p':
+                    case 'pending':
                         this.message = 'connecting';
                         this.connecting = true;
                         break;
 
-                    case 'n':
+                    case 'no':
                         this.message = 'failed';
                         this.connecting = false;
                         break;

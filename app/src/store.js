@@ -18,11 +18,12 @@ export function createStore () {
             }),
 
             session: {},
-            printout: null,
 
+            printout: null,
             ui_panel: null,
+
             connected: {
-                state: '0',
+                state: 'null',
                 name: '',
                 id: null
             },
@@ -45,7 +46,7 @@ export function createStore () {
 const getters = {
 
     userIsConnected ({ connected }) {
-        return connected.state === 'y';
+        return connected.state === 'yes';
     },
 
     inSession ({ session }) {
@@ -98,16 +99,16 @@ const mutations = {
     },
 
     mutateSetConnectionPending (state) {
-        state.connected.state = 'p';
+        state.connected.state = 'pending';
     },
 
     mutateSetConnectedUser (state, user) {
         if (user) {
-            state.connected.state = 'y';
+            state.connected.state = 'yes';
             state.connected.id = user.id;
             state.connected.name = user.name;
         } else {
-            state.connected.state = 'n';
+            state.connected.state = 'no';
             state.connected.id = null;
         }
     },
