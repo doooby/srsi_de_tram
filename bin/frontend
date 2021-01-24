@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -e
+
+action=$1
+if [ -z "$action" ]; then
+    action="yarn"
+else
+    shift
+fi
+
+cd frontend
+
+case $action in
+
+help)
+    ;&
+-h)
+    ;&
+--help)
+    exec cat "$(realpath "../$0")"
+    ;;
+
+pack)
+    exec ./node_modules/.bin/webpack "$@"
+    ;;
+
+yarn)
+    exec yarn "$@"
+    ;;
+
+esac

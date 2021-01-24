@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+set -e
+
+action=$1
+if [ -z "$action" ]; then
+    action="yarn"
+else
+    shift
+fi
+
+cd game
+
+case $action in
+
+help)
+    ;&
+-h)
+    ;&
+--help)
+    exec cat "$(realpath "../$0")"
+    ;;
+
+test)
+    exec yarn test
+    ;;
+
+yarn)
+    exec yarn "$@"
+    ;;
+
+esac

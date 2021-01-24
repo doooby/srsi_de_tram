@@ -1,3 +1,42 @@
 #!/usr/bin/env bash
+set -e
 
-bundle exec puma --pidfile tmp/puma.pid --port 3000 -w 0
+action=$1
+if [ -z "$action" ]; then
+    action="bundle"
+else
+    shift
+fi
+
+case $action in
+
+help)
+    ;&
+-h)
+    ;&
+--help)
+    exec cat "$0"
+    ;;
+
+run)
+    exec bundle exec puma --pidfile tmp/puma.pid --port 3000 -w 0
+    ;;
+
+restart)
+    exec bundle exec pumactl -p "$(cat tmp/puma.pid)" restart
+    ;;
+
+cops)
+    source server/lib/cops.sh
+    ;;
+
+rspec)
+    export RACK_ENV=test
+    exec bundle exec rspec "$@"
+    ;;
+
+bundle)
+    exec bundle "$@"
+    ;;
+
+esac

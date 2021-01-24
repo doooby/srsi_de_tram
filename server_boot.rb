@@ -7,7 +7,7 @@ require 'json'
 require 'pathname'
 require 'logger'
 
-ROOT = Pathname.new( ENV['RACK_ROOT'] || Dir.pwd )
+ROOT = Pathname.new Dir.pwd
 
 string_inquirer_class = Class.new String do
   def respond_to_missing?(method_name, include_private = false)
